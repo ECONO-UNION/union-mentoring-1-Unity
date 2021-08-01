@@ -40,6 +40,7 @@ namespace InputSystem.Editor
             GetChildProperty(currentInputProperty, "m_Name").stringValue = input.name;
             GetChildProperty(currentInputProperty, "negativeButton").stringValue = input.negativeButton;
             GetChildProperty(currentInputProperty, "positiveButton").stringValue = input.positiveButton;
+            GetChildProperty(currentInputProperty, "sensitivity").floatValue = 3f;
             _unityInputAssest.ApplyModifiedProperties();
         }
 
@@ -50,6 +51,7 @@ namespace InputSystem.Editor
             GetChildProperty(currentInputProperty, "m_Name").stringValue = input.name;
             GetChildProperty(currentInputProperty, "negativeButton").stringValue = "";
             GetChildProperty(currentInputProperty, "positiveButton").stringValue = input.button.ToLower();
+            GetChildProperty(currentInputProperty, "sensitivity").floatValue = 0;
             _unityInputAssest.ApplyModifiedProperties();
         }
 

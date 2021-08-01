@@ -3,12 +3,13 @@ namespace InputSystem
 {
     public enum InputAxisName
     {
-        Hori,
-        Verti,
+        Horizontal,
+        Vertical,
     }
 
     public enum InputButtonName
     {
         Attack,
+        Jump,
     }
 }
