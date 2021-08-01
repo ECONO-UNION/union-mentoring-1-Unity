@@ -28,8 +28,6 @@ namespace InputSystem
         private Dictionary<InputAxisName, InputAxisEvent> _axisKeys = new Dictionary<InputAxisName, InputAxisEvent>();
         private Dictionary<InputButtonName, InputButtonEvent> _buttonKeys = new Dictionary<InputButtonName, InputButtonEvent>();
 
-        public bool IsInputBlock { get; set; }
-
         private void Awake()
         {
             BindButtonKeys();
@@ -55,30 +53,16 @@ namespace InputSystem
 
         private void Update()
         {
-            if (IsInputBlock)
-            {
-                return;
-            }
-
             foreach (var key in _axisKeys.Values)
             {
-                key.onPressedKey?.Invoke(Input.GetAxis(key.Name));
+                key.Axis = Input.GetAxis(key.Name);
             }
 
             foreach (var key in _buttonKeys.Values)
             {
-                if (Input.GetButtonDown(key.Name))
-                {
-                    key.onDownKey?.Invoke();
-                }
-                else if (Input.GetButton(key.Name))
-                {
-                    key.onPressedKey?.Invoke();
-                }
-                else if (Input.GetButtonUp(key.Name))
-                {
-                    key.onUpKey?.Invoke();
-                }
+                key.IsButtonPressed = Input.GetButton(key.Name);
+                key.IsButtonDown = Input.GetButtonDown(key.Name);
+                key.IsButtonUp = Input.GetButtonUp(key.Name);
             }
         }
 

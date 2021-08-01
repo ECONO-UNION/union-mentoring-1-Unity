@@ -48,7 +48,8 @@ namespace InputSystem.Editor
             _unityInputProperty.arraySize++;
             SerializedProperty currentInputProperty = _unityInputProperty.GetArrayElementAtIndex(_unityInputProperty.arraySize - 1);
             GetChildProperty(currentInputProperty, "m_Name").stringValue = input.name;
-            GetChildProperty(currentInputProperty, "positiveButton").stringValue = input.button;
+            GetChildProperty(currentInputProperty, "negativeButton").stringValue = "";
+            GetChildProperty(currentInputProperty, "positiveButton").stringValue = input.button.ToLower();
             _unityInputAssest.ApplyModifiedProperties();
         }
 

@@ -1,32 +1,26 @@
-using System;
-
 namespace InputSystem
 {
     public class InputButtonEvent
     {
-        public Action onPressedKey;
-        public Action onUpKey;
-        public Action onDownKey;
-
-        private string _name;
-        public string Name { get => _name; }
+        public bool IsButtonPressed { get; set; }
+        public bool IsButtonUp { get; set; }
+        public bool IsButtonDown { get; set; }
+        public string Name { get; private set; }
 
         public InputButtonEvent(string name)
         {
-            _name = name;
+            Name = name;
         }
     }
 
     public class InputAxisEvent
     {
-        public Action<float> onPressedKey;
-
-        private string _name;
-        public string Name { get => _name; }
+        public float Axis { get; set; }
+        public string Name { get; private set; }
 
         public InputAxisEvent(string name)
         {
-            _name = name;
+            Name = name;
         }
     }
 }

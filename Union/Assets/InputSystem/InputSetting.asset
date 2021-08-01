@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: InputSetting
   m_EditorClassIdentifier: 
   inputAxes:
-  - name: Horizontal
+  - name: Hori
     negativeButton: left
     positiveButton: right
-  - name: Vertical
+  - name: Verti
     negativeButton: down
     positiveButton: up
   inputButtons:
   - name: Attack
     button: Z
-  - name: Jump
-    button: X
