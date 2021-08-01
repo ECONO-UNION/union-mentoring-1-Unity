@@ -24,3 +24,5 @@ MonoBehaviour:
     button: Z
   - name: Jump
     button: X
+  - name: Run
+    button: C

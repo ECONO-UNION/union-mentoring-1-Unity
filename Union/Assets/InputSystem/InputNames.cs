@@ -11,5 +11,6 @@ namespace InputSystem
     {
         Attack,
         Jump,
+        Run,
     }
 }

@@ -25,8 +25,8 @@ namespace InputSystem
             }
         }
 
-        private Dictionary<InputAxisName, InputAxisEvent> _axisKeys = new Dictionary<InputAxisName, InputAxisEvent>();
-        private Dictionary<InputButtonName, InputButtonEvent> _buttonKeys = new Dictionary<InputButtonName, InputButtonEvent>();
+        private Dictionary<InputAxisName, AxisKey> _axisKeys = new Dictionary<InputAxisName, AxisKey>();
+        private Dictionary<InputButtonName, ButtonKey> _buttonKeys = new Dictionary<InputButtonName, ButtonKey>();
 
         private void Awake()
         {
@@ -38,7 +38,7 @@ namespace InputSystem
             var keyTypes = Enum.GetValues(typeof(InputAxisName));
             foreach (var keyType in keyTypes)
             {
-                _axisKeys[(InputAxisName)keyType] = new InputAxisEvent(keyType.ToString());
+                _axisKeys[(InputAxisName)keyType] = new AxisKey(keyType.ToString());
             }
         }
 
@@ -47,7 +47,7 @@ namespace InputSystem
             var keyTypes = Enum.GetValues(typeof(InputButtonName));
             foreach (var keyType in keyTypes)
             {
-                _buttonKeys[(InputButtonName)keyType] = new InputButtonEvent(keyType.ToString());
+                _buttonKeys[(InputButtonName)keyType] = new ButtonKey(keyType.ToString());
             }
         }
 
@@ -55,7 +55,7 @@ namespace InputSystem
         {
             foreach (var key in _axisKeys.Values)
             {
-                key.Axis = Input.GetAxis(key.Name);
+                key.Value = Input.GetAxis(key.Name);
             }
 
             foreach (var key in _buttonKeys.Values)
@@ -66,20 +66,20 @@ namespace InputSystem
             }
         }
 
-        public InputAxisEvent GetAxisKey(InputAxisName type)
+        public AxisKey GetAxisKey(InputAxisName type)
         {
             if (!_axisKeys.ContainsKey(type))
             {
-                _axisKeys[type] = new InputAxisEvent(type.ToString());
+                _axisKeys[type] = new AxisKey(type.ToString());
             }
             return _axisKeys[type];
         }
 
-        public InputButtonEvent GetButtonKey(InputButtonName type)
+        public ButtonKey GetButtonKey(InputButtonName type)
         {
             if (!_buttonKeys.ContainsKey(type))
             {
-                _buttonKeys[type] = new InputButtonEvent(type.ToString());
+                _buttonKeys[type] = new ButtonKey(type.ToString());
             }
             return _buttonKeys[type];
         }
