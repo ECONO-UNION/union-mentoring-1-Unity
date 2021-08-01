@@ -13,7 +13,7 @@ namespace InputSystem.Editor
             sb.AppendLine("// Input System에 의해서 자동으로 생성되는 Enum입니다.");
             sb.AppendLine("namespace InputSystem");
             sb.AppendLine("{");
-            sb.AppendLine("    public enum InputAxisName");
+            sb.AppendLine("    public enum AxisName");
             sb.AppendLine("    {");
             foreach (InputAxis inputAxis in inputAxes)
             {
@@ -21,7 +21,7 @@ namespace InputSystem.Editor
             }
             sb.AppendLine("    }");
             sb.AppendLine();
-            sb.AppendLine("    public enum InputButtonName");
+            sb.AppendLine("    public enum ButtonName");
             sb.AppendLine("    {");
             foreach (InputButton inputButton in inputButtons)
             {

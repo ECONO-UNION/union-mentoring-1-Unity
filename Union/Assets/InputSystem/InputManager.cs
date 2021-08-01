@@ -25,8 +25,8 @@ namespace InputSystem
             }
         }
 
-        private Dictionary<InputAxisName, AxisKey> _axisKeys = new Dictionary<InputAxisName, AxisKey>();
-        private Dictionary<InputButtonName, ButtonKey> _buttonKeys = new Dictionary<InputButtonName, ButtonKey>();
+        private Dictionary<AxisName, AxisKey> _axisKeys = new Dictionary<AxisName, AxisKey>();
+        private Dictionary<ButtonName, ButtonKey> _buttonKeys = new Dictionary<ButtonName, ButtonKey>();
 
         private void Awake()
         {
@@ -35,19 +35,19 @@ namespace InputSystem
         }
         private void BindAxisKeys()
         {
-            var keyTypes = Enum.GetValues(typeof(InputAxisName));
+            var keyTypes = Enum.GetValues(typeof(AxisName));
             foreach (var keyType in keyTypes)
             {
-                _axisKeys[(InputAxisName)keyType] = new AxisKey(keyType.ToString());
+                _axisKeys[(AxisName)keyType] = new AxisKey(keyType.ToString());
             }
         }
 
         private void BindButtonKeys()
         {
-            var keyTypes = Enum.GetValues(typeof(InputButtonName));
+            var keyTypes = Enum.GetValues(typeof(ButtonName));
             foreach (var keyType in keyTypes)
             {
-                _buttonKeys[(InputButtonName)keyType] = new ButtonKey(keyType.ToString());
+                _buttonKeys[(ButtonName)keyType] = new ButtonKey(keyType.ToString());
             }
         }
 
@@ -66,7 +66,7 @@ namespace InputSystem
             }
         }
 
-        public AxisKey GetAxisKey(InputAxisName type)
+        public AxisKey GetAxisKey(AxisName type)
         {
             if (!_axisKeys.ContainsKey(type))
             {
@@ -75,7 +75,7 @@ namespace InputSystem
             return _axisKeys[type];
         }
 
-        public ButtonKey GetButtonKey(InputButtonName type)
+        public ButtonKey GetButtonKey(ButtonName type)
         {
             if (!_buttonKeys.ContainsKey(type))
             {
