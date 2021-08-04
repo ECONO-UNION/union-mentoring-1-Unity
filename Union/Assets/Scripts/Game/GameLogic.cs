@@ -9,7 +9,8 @@ namespace Union.Services.Game
             public const int BattleFieldEnemyCount = 10;
         }
 
-        private EGameStatus _eGameStatus;
+        private IGameState _iGameState;
+        private GameState _gameState;
 
         public GameTime gameTime;
 
@@ -20,8 +21,7 @@ namespace Union.Services.Game
 
         private void Start()
         {
-            Initialize();
-            StartGame();
+            SetGameState(GameState.ReadyGame);
         }
 
         private void Update()
@@ -30,47 +30,48 @@ namespace Union.Services.Game
             {
                 this.gameTime.UpdatePlayTime(Time.deltaTime);
             }
+
+            this._iGameState.Run();
         }
 
-        private void Initialize()
+        public void SetGameState(GameState gameState)
         {
-            this._eGameStatus = EGameStatus.None;       
+            this._gameState = gameState;
+            this._iGameState.Exit();
+            CreateIGameState(gameState);
+            this._iGameState.Enter();
         }
 
-        public void ReadyGame()
+        private void CreateIGameState(GameState gameState)
         {
-            this._eGameStatus = EGameStatus.Ready;
-        }
-
-        public void StartGame()
-        {
-            this._eGameStatus = EGameStatus.InGame;
-
-        }
-
-        public void PauseGame()
-        {
-            this._eGameStatus = EGameStatus.Pause;
-        }
-
-        public void ResumeGame()
-        {
-            this._eGameStatus = EGameStatus.InGame;
-        }
-
-        public void WinGame()
-        {
-            this._eGameStatus = EGameStatus.Win;
-        }
-
-        public void LoseGame()
-        {
-            this._eGameStatus = EGameStatus.Lose;
+            switch (gameState)
+            {
+                case GameState.ReadyGame:
+                    this._iGameState = new ReadyGame();
+                    break;
+                case GameState.StartGame:
+                    this._iGameState = new StartGame();
+                    break;
+                case GameState.PlayingGame:
+                    this._iGameState = new PlayingGame();
+                    break;
+                case GameState.PauseGame:
+                    this._iGameState = new PauseGame();
+                    break;
+                case GameState.WinGame:
+                    this._iGameState = new WinGame();
+                    break;
+                case GameState.LoseGame:
+                    this._iGameState = new LoseGame();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private bool IsGamePlaying()
         {
-            if (this._eGameStatus != EGameStatus.InGame)
+            if (this._gameState != GameState.StartGame)
             {
                 return false;
             }
