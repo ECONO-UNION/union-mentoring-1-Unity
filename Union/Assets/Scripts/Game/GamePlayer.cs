@@ -2,17 +2,18 @@
 using UnityEngine;
 
 using Union.Services.UI;
+using Union.Services.Stat;
 
 namespace Union.Services.Game
 {
     public class GamePlayer : MonoBehaviour
     {
         public UIGamePlayerStatus uiGamePlayerStatus;
-        private UnitAbility _unitAbility;
+        private UnitStat _unitAbility;
 
         private void Awake()
         {
-            this._unitAbility = new UnitAbility();
+            this._unitAbility = new UnitStat();
         }
 
         void Start()

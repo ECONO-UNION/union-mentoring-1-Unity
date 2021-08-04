@@ -1,27 +1,28 @@
-using Union.Services.Stat;
-
-public class UnitStat
+namespace Union.Services.Stat
 {
-    public Stat healthPoint;
-
-    public Stat physicalPower;
-    public Stat physicalDefense;
-
-    public Stat walkingSpeed;
-    public Stat runningSpeed;
-
-    public Stat jumpingPower;
-
-    public UnitStat()
+    public class UnitStat
     {
-        this.healthPoint = new Stat();
+        public Stat healthPoint;
 
-        this.physicalPower = new Stat();
-        this.physicalDefense = new Stat();
+        public Stat physicalPower;
+        public Stat physicalDefense;
 
-        this.walkingSpeed = new Stat();
-        this.runningSpeed = new Stat();
+        public Stat walkingSpeed;
+        public Stat runningSpeed;
 
-        this.jumpingPower = new Stat();
+        public Stat jumpingPower;
+
+        public UnitStat()
+        {
+            this.healthPoint = new Stat();
+
+            this.physicalPower = new Stat();
+            this.physicalDefense = new Stat();
+
+            this.walkingSpeed = new Stat();
+            this.runningSpeed = new Stat();
+
+            this.jumpingPower = new Stat();
+        }
     }
 }
