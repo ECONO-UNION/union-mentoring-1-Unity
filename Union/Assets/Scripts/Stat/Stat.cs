@@ -1,10 +1,10 @@
-﻿namespace Union.Services.Ability
+﻿namespace Union.Services.Stat
 {
-    public class Ability
+    public class Stat
     {
         protected int amount;
 
-        public Ability()
+        public Stat()
         {
             this.amount = 0;
         }
@@ -34,11 +34,4 @@
             this.amount -= amount;
         }
     }
-
-    public class HealthPoint : Ability { }
-    public class PhysicalPower : Ability { }
-    public class PhysicalDefense : Ability { }
-    public class WalkingSpeed : Ability { }
-    public class RunningSpeed : Ability { }
-    public class JumpingPower : Ability { }
 }
