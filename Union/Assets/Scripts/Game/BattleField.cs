@@ -29,14 +29,11 @@ namespace Union.Services.Game
         {
             this.totalEnemyCount = Constants.InitialEnemyCount;
             this.currentEnemyCount = totalEnemyCount;
-
-            UIGame.Instance.SetEnemyCountText(this.currentEnemyCount.ToString());
         }
 
         public void DecreaseEnemyCount(int amount)
         {
             this.currentEnemyCount -= amount;
-            UIGame.Instance.SetEnemyCountText(this.currentEnemyCount.ToString());
         }
     }
 }

@@ -1,30 +1,43 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+using Union.Services.Game;
+
 namespace Union.Services.UI
 {
     public class UIGamePlayerStatus : MonoBehaviour
     {
-        public Image healthPointImage;
-        public Text healthPointText;
+        [SerializeField]
+        private GamePlayer _gamePlayer;
+
+        [SerializeField]
+        private Image _healthPointImage;
+
+        [SerializeField]
+        private Text _healthPointText;
 
         private void Start()
         {
             Initialize();
         }
 
-        public void Initialize()
+        private void Update()
         {
-            this.healthPointImage.type = Image.Type.Filled;
-            this.healthPointImage.fillMethod = Image.FillMethod.Horizontal;
-            this.healthPointImage.fillOrigin = 0;
-            this.healthPointImage.fillAmount = 100.0f;
+            UpdateHealthPointUI();
         }
 
-        public void SetHealthPointUI(int healthPoint)
+        private void Initialize()
         {
-            this.healthPointImage.fillAmount = healthPoint / 100.0f;
-            this.healthPointText.text = "HP : " + healthPoint.ToString();
+            this._healthPointImage.type = Image.Type.Filled;
+            this._healthPointImage.fillMethod = Image.FillMethod.Horizontal;
+            this._healthPointImage.fillOrigin = 0;
+            this._healthPointImage.fillAmount = 100.0f;
+        }
+
+        private void UpdateHealthPointUI()
+        {
+            this._healthPointImage.fillAmount = this._gamePlayer.UnitStat.healthPoint.Get() / 100.0f;
+            this._healthPointText.text = "HP : " + this._gamePlayer.UnitStat.healthPoint.Get().ToString();
         }
     }
 }

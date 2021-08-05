@@ -7,22 +7,27 @@ namespace Union.Services.UI
 {
     public class UIGame : Singleton<UIGame>
     {
-        public Text playTimeText;
-        public Text enemyCountText;
+        [SerializeField]
+        private Text _playTimeText;
+
+        [SerializeField]
+        private Text _enemyCountText;
 
         private void Update()
         {
-            SetPlayTimeText(GameLogic.Instance.gameTime.playTime.ToString("F2"));
+            UpdatePlayTimeUI();
+            UpdateEnemyCountUI();
         }
 
-        private void SetPlayTimeText(string text)
+        private void UpdatePlayTimeUI()
         {
-            this.playTimeText.text = text;
+            this._playTimeText.text = GameLogic.Instance.gameTime.playTime.ToString("F2");
         }
 
-        public void SetEnemyCountText(string text)
+        private void UpdateEnemyCountUI()
         {
-            this.enemyCountText.text = text;
+            string enemyCountString = BattleField.Instance.currentEnemyCount.ToString() + " / " + BattleField.Instance.totalEnemyCount.ToString();
+            this._enemyCountText.text = enemyCountString;
         }
     }
 }
