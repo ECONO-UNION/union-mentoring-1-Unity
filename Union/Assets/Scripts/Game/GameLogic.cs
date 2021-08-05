@@ -37,7 +37,7 @@ namespace Union.Services.Game
         public void SetGameState(GameState gameState)
         {
             this._gameState = gameState;
-            this._iGameState.Exit();
+            this._iGameState?.Exit();
             CreateIGameState(gameState);
             this._iGameState.Enter();
         }
