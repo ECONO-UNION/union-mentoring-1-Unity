@@ -25,63 +25,84 @@ namespace InputSystem
             }
         }
 
-        private Dictionary<AxisName, AxisKey> _axisKeys = new Dictionary<AxisName, AxisKey>();
-        private Dictionary<ButtonName, ButtonKey> _buttonKeys = new Dictionary<ButtonName, ButtonKey>();
+        private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
+        private Dictionary<MouseName, MouseInput> _mouseInputs = new Dictionary<MouseName, MouseInput>();
+        private string _settingPath = "InputSystem/InputSetting";
+        private InputSetting _inputSetting;
+
+        public Vector2 MousePosition { get; private set; }
 
         private void Awake()
         {
-            BindButtonKeys();
-            BindAxisKeys();
-        }
-        private void BindAxisKeys()
-        {
-            var keyTypes = Enum.GetValues(typeof(AxisName));
-            foreach (var keyType in keyTypes)
+            _inputSetting = Resources.Load<InputSetting>(_settingPath);
+            if (_inputSetting == null)
             {
-                _axisKeys[(AxisName)keyType] = new AxisKey(keyType.ToString());
+                Debug.LogError("Input System을 설정하지 않았습니다.");
+                return;
             }
+            BindButtonKeys();
+            BindMouseKeys();
         }
 
         private void BindButtonKeys()
         {
-            var keyTypes = Enum.GetValues(typeof(ButtonName));
+            foreach (var keyButton in _inputSetting.keyButtons)
+            {
+                KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.name);
+                _keyInputs[name] = new KeyInput(keyButton.button);
+            }
+        }
+
+        private void BindMouseKeys()
+        {
+            var keyTypes = Enum.GetValues(typeof(MouseName));
             foreach (var keyType in keyTypes)
             {
-                _buttonKeys[(ButtonName)keyType] = new ButtonKey(keyType.ToString());
+                _mouseInputs[(MouseName)keyType] = new MouseInput((int)keyType);
             }
         }
 
         private void Update()
         {
-            foreach (var key in _axisKeys.Values)
+            foreach (var key in _keyInputs.Values)
             {
-                key.Value = Input.GetAxis(key.Name);
+                key.IsButtonPressed = Input.GetKey(key.Code);
+                key.IsButtonDown = Input.GetKeyDown(key.Code);
+                key.IsButtonUp = Input.GetKeyUp(key.Code);
             }
 
-            foreach (var key in _buttonKeys.Values)
+            foreach (var key in _mouseInputs.Values)
             {
-                key.IsButtonPressed = Input.GetButton(key.Name);
-                key.IsButtonDown = Input.GetButtonDown(key.Name);
-                key.IsButtonUp = Input.GetButtonUp(key.Name);
+                key.IsButtonPressed = Input.GetMouseButton(key.MouseType);
+                key.IsButtonDown = Input.GetMouseButtonDown(key.MouseType);
+                key.IsButtonUp = Input.GetMouseButtonUp(key.MouseType);
             }
+
+            MousePosition = Input.mousePosition;
         }
 
-        public AxisKey GetAxisKey(AxisName type)
+        public KeyInput GetButtonKey(KeyName name)
         {
-            if (!_axisKeys.ContainsKey(type))
+            if (!_keyInputs.ContainsKey(name))
             {
-                _axisKeys[type] = new AxisKey(type.ToString());
+                KeyButton keyButton = _inputSetting.keyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.name) == name);
+                if (keyButton == null)
+                {
+                    Debug.LogError("Invalid Key Name");
+                    return null;
+                }
+                _keyInputs[name] = new KeyInput(keyButton.button);
             }
-            return _axisKeys[type];
+            return _keyInputs[name];
         }
 
-        public ButtonKey GetButtonKey(ButtonName type)
+        public MouseInput GetMouseKey(MouseName name)
         {
-            if (!_buttonKeys.ContainsKey(type))
+            if (!_mouseInputs.ContainsKey(name))
             {
-                _buttonKeys[type] = new ButtonKey(type.ToString());
+                _mouseInputs[name] = new MouseInput((int)name);
             }
-            return _buttonKeys[type];
+            return _mouseInputs[name];
         }
     }
 }
