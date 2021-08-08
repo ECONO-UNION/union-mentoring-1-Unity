@@ -5,6 +5,7 @@ namespace InputSystem
     {
         public const string Path = "InputSystem/InputSetting";
     }
+
     public enum KeyName
     {
         Left,

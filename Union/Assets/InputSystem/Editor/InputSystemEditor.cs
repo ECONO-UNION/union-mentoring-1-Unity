@@ -127,6 +127,7 @@ namespace InputSystem
             sb.AppendLine("    {");
             sb.AppendLine($"        public const string Path = \"{_directory}/{_settingName}\";");
             sb.AppendLine("    }");
+            sb.AppendLine();
 
             if (inputButtons.Count > 0)
             {
