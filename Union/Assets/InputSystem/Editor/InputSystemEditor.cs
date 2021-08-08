@@ -24,7 +24,7 @@ namespace InputSystem
         private int _spaceSize = 20;
 
         [MenuItem("InputSystem/Set Input system")]
-        static void OpenEditor()
+        private static void OpenEditor()
         {
             GetWindow<InputSystemEditor>("InputSystem");
         }
