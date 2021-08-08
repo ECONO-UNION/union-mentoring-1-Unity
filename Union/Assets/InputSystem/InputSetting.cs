@@ -25,7 +25,12 @@ namespace InputSystem
 
     public class InputSetting : ScriptableObject
     {
-        public List<KeyButton> keyButtons;
-        public List<MouseButton> mouseButtons;
+        [SerializeField]
+        private List<KeyButton> _keyButtons;
+        [SerializeField]
+        private List<MouseButton> _mouseButtons;
+
+        public List<KeyButton> KeyButtons { get => _keyButtons; }
+        public List<MouseButton> MouseButtons { get => _mouseButtons; }
     }
 }
