@@ -27,17 +27,16 @@ namespace InputSystem
 
         private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
         private Dictionary<MouseName, MouseInput> _mouseInputs = new Dictionary<MouseName, MouseInput>();
-        private string _settingPath = "InputSystem/InputSetting";
         private InputSetting _inputSetting;
 
         public Vector2 MousePosition { get; private set; }
 
         private void Awake()
         {
-            _inputSetting = Resources.Load<InputSetting>(_settingPath);
+            _inputSetting = Resources.Load<InputSetting>(InputSystemSetting.Path);
             if (_inputSetting == null)
             {
-                Debug.LogError("Input System을 설정하지 않았습니다.");
+                Debug.LogError("Input System을 설정하지 않았습니다");
                 return;
             }
             BindButtonKeys();
@@ -46,7 +45,7 @@ namespace InputSystem
 
         private void BindButtonKeys()
         {
-            foreach (var keyButton in _inputSetting.keyButtons)
+            foreach (var keyButton in _inputSetting.KeyButtons)
             {
                 KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.name);
                 _keyInputs[name] = new KeyInput(keyButton.button);
@@ -85,7 +84,7 @@ namespace InputSystem
         {
             if (!_keyInputs.ContainsKey(name))
             {
-                KeyButton keyButton = _inputSetting.keyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.name) == name);
+                KeyButton keyButton = _inputSetting.KeyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.name) == name);
                 if (keyButton == null)
                 {
                     Debug.LogError("Invalid Key Name");
