@@ -6,11 +6,10 @@ namespace Union.Services.Game
     {
         private static class Constants
         {
-            public const int BattleFieldEnemyCount = 10;
+            public const int BattleFieldEnemyCount = 1;
         }
 
-        private IGameState _iGameState;
-        private GameState _gameState;
+        private GameState _GameState;
 
         public GameTime gameTime;
 
@@ -21,57 +20,59 @@ namespace Union.Services.Game
 
         private void Start()
         {
-            SetGameState(GameState.ReadyGame);
+            SetState(GameStates.Playing);
         }
 
         private void Update()
         {
-            if (IsGamePlaying() == true)
+            if (IsPlaying() == true)
             {
                 this.gameTime.UpdatePlayTime(Time.deltaTime);
             }
 
-            this._iGameState.Run();
+            this._GameState.Run();
         }
 
-        public void SetGameState(GameState gameState)
+        public void SetState(GameStates gameStates)
         {
-            this._gameState = gameState;
-            this._iGameState?.Exit();
-            CreateIGameState(gameState);
-            this._iGameState.Enter();
+            this._GameState?.Exit();
+            CreateIGameState(gameStates);
+            this._GameState.Enter();
         }
 
-        private void CreateIGameState(GameState gameState)
+        private void CreateIGameState(GameStates gameStates)
         {
-            switch (gameState)
+            switch (gameStates)
             {
-                case GameState.ReadyGame:
-                    this._iGameState = new ReadyGame();
+                case GameStates.Ready:
+                    this._GameState = new ReadyGame(this);
                     break;
-                case GameState.StartGame:
-                    this._iGameState = new StartGame();
+                case GameStates.Start:
+                    this._GameState = new StartGame(this);
                     break;
-                case GameState.PlayingGame:
-                    this._iGameState = new PlayingGame();
+                case GameStates.Playing:
+                    this._GameState = new PlayingGame(this);
                     break;
-                case GameState.PauseGame:
-                    this._iGameState = new PauseGame();
+                case GameStates.Pause:
+                    this._GameState = new PauseGame(this);
                     break;
-                case GameState.WinGame:
-                    this._iGameState = new WinGame();
+                case GameStates.Win:
+                    this._GameState = new WinGame(this);
                     break;
-                case GameState.LoseGame:
-                    this._iGameState = new LoseGame();
+                case GameStates.Draw:
+                    this._GameState = new DrawGame(this);
+                    break;
+                case GameStates.Lose:
+                    this._GameState = new LoseGame(this);
                     break;
                 default:
                     break;
             }
         }
 
-        private bool IsGamePlaying()
+        public bool IsPlaying()
         {
-            if (this._gameState != GameState.StartGame)
+            if (this._GameState.GameStates != GameStates.Playing)
             {
                 return false;
             }
