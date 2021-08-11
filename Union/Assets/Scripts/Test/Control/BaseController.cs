@@ -140,12 +140,17 @@ public class BaseController : MonoBehaviour
 
     private void MouseInputFunctionLeftClickCase()
     {
-        Debug.Log("DEBUG : Mouse Left Click");
+
     }
 
     private bool CanMove()
     {
         if (this.onGround == false)
+        {
+            return false;
+        }
+
+        if (Union.Services.Game.GameLogic.Instance.IsPlaying() == false)
         {
             return false;
         }
@@ -170,7 +175,7 @@ public class BaseController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "ground")
+        if (collision.gameObject.tag == "Ground")
         {
             onGround = true;
         }
@@ -178,7 +183,7 @@ public class BaseController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "ground")
+        if (collision.gameObject.tag == "Ground")
         {
             onGround = false;
         }
