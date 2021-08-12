@@ -13,9 +13,9 @@ namespace InputSystem
         Up,
         Down,
         Crouch,
-        Walk,
-        Jump,
         Sprint,
+        Jump,
+        Walk,
     }
 
     public enum MouseName

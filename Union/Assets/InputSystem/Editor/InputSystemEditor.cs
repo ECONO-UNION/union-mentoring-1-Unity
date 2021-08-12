@@ -113,6 +113,7 @@ namespace InputSystem
             if (GUILayout.Button("Apply Input System", GUILayout.Width(_buttonsSize)))
             {
                 CreateEnumClass(_inputSetting.KeyButtons, _inputSetting.MouseButtons);
+                AssetDatabase.SaveAssets();
             }
         }
 
