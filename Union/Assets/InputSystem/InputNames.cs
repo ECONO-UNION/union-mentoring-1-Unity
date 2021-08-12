@@ -1,7 +1,7 @@
 // Input System에 의해서 자동으로 생성되는 Enum입니다.
 namespace InputSystem
 {
-    static class InputSystemSetting
+    public static class InputSystemSetting
     {
         public const string Path = "InputSystem/InputSetting";
     }
@@ -13,9 +13,9 @@ namespace InputSystem
         Up,
         Down,
         Crouch,
-        Sprint,
-        Jump,
         Walk,
+        Jump,
+        Sprint,
     }
 
     public enum MouseName

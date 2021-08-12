@@ -7,7 +7,7 @@ namespace InputSystem
         public bool IsButtonPressed { get; set; }
         public bool IsButtonUp { get; set; }
         public bool IsButtonDown { get; set; }
-        public KeyCode Code { get; private set; }
+        public KeyCode Code { get; set; }
 
         public KeyInput(KeyCode code)
         {

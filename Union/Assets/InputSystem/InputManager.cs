@@ -47,8 +47,8 @@ namespace InputSystem
         {
             foreach (var keyButton in _inputSetting.KeyButtons)
             {
-                KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.name);
-                _keyInputs[name] = new KeyInput(keyButton.button);
+                KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.Name);
+                _keyInputs[name] = new KeyInput(keyButton.Button);
             }
         }
 
@@ -84,13 +84,13 @@ namespace InputSystem
         {
             if (!_keyInputs.ContainsKey(name))
             {
-                KeyButton keyButton = _inputSetting.KeyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.name) == name);
+                KeyButton keyButton = _inputSetting.KeyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
                 if (keyButton == null)
                 {
                     Debug.LogError("Invalid Key Name");
                     return null;
                 }
-                _keyInputs[name] = new KeyInput(keyButton.button);
+                _keyInputs[name] = new KeyInput(keyButton.Button);
             }
             return _keyInputs[name];
         }
@@ -102,6 +102,18 @@ namespace InputSystem
                 _mouseInputs[name] = new MouseInput((int)name);
             }
             return _mouseInputs[name];
+        }
+
+        // KEY TEST 용도입니다 //
+        private void OnGUI()
+        {
+            int height = 0;
+            foreach(var key in _keyInputs)
+            {
+                GUI.Label(new Rect(100, 40 + height, 80, 20), key.Key.ToString());
+                GUI.Label(new Rect(20, 40 + height, 80, 20), key.Value.Code.ToString());
+                height += 20;
+            }
         }
     }
 }

@@ -124,7 +124,7 @@ namespace InputSystem
             sb.AppendLine("namespace InputSystem");
             sb.AppendLine("{");
 
-            sb.AppendLine("    static class InputSystemSetting");
+            sb.AppendLine("    public static class InputSystemSetting");
             sb.AppendLine("    {");
             sb.AppendLine($"        public const string Path = \"{_directory}/{_settingName}\";");
             sb.AppendLine("    }");
@@ -136,7 +136,7 @@ namespace InputSystem
                 sb.AppendLine("    {");
                 foreach (KeyButton inputButton in inputButtons)
                 {
-                    sb.AppendLine($"        {inputButton.name},");
+                    sb.AppendLine($"        {inputButton.Name},");
                 }
                 sb.AppendLine("    }");
                 sb.AppendLine();
@@ -146,11 +146,11 @@ namespace InputSystem
             {
                 sb.AppendLine("    public enum MouseName");
                 sb.AppendLine("    {");
-                var mouseButtonTypes = Enum.GetValues(typeof(MouseButton.Type));
+                var mouseButtonTypes = Enum.GetValues(typeof(MouseButton.buttonType));
                 HashSet<int> hasName = new HashSet<int>();
                 foreach (MouseButton mouseButton in mouseButtons)
                 {
-                    hasName.Add((int)mouseButton.type);
+                    hasName.Add((int)mouseButton.Type);
                 }
                 foreach (var mouseButtonType in mouseButtonTypes)
                 {

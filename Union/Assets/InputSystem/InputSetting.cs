@@ -7,20 +7,28 @@ namespace InputSystem
     [Serializable]
     public class KeyButton
     {
-        public string name;
-        public KeyCode button;
+        [SerializeField]
+        private string _name;
+        [SerializeField]
+        private KeyCode _button;
+
+        public string Name { get => _name;}
+        public KeyCode Button { get => _button;}
     }
 
     [Serializable]
     public class MouseButton
     {
-        public enum Type
+        public enum buttonType
         {
             Left,
             Right,
             Middle,
         }
-        public Type type;
+
+        [SerializeField]
+        private buttonType _type;
+        public buttonType Type { get => _type; }
     }
 
     public class InputSetting : ScriptableObject

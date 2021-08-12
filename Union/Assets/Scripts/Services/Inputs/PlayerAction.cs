@@ -8,7 +8,7 @@ namespace Union.Services.Inputs
         public bool WasPressed { get; private set; }
         public bool WasReleased { get; private set; }
 
-        string key;
+        private string key;
 
         public PlayerAction(string key)
         {
