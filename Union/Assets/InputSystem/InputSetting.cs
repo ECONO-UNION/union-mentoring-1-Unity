@@ -5,40 +5,22 @@ using System.Collections.Generic;
 namespace InputSystem
 {
     [Serializable]
-    public class KeyButton
+    public class Key
     {
         [SerializeField]
         private string _name;
         [SerializeField]
-        private KeyCode _button;
+        private KeyCode _code;
 
         public string Name { get => _name;}
-        public KeyCode Button { get => _button;}
-    }
-
-    [Serializable]
-    public class MouseButton
-    {
-        public enum buttonType
-        {
-            Left,
-            Right,
-            Middle,
-        }
-
-        [SerializeField]
-        private buttonType _type;
-        public buttonType Type { get => _type; }
+        public KeyCode Code { get => _code;}
     }
 
     public class InputSetting : ScriptableObject
     {
         [SerializeField]
-        private List<KeyButton> _keyButtons;
-        [SerializeField]
-        private List<MouseButton> _mouseButtons;
+        private List<Key> _key;
 
-        public List<KeyButton> KeyButtons { get => _keyButtons; }
-        public List<MouseButton> MouseButtons { get => _mouseButtons; }
+        public List<Key> Key { get => _key; }
     }
 }

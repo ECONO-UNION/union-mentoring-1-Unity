@@ -97,10 +97,8 @@ namespace InputSystem
             if (_inputSetting == null || _serializedObject == null)
                 return;
 
-            SerializedProperty keyButtonProperty = _serializedObject.FindProperty("_keyButtons");
-            SerializedProperty mouseButtonProperty = _serializedObject.FindProperty("_mouseButtons");
+            SerializedProperty keyButtonProperty = _serializedObject.FindProperty("_key");
             EditorGUILayout.PropertyField(keyButtonProperty, true);
-            EditorGUILayout.PropertyField(mouseButtonProperty, true);
             _serializedObject.ApplyModifiedProperties();
         }
 
@@ -112,12 +110,12 @@ namespace InputSystem
             GUI.color = Color.cyan;
             if (GUILayout.Button("Apply Input System", GUILayout.Width(_buttonsSize)))
             {
-                CreateEnumClass(_inputSetting.KeyButtons, _inputSetting.MouseButtons);
+                CreateEnumClass(_inputSetting.Key);
                 AssetDatabase.SaveAssets();
             }
         }
 
-        public void CreateEnumClass(List<KeyButton> inputButtons, List<MouseButton> mouseButtons)
+        public void CreateEnumClass(List<Key> inputButtons)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("// Input System에 의해서 자동으로 생성되는 Enum입니다.");
@@ -134,30 +132,9 @@ namespace InputSystem
             {
                 sb.AppendLine("    public enum KeyName");
                 sb.AppendLine("    {");
-                foreach (KeyButton inputButton in inputButtons)
+                foreach (Key inputButton in inputButtons)
                 {
                     sb.AppendLine($"        {inputButton.Name},");
-                }
-                sb.AppendLine("    }");
-                sb.AppendLine();
-            }
-
-            if (mouseButtons.Count > 0)
-            {
-                sb.AppendLine("    public enum MouseName");
-                sb.AppendLine("    {");
-                var mouseButtonTypes = Enum.GetValues(typeof(MouseButton.buttonType));
-                HashSet<int> hasName = new HashSet<int>();
-                foreach (MouseButton mouseButton in mouseButtons)
-                {
-                    hasName.Add((int)mouseButton.Type);
-                }
-                foreach (var mouseButtonType in mouseButtonTypes)
-                {
-                    if (hasName.Contains((int)mouseButtonType))
-                    {
-                        sb.AppendLine($"        {mouseButtonType} = {(int)mouseButtonType},");
-                    }
                 }
                 sb.AppendLine("    }");
             }

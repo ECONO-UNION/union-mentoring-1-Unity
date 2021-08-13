@@ -16,10 +16,6 @@ namespace InputSystem
         Walk,
         Jump,
         Sprint,
-    }
-
-    public enum MouseName
-    {
-        Left = 0,
+        Attack,
     }
 }

@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639179f1e61d950439870736029ba54a, type: 3}
   m_Name: InputSetting
   m_EditorClassIdentifier: 
-  _keyButtons:
+  _key:
   - _name: Left
-    _button: 276
+    _code: 276
   - _name: Right
-    _button: 275
+    _code: 275
   - _name: Up
-    _button: 273
+    _code: 273
   - _name: Down
-    _button: 274
+    _code: 274
   - _name: Crouch
-    _button: 122
+    _code: 122
   - _name: Walk
-    _button: 120
+    _code: 120
   - _name: Jump
-    _button: 99
+    _code: 99
   - _name: Sprint
-    _button: 118
-  _mouseButtons:
-  - type: 0
+    _code: 118
+  - _name: Attack
+    _code: 323

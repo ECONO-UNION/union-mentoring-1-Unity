@@ -26,7 +26,6 @@ namespace InputSystem
         }
 
         private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
-        private Dictionary<MouseName, MouseInput> _mouseInputs = new Dictionary<MouseName, MouseInput>();
         private InputSetting _inputSetting;
 
         public Vector2 MousePosition { get; private set; }
@@ -39,25 +38,15 @@ namespace InputSystem
                 Debug.LogError("Input System을 설정하지 않았습니다");
                 return;
             }
-            BindButtonKeys();
-            BindMouseKeys();
+            BindKey();
         }
 
-        private void BindButtonKeys()
+        private void BindKey()
         {
-            foreach (var keyButton in _inputSetting.KeyButtons)
+            foreach (var keyButton in _inputSetting.Key)
             {
                 KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.Name);
-                _keyInputs[name] = new KeyInput(keyButton.Button);
-            }
-        }
-
-        private void BindMouseKeys()
-        {
-            var keyTypes = Enum.GetValues(typeof(MouseName));
-            foreach (var keyType in keyTypes)
-            {
-                _mouseInputs[(MouseName)keyType] = new MouseInput((int)keyType);
+                _keyInputs[name] = new KeyInput(keyButton.Code);
             }
         }
 
@@ -65,50 +54,33 @@ namespace InputSystem
         {
             foreach (var key in _keyInputs.Values)
             {
-                key.IsButtonPressed = Input.GetKey(key.Code);
-                key.IsButtonDown = Input.GetKeyDown(key.Code);
-                key.IsButtonUp = Input.GetKeyUp(key.Code);
+                key.IsKeyPressed = Input.GetKey(key.Code);
+                key.IsKeyDown = Input.GetKeyDown(key.Code);
+                key.IsKeyUp = Input.GetKeyUp(key.Code);
             }
-
-            foreach (var key in _mouseInputs.Values)
-            {
-                key.IsButtonPressed = Input.GetMouseButton(key.MouseType);
-                key.IsButtonDown = Input.GetMouseButtonDown(key.MouseType);
-                key.IsButtonUp = Input.GetMouseButtonUp(key.MouseType);
-            }
-
             MousePosition = Input.mousePosition;
         }
 
-        public KeyInput GetButtonKey(KeyName name)
+        public KeyInput GetKey(KeyName name)
         {
             if (!_keyInputs.ContainsKey(name))
             {
-                KeyButton keyButton = _inputSetting.KeyButtons.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
+                Key keyButton = _inputSetting.Key.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
                 if (keyButton == null)
                 {
                     Debug.LogError("Invalid Key Name");
                     return null;
                 }
-                _keyInputs[name] = new KeyInput(keyButton.Button);
+                _keyInputs[name] = new KeyInput(keyButton.Code);
             }
             return _keyInputs[name];
-        }
-
-        public MouseInput GetMouseKey(MouseName name)
-        {
-            if (!_mouseInputs.ContainsKey(name))
-            {
-                _mouseInputs[name] = new MouseInput((int)name);
-            }
-            return _mouseInputs[name];
         }
 
         // KEY TEST 용도입니다 //
         private void OnGUI()
         {
             int height = 0;
-            foreach(var key in _keyInputs)
+            foreach (var key in _keyInputs)
             {
                 GUI.Label(new Rect(100, 40 + height, 80, 20), key.Key.ToString());
                 GUI.Label(new Rect(20, 40 + height, 80, 20), key.Value.Code.ToString());

@@ -9,9 +9,9 @@ public class AxisInput
     {
         get
         {
-            if (_negativeKey.IsButtonPressed && !_postiveKey.IsButtonPressed)
+            if (_negativeKey.IsKeyPressed && !_postiveKey.IsKeyPressed)
                 return -1f;
-            else if (!_negativeKey.IsButtonPressed && _postiveKey.IsButtonPressed)
+            else if (!_negativeKey.IsKeyPressed && _postiveKey.IsKeyPressed)
                 return 1f;
             return 0;
         }

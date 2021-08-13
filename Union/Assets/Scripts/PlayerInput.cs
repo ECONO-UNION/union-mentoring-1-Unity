@@ -9,18 +9,18 @@ public class PlayerInput
     public KeyInput Sprint { get; private set; }
     public KeyInput Crouch { get; private set; }
     public KeyInput Jump { get; private set; }
-    public MouseInput Attack { get; private set; }
+    public KeyInput Attack { get; private set; }
     public Vector2 MousePosition { get; private set; }
 
     public PlayerInput()
     {
-        Horizontal = new AxisInput(InputSystem.InputManager.Instance.GetButtonKey(KeyName.Left), InputSystem.InputManager.Instance.GetButtonKey(KeyName.Right));
-        Vertical = new AxisInput(InputSystem.InputManager.Instance.GetButtonKey(KeyName.Down), InputSystem.InputManager.Instance.GetButtonKey(KeyName.Up));
-        Walk = InputSystem.InputManager.Instance.GetButtonKey(KeyName.Walk);
-        Sprint = InputSystem.InputManager.Instance.GetButtonKey(KeyName.Sprint);
-        Crouch = InputSystem.InputManager.Instance.GetButtonKey(KeyName.Crouch);
-        Jump = InputSystem.InputManager.Instance.GetButtonKey(KeyName.Jump);
-        Attack = InputSystem.InputManager.Instance.GetMouseKey(MouseName.Left);
+        Horizontal = new AxisInput(InputSystem.InputManager.Instance.GetKey(KeyName.Left), InputSystem.InputManager.Instance.GetKey(KeyName.Right));
+        Vertical = new AxisInput(InputSystem.InputManager.Instance.GetKey(KeyName.Down), InputSystem.InputManager.Instance.GetKey(KeyName.Up));
+        Walk = InputSystem.InputManager.Instance.GetKey(KeyName.Walk);
+        Sprint = InputSystem.InputManager.Instance.GetKey(KeyName.Sprint);
+        Crouch = InputSystem.InputManager.Instance.GetKey(KeyName.Crouch);
+        Jump = InputSystem.InputManager.Instance.GetKey(KeyName.Jump);
+        Attack = InputSystem.InputManager.Instance.GetKey(KeyName.Attack);
         MousePosition = InputSystem.InputManager.Instance.MousePosition;
     }
 }
