@@ -16,7 +16,7 @@ namespace Union.Services.Stat
 
         public void LateUpdateHeadUpDisplay()
         {
-            this._headUpDispalyHealthPointBar.fillAmount = Mathf.Lerp(this._headUpDispalyHealthPointBar.fillAmount, (float)this.amount / this.maxAmount, Time.deltaTime * 10.0f);
+            this._headUpDispalyHealthPointBar.fillAmount = Mathf.Lerp(this._headUpDispalyHealthPointBar.fillAmount, (float)this._amount / this._maxAmount, Time.deltaTime * 10.0f);
             LateUpdateHeadUpDisplayHealthBarLookAt();
         }
 

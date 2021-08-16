@@ -2,54 +2,54 @@
 {
     public class Stat
     {
-        protected int amount;
-        protected int maxAmount;
+        protected int _amount;
+        protected int _maxAmount;
 
         public Stat()
         {
-            this.amount = 0;
-            this.maxAmount = 0;
+            this._amount = 0;
+            this._maxAmount = 0;
         }
 
         public void Reset()
         {
-            this.amount = 0;
-            this.maxAmount = 0;
+            this._amount = 0;
+            this._maxAmount = 0;
         }
 
         public void Set(int amount)
         {
-            this.amount = amount;
+            this._amount = amount;
 
-            if (this.maxAmount == 0)
+            if (this._maxAmount == 0)
             {
-                this.maxAmount = this.amount;
+                this._maxAmount = this._amount;
             }
         }
 
         public void SetMax(int maxAmount)
         {
-            this.maxAmount = maxAmount;
+            this._maxAmount = maxAmount;
         }
 
         public int Get()
         {
-            return this.amount;
+            return this._amount;
         }
 
         public int GetMax()
         {
-            return this.maxAmount;
+            return this._maxAmount;
         }
 
         public void Increase(int amount)
         {
-            this.amount += amount;
+            this._amount += amount;
         }
 
         public void Decrease(int amount)
         {
-            this.amount -= amount;
+            this._amount -= amount;
         }
     }
 }

@@ -36,7 +36,8 @@ namespace Union.Services.UI
 
         private void UpdateHealthPointUI()
         {
-            this._healthPointBar.fillAmount = Mathf.Lerp(this._healthPointBar.fillAmount, (float)this._player.UnitStat.healthPoint.Get() / this._player.UnitStat.healthPoint.GetMax(), Time.deltaTime * 10.0f);
+            const float Test_HPBarFillAmountWeight = 10.0f;
+            this._healthPointBar.fillAmount = Mathf.Lerp(this._healthPointBar.fillAmount, (float)this._player.UnitStat.healthPoint.Get() / this._player.UnitStat.healthPoint.GetMax(), Time.deltaTime * Test_HPBarFillAmountWeight);
             this._healthPointText.text = "HP : " + this._player.UnitStat.healthPoint.Get().ToString();
         }
     }

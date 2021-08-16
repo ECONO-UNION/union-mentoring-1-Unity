@@ -7,7 +7,7 @@ namespace Union.Services.Game
     {
         private static class Constants
         {
-            public const int InitialEnemyCount = 1;
+            public const int Test_InitialEnemyCount = 1;
         }
 
         public int totalEnemyCount { get; private set; }
@@ -27,7 +27,7 @@ namespace Union.Services.Game
 
         private void Initialize()
         {
-            this.totalEnemyCount = Constants.InitialEnemyCount;
+            this.totalEnemyCount = Constants.Test_InitialEnemyCount;
             this.currentEnemyCount = totalEnemyCount;
         }
 

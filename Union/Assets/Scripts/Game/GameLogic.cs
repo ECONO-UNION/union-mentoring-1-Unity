@@ -4,12 +4,7 @@ namespace Union.Services.Game
 {
     public class GameLogic : Singleton<GameLogic>
     {
-        private static class Constants
-        {
-            public const int BattleFieldEnemyCount = 1;
-        }
-
-        private GameState _GameState;
+        private GameState _gameState;
 
         public GameTime gameTime;
 
@@ -30,14 +25,14 @@ namespace Union.Services.Game
                 this.gameTime.UpdatePlayTime(Time.deltaTime);
             }
 
-            this._GameState.Run();
+            this._gameState.Run();
         }
 
         public void SetState(GameStates gameStates)
         {
-            this._GameState?.Exit();
+            this._gameState?.Exit();
             CreateIGameState(gameStates);
-            this._GameState.Enter();
+            this._gameState.Enter();
         }
 
         private void CreateIGameState(GameStates gameStates)
@@ -45,25 +40,25 @@ namespace Union.Services.Game
             switch (gameStates)
             {
                 case GameStates.Ready:
-                    this._GameState = new ReadyGame(this);
+                    this._gameState = new ReadyGame(this);
                     break;
                 case GameStates.Start:
-                    this._GameState = new StartGame(this);
+                    this._gameState = new StartGame(this);
                     break;
                 case GameStates.Playing:
-                    this._GameState = new PlayingGame(this);
+                    this._gameState = new PlayingGame(this);
                     break;
                 case GameStates.Pause:
-                    this._GameState = new PauseGame(this);
+                    this._gameState = new PauseGame(this);
                     break;
                 case GameStates.Win:
-                    this._GameState = new WinGame(this);
+                    this._gameState = new WinGame(this);
                     break;
                 case GameStates.Draw:
-                    this._GameState = new DrawGame(this);
+                    this._gameState = new DrawGame(this);
                     break;
                 case GameStates.Lose:
-                    this._GameState = new LoseGame(this);
+                    this._gameState = new LoseGame(this);
                     break;
                 default:
                     break;
@@ -72,7 +67,7 @@ namespace Union.Services.Game
 
         public bool IsPlaying()
         {
-            if (this._GameState.GameStates != GameStates.Playing)
+            if (this._gameState.GameStates != GameStates.Playing)
             {
                 return false;
             }
