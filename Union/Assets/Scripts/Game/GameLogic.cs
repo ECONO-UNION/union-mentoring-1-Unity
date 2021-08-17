@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Union.Services.Game
 {
     public class GameLogic : Singleton<GameLogic>
     {
-        private GameState _gameState;
+        private Dictionary<GameStates, GameState> _gameStates;
+        private GameState _currentGameState;
 
         public GameTime gameTime;
 
@@ -15,6 +17,7 @@ namespace Union.Services.Game
 
         private void Start()
         {
+            Initialize();
             SetState(GameStates.Playing);
         }
 
@@ -25,49 +28,40 @@ namespace Union.Services.Game
                 this.gameTime.UpdatePlayTime(Time.deltaTime);
             }
 
-            this._gameState.Run();
+            this._currentGameState.Run();
+        }
+
+        private void Initialize()
+        {
+            this._gameStates = new Dictionary<GameStates, GameState>();
+
+            this._gameStates.Add(GameStates.Ready, new ReadyGame(this));
+            this._gameStates.Add(GameStates.Start, new StartGame(this));
+            this._gameStates.Add(GameStates.Playing, new PlayingGame(this));
+            this._gameStates.Add(GameStates.Pause, new PauseGame(this));
+            this._gameStates.Add(GameStates.Win, new WinGame(this));
+            this._gameStates.Add(GameStates.Draw, new DrawGame(this));
+            this._gameStates.Add(GameStates.Lose, new LoseGame(this));
         }
 
         public void SetState(GameStates gameStates)
         {
-            this._gameState?.Exit();
-            CreateIGameState(gameStates);
-            this._gameState.Enter();
+            this._currentGameState?.Exit();
+            this._currentGameState = GetGameState(gameStates);
+            this._currentGameState?.Enter();
         }
 
-        private void CreateIGameState(GameStates gameStates)
+        private GameState GetGameState(GameStates gameStates)
         {
-            switch (gameStates)
-            {
-                case GameStates.Ready:
-                    this._gameState = new ReadyGame(this);
-                    break;
-                case GameStates.Start:
-                    this._gameState = new StartGame(this);
-                    break;
-                case GameStates.Playing:
-                    this._gameState = new PlayingGame(this);
-                    break;
-                case GameStates.Pause:
-                    this._gameState = new PauseGame(this);
-                    break;
-                case GameStates.Win:
-                    this._gameState = new WinGame(this);
-                    break;
-                case GameStates.Draw:
-                    this._gameState = new DrawGame(this);
-                    break;
-                case GameStates.Lose:
-                    this._gameState = new LoseGame(this);
-                    break;
-                default:
-                    break;
-            }
+            if (this._gameStates.ContainsKey(gameStates) == false)
+                return null;
+
+            return this._gameStates[gameStates];
         }
 
         public bool IsPlaying()
         {
-            if (this._gameState.GameStates != GameStates.Playing)
+            if (this._currentGameState.GameStates != GameStates.Playing)
             {
                 return false;
             }

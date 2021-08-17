@@ -14,7 +14,7 @@
     public abstract class GameState
     {
         protected GameLogic GameLogic { get; set; }
-        public GameStates GameStates { get; protected set; }
+        public GameStates GameStates { get; protected set; } // TO DO : Dictionary 구조로 인해 필요가 없어짐, 추후 정리 필요
 
         public abstract void Enter();
         public abstract void Run();
