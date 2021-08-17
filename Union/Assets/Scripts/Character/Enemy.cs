@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-namespace Union.Services.Unit
+namespace Union.Services.Charcater
 {
     public class Enemy : MonoBehaviour
     {
-        private UnitStat _unitStat;
+        private CharacterStat _characterStat;
         private EnemyState _enemyState;
         
         private void Awake()
         {
-            this._unitStat = new UnitStat();
+            this._characterStat = new CharacterStat();
         }
 
         private void Start()
@@ -25,19 +25,19 @@ namespace Union.Services.Unit
 
         private void LateUpdate()
         {
-            this._unitStat.healthPoint.LateUpdateHeadUpDisplay();
+            this._characterStat.healthPoint.LateUpdateHeadUpDisplay();
         }
 
         private void Initialize()
         {
-            this._unitStat.healthPoint.SetHeadUpDisplay(this.gameObject);
-            this._unitStat.healthPoint.Set(20);
+            this._characterStat.healthPoint.SetHeadUpDisplay(this.gameObject);
+            this._characterStat.healthPoint.Set(20);
 
-            this._unitStat.physicalPower.Set(10);
-            this._unitStat.physicalDefense.Set(10);
-            this._unitStat.walkingSpeed.Set(10);
-            this._unitStat.runningSpeed.Set(20);
-            this._unitStat.jumpingPower.Set(10);
+            this._characterStat.physicalPower.Set(10);
+            this._characterStat.physicalDefense.Set(10);
+            this._characterStat.walkingSpeed.Set(10);
+            this._characterStat.runningSpeed.Set(20);
+            this._characterStat.jumpingPower.Set(10);
         }
 
         public void SetState(EnemyStates enemyStates)
@@ -52,7 +52,7 @@ namespace Union.Services.Unit
             switch (enemyStates)
             {
                 case EnemyStates.Alive:
-                    this._enemyState = new AliveEnemy(this, this._unitStat.healthPoint);
+                    this._enemyState = new AliveEnemy(this, this._characterStat.healthPoint);
                     break;
                 case EnemyStates.Dead:
                     this._enemyState = new DeadEnemy(this);
@@ -69,7 +69,7 @@ namespace Union.Services.Unit
                 return;
             }
 
-            this._unitStat.healthPoint.Decrease(10);
+            this._characterStat.healthPoint.Decrease(10);
         }
     }
 }

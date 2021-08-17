@@ -1,4 +1,4 @@
-﻿namespace Union.Services.Unit
+﻿namespace Union.Services.Charcater
 {
     public enum EnemyStates
     {

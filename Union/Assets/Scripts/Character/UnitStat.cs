@@ -1,8 +1,8 @@
 using Union.Services.Stat;
 
-namespace Union.Services.Unit
+namespace Union.Services.Charcater
 {
-    public class UnitStat
+    public class CharacterStat
     {
         public HealthPoint healthPoint;
 
@@ -14,7 +14,7 @@ namespace Union.Services.Unit
 
         public Stat.Stat jumpingPower;
 
-        public UnitStat()
+        public CharacterStat()
         {
             this.healthPoint = new HealthPoint();
 
