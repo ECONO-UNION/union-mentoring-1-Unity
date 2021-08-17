@@ -5,7 +5,7 @@ using Union.Services.Game;
 
 namespace Union.Services.UI
 {
-    public class UIGame : Singleton<UIGame>
+    public class GameStatus : Singleton<GameStatus>
     {
         [SerializeField]
         private Text _playTimeText;
@@ -21,7 +21,7 @@ namespace Union.Services.UI
 
         private void UpdatePlayTimeUI()
         {
-            this._playTimeText.text = GameLogic.Instance.gameTime.playTime.ToString("F2");
+            this._playTimeText.text = GameLogic.Instance.GameTime.playTime.ToString("F2");
         }
 
         private void UpdateEnemyCountUI()
