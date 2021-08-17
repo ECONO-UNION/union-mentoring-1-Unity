@@ -8,7 +8,7 @@ namespace Union.Characters
     public class BaseController : MonoBehaviour
     {
         [System.Serializable]
-        class Context
+        private class Context
         {
             internal Vector3 originalScale;
 
@@ -25,7 +25,7 @@ namespace Union.Characters
             internal float walkSpeed =5f;
         }
 
-        abstract class Action
+        private abstract class Action
         {
             protected Context context;
 
@@ -34,19 +34,21 @@ namespace Union.Characters
             public abstract void Run();
         }
 
-        abstract class AxisAction
+        private abstract class AxisAction
         {
             protected Context context;
 
             protected AxisAction(Context context) { this.context = context; }
 
-            public abstract void Update(float x, float y);
+            public abstract void Run(float x, float y);
         }
 
-        class Crouch : Action
+        private class Crouch : Action
         {
-            public float crouchHeight = .75f;
-            public float speedReduction = .5f;
+            [SerializeField]
+            float crouchHeight = .75f;
+            [SerializeField]
+            float speedReduction = .5f;
 
             public Crouch(Context context) : base(context)
             {
@@ -75,7 +77,7 @@ namespace Union.Characters
             }
         }
 
-        class Jump : Action
+        private class Jump : Action
         {
             public float jumpPower = 5f;
             public Jump(Context context) : base(context)
@@ -89,7 +91,7 @@ namespace Union.Characters
             }
         }
 
-        class Walk : AxisAction
+        private class Walk : AxisAction
         {
             public bool playerCanMove = true;
 
@@ -98,7 +100,7 @@ namespace Union.Characters
                 this.context = context;
             }
             
-            public override void Update(float x, float y)
+            public override void Run(float x, float y)
             {
                 context.isSprinting = false;
 
@@ -118,7 +120,7 @@ namespace Union.Characters
             }
         }
 
-        class Sprint : AxisAction
+        private class Sprint : AxisAction
         {
             public float sprintSpeed = 7f;
 
@@ -127,7 +129,7 @@ namespace Union.Characters
                 this.context = context;
             }
 
-            public override void Update(float x, float y)
+            public override void Run(float x, float y)
             {
                 var maxVelocityChange = context.maxVelocityChange;
 
@@ -145,15 +147,15 @@ namespace Union.Characters
         }
 
         [SerializeField]
-        Rigidbody _rigidbody;
+        private Rigidbody _rigidbody;
 
         [SerializeField]
-        Context _context;
+        private Context _context;
 
-        AxisAction _walk;
-        AxisAction _sprint;
-        Action _crouch;
-        Action _jump;
+        private AxisAction _walk;
+        private AxisAction _sprint;
+        private Action _crouch;
+        private Action _jump;
 
         private void Awake()
         {
@@ -170,12 +172,12 @@ namespace Union.Characters
             _jump = new Jump(_context);
         }
 
-        void Update()
+        private void Update()
         {
-            CheckGround();         
+            CheckGround();
         }
 
-        void CheckGround()
+        private void CheckGround()
         {
             Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
             Vector3 direction = transform.TransformDirection(Vector3.down);
@@ -183,15 +185,16 @@ namespace Union.Characters
 
             if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
                 _context.isGrounded = true;
+
             else
                 _context.isGrounded = false;
         }
 
         public void DoWalk(float x, float z) 
-            => _walk.Update(x, z);
+            => _walk.Run(x, z);
 
         public void DoSprint(float x, float z)
-            => _sprint.Update(x, z);
+            => _sprint.Run(x, z);
 
         public void DoCrouch() 
             => _crouch.Run();
