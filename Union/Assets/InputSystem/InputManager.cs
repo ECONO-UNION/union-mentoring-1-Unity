@@ -28,7 +28,7 @@ namespace InputSystem
         private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
         private InputSetting _inputSetting;
 
-        public Vector2 MousePosition { get; private set; }
+        public MouseInput MouseInput { get; private set; }
 
         private void Awake()
         {
@@ -58,7 +58,7 @@ namespace InputSystem
                 key.IsKeyDown = Input.GetKeyDown(key.Code);
                 key.IsKeyUp = Input.GetKeyUp(key.Code);
             }
-            MousePosition = Input.mousePosition;
+            MouseInput.Run();
         }
 
         public KeyInput GetKey(KeyName name)

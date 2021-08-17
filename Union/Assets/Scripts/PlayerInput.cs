@@ -10,7 +10,7 @@ public class PlayerInput
     public KeyInput Crouch { get; private set; }
     public KeyInput Jump { get; private set; }
     public KeyInput Attack { get; private set; }
-    public Vector2 MousePosition { get; private set; }
+    public MouseInput MouseInput { get; private set; }
 
     public PlayerInput()
     {
@@ -21,6 +21,6 @@ public class PlayerInput
         Crouch = InputSystem.InputManager.Instance.GetKey(KeyName.Crouch);
         Jump = InputSystem.InputManager.Instance.GetKey(KeyName.Jump);
         Attack = InputSystem.InputManager.Instance.GetKey(KeyName.Attack);
-        MousePosition = InputSystem.InputManager.Instance.MousePosition;
+        MouseInput = InputSystem.InputManager.Instance.MouseInput;
     }
 }

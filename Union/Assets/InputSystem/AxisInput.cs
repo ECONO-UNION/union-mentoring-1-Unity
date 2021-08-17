@@ -1,25 +1,26 @@
-﻿using InputSystem;
-
-public class AxisInput
+﻿namespace InputSystem
 {
-    private KeyInput _negativeKey;
-    private KeyInput _postiveKey;
-
-    public float Value
+    public class AxisInput
     {
-        get
+        private KeyInput _negativeKey;
+        private KeyInput _postiveKey;
+
+        public float Value
         {
-            if (_negativeKey.IsKeyPressed && !_postiveKey.IsKeyPressed)
-                return -1f;
-            else if (!_negativeKey.IsKeyPressed && _postiveKey.IsKeyPressed)
-                return 1f;
-            return 0;
+            get
+            {
+                if (_negativeKey.IsKeyPressed && !_postiveKey.IsKeyPressed)
+                    return -1f;
+                else if (!_negativeKey.IsKeyPressed && _postiveKey.IsKeyPressed)
+                    return 1f;
+                return 0;
+            }
         }
-    }
 
-    public AxisInput(KeyInput negativeKey, KeyInput postiveKey)
-    {
-        _negativeKey = negativeKey;
-        _postiveKey = postiveKey;
+        public AxisInput(KeyInput negativeKey, KeyInput postiveKey)
+        {
+            _negativeKey = negativeKey;
+            _postiveKey = postiveKey;
+        }
     }
 }
