@@ -4,7 +4,7 @@ namespace Union.Services.Charcater
 {
     public class CharacterStat
     {
-        public HealthPoint healthPoint;
+        public Stat.Stat healthPoint;
 
         public Stat.Stat physicalPower;
         public Stat.Stat physicalDefense;
@@ -16,7 +16,7 @@ namespace Union.Services.Charcater
 
         public CharacterStat()
         {
-            this.healthPoint = new HealthPoint();
+            this.healthPoint = new Stat.Stat();
 
             this.physicalPower = new Stat.Stat();
             this.physicalDefense = new Stat.Stat();

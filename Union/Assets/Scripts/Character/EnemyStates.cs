@@ -18,9 +18,9 @@
 
     public class AliveEnemy : EnemyState
     {
-        public Union.Services.Stat.HealthPoint HealthPoint { private get; set; }
+        public Union.Services.Stat.Stat HealthPoint { private get; set; }
 
-        public AliveEnemy(Enemy enemy, Union.Services.Stat.HealthPoint healthPoint)
+        public AliveEnemy(Enemy enemy, Union.Services.Stat.Stat healthPoint)
         {
             this.EnemyStates = EnemyStates.Alive;
             this.Enemy = enemy;

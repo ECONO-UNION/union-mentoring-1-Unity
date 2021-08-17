@@ -18,9 +18,9 @@
 
     public class AlivePlayer : PlayerState
     {
-        public Union.Services.Stat.HealthPoint HealthPoint { private get; set; }
+        public Union.Services.Stat.Stat HealthPoint { private get; set; }
 
-        public AlivePlayer(Player player, Union.Services.Stat.HealthPoint healthPoint)
+        public AlivePlayer(Player player, Union.Services.Stat.Stat healthPoint)
         {
             this.PlayerStates = PlayerStates.Alive;
             this.Player = player;

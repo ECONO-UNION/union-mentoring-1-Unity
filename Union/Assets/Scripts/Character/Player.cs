@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Union.Services.Charcater
 {
-    public class Player : MonoBehaviour
+    public class Player : Character
     {
-        public CharacterStat CharacterStat { private set; get; }
         private PlayerState _playerState;
 
         private void Awake()
@@ -24,14 +23,8 @@ namespace Union.Services.Charcater
             this._playerState.Run();
         }
 
-        private void LateUpdate()
-        {
-            this.CharacterStat.healthPoint.LateUpdateHeadUpDisplay();
-        }
-
         private void Initialize()
         {
-            this.CharacterStat.healthPoint.SetHeadUpDisplay(this.gameObject);
             this.CharacterStat.healthPoint.Set(100);
 
             this.CharacterStat.physicalPower.Set(10);

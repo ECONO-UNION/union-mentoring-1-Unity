@@ -2,14 +2,13 @@
 
 namespace Union.Services.Charcater
 {
-    public class Enemy : MonoBehaviour
+    public class Enemy : Character
     {
-        private CharacterStat _characterStat;
         private EnemyState _enemyState;
         
         private void Awake()
         {
-            this._characterStat = new CharacterStat();
+            this.CharacterStat = new CharacterStat();
         }
 
         private void Start()
@@ -23,21 +22,15 @@ namespace Union.Services.Charcater
             this._enemyState.Run();
         }
 
-        private void LateUpdate()
-        {
-            this._characterStat.healthPoint.LateUpdateHeadUpDisplay();
-        }
-
         private void Initialize()
         {
-            this._characterStat.healthPoint.SetHeadUpDisplay(this.gameObject);
-            this._characterStat.healthPoint.Set(20);
+            this.CharacterStat.healthPoint.Set(20);
 
-            this._characterStat.physicalPower.Set(10);
-            this._characterStat.physicalDefense.Set(10);
-            this._characterStat.walkingSpeed.Set(10);
-            this._characterStat.runningSpeed.Set(20);
-            this._characterStat.jumpingPower.Set(10);
+            this.CharacterStat.physicalPower.Set(10);
+            this.CharacterStat.physicalDefense.Set(10);
+            this.CharacterStat.walkingSpeed.Set(10);
+            this.CharacterStat.runningSpeed.Set(20);
+            this.CharacterStat.jumpingPower.Set(10);
         }
 
         public void SetState(EnemyStates enemyStates)
@@ -52,7 +45,7 @@ namespace Union.Services.Charcater
             switch (enemyStates)
             {
                 case EnemyStates.Alive:
-                    this._enemyState = new AliveEnemy(this, this._characterStat.healthPoint);
+                    this._enemyState = new AliveEnemy(this, this.CharacterStat.healthPoint);
                     break;
                 case EnemyStates.Dead:
                     this._enemyState = new DeadEnemy(this);
@@ -69,7 +62,7 @@ namespace Union.Services.Charcater
                 return;
             }
 
-            this._characterStat.healthPoint.Decrease(10);
+            this.CharacterStat.healthPoint.Decrease(10);
         }
     }
 }

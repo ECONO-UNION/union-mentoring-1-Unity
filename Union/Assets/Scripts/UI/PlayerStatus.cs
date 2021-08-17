@@ -6,7 +6,7 @@ using Union.Services.Charcater;
 
 namespace Union.Services.UI
 {
-    public class UIPlayerStatus : MonoBehaviour
+    public class PlayerStatus : MonoBehaviour
     {
         [SerializeField]
         private Player _player;

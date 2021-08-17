@@ -29,7 +29,7 @@ public class BaseController : MonoBehaviour
 
         this.currentJumpCount = 0;
 
-        this.moveSpeed = 10.0f;
+        this.moveSpeed = 30.0f;
         this.jumpingPower = 500.0f;
 
         this.controllerRigidbody.mass = 1.5f;
