@@ -8,11 +8,11 @@ namespace Union.Services.Game
         private Dictionary<GameStates, GameState> _gameStates;
         private GameState _currentGameState;
 
-        public GameTime gameTime;
+        public GameTime GameTime { get; private set; }
 
         private void Awake()
         {
-            this.gameTime = new GameTime();
+            this.GameTime = new GameTime();
         }
 
         private void Start()
@@ -25,7 +25,7 @@ namespace Union.Services.Game
         {
             if (IsPlaying() == true)
             {
-                this.gameTime.UpdatePlayTime(Time.deltaTime);
+                this.GameTime.UpdatePlayTime(Time.deltaTime);
             }
 
             this._currentGameState.Run();
@@ -62,9 +62,7 @@ namespace Union.Services.Game
         public bool IsPlaying()
         {
             if (this._currentGameState.GameStates != GameStates.Playing)
-            {
-                return false;
-            }
+                return false;            
 
             return true;
         }
