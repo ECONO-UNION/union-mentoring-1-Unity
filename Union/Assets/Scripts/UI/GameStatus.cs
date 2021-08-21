@@ -21,7 +21,7 @@ namespace Union.Services.UI
 
         private void UpdatePlayTimeUI()
         {
-            this._playTimeText.text = GameLogic.Instance.GameTime.playTime.ToString("F2");
+            this._playTimeText.text = Logic.Instance.Time.playTime.ToString("F2");
         }
 
         private void UpdateEnemyCountUI()

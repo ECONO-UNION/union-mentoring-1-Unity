@@ -13,8 +13,8 @@ namespace Union.Services.Game
 
     public abstract class State
     {
-        protected GameLogic _gameLogic { get; set; }
-        protected GameFiniteStateMachine _gameFiniteStateMachine { get; set; }
+        protected Logic _logic { get; set; }
+        protected FiniteStateMachine _finiteStateMachine { get; set; }
 
         public abstract void Enter();
         public abstract void Run();
@@ -23,10 +23,10 @@ namespace Union.Services.Game
 
     public class Ready : State
     {
-        public Ready(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
+        public Ready(Logic logic, FiniteStateMachine finiteStateMachine)
         {
-            this._gameLogic = gameLogic;
-            this._gameFiniteStateMachine = gameFiniteStateMachine;
+            this._logic = logic;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
@@ -47,10 +47,10 @@ namespace Union.Services.Game
 
     public class Playing : State
     {
-        public Playing(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
+        public Playing(Logic logic, FiniteStateMachine finiteStateMachine)
         {
-            this._gameLogic = gameLogic;
-            this._gameFiniteStateMachine = gameFiniteStateMachine;
+            this._logic = logic;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
@@ -60,12 +60,12 @@ namespace Union.Services.Game
 
         public override void Run()
         {
-            this._gameLogic.UpdatePlayTime(Time.deltaTime);
+            this._logic.UpdatePlayTime(UnityEngine.Time.deltaTime);
 
             if (BattleField.Instance.currentEnemyCount <= 0)
             {
-                this._gameFiniteStateMachine.IssueCommand(GameFiniteStateMachine.Constants.EndCommand);
-                Assert.AreEqual(this._gameFiniteStateMachine.CurrentStates, States.End);
+                this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constants.EndCommand);
+                Assert.AreEqual(this._finiteStateMachine.CurrentStates, States.End);
             }
         }
 
@@ -77,10 +77,10 @@ namespace Union.Services.Game
 
     public class Pause : State
     {
-        public Pause(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
+        public Pause(Logic logic, FiniteStateMachine finiteStateMachine)
         {
-            this._gameLogic = gameLogic;
-            this._gameFiniteStateMachine = gameFiniteStateMachine;
+            this._logic = logic;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
@@ -101,10 +101,10 @@ namespace Union.Services.Game
 
     public class End : State
     {
-        public End(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
+        public End(Logic logic, FiniteStateMachine finiteStateMachine)
         {
-            this._gameLogic = gameLogic;
-            this._gameFiniteStateMachine = gameFiniteStateMachine;
+            this._logic = logic;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()

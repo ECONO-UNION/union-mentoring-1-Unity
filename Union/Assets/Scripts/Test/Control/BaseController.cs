@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BaseController : MonoBehaviour
 {
@@ -150,7 +150,7 @@ public class BaseController : MonoBehaviour
             return false;
         }
 
-        if (Union.Services.Game.GameLogic.Instance.IsPlaying() == false)
+        if (Union.Services.Game.Logic.Instance.IsPlaying() == false)
         {
             return false;
         }

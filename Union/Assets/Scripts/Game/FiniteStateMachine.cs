@@ -4,7 +4,7 @@ using Union.Services.FiniteStateMachine;
 
 namespace Union.Services.Game
 {
-    public class GameFiniteStateMachine
+    public class FiniteStateMachine
     {
         public static class Constants
         {
@@ -22,14 +22,14 @@ namespace Union.Services.Game
             }
         }
 
-        private GameLogic _gameLogic;
+        private Logic _logic;
 
         private List<KeyValuePair<States, State>> _states;
         private Machine<States> _machine;
 
-        public GameFiniteStateMachine(GameLogic gameLogic)
+        public FiniteStateMachine(Logic logic)
         {
-            this._gameLogic = gameLogic;
+            this._logic = logic;
         }
 
         public void Initialize()
@@ -57,10 +57,10 @@ namespace Union.Services.Game
         {
             this._states = new List<KeyValuePair<States, State>>();
 
-            this._states.Add(new KeyValuePair<States, State>(States.Ready, new Ready(this._gameLogic, this)));
-            this._states.Add(new KeyValuePair<States, State>(States.Playing, new Playing(this._gameLogic, this)));
-            this._states.Add(new KeyValuePair<States, State>(States.Pause, new Pause(this._gameLogic, this)));
-            this._states.Add(new KeyValuePair<States, State>(States.End, new End(this._gameLogic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Ready, new Ready(this._logic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Playing, new Playing(this._logic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Pause, new Pause(this._logic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.End, new End(this._logic, this)));
         }
 
         private void SetOnEvent()

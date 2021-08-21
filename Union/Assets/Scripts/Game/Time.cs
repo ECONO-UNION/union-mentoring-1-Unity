@@ -1,6 +1,6 @@
 ﻿namespace Union.Services.Game
 {
-    public class GameTime
+    public class Time
     {
         public float playTime { get; private set; }
 
