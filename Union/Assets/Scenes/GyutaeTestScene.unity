@@ -757,7 +757,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1199273944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b389e01afc1448aca24f9ba7a669c79, type: 3}
+  m_Script: {fileID: 11500000, guid: bc3b478e75cb2412d81bd85158b1439b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &1199273949
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1571688288}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b389e01afc1448aca24f9ba7a669c79, type: 3}
+  m_Script: {fileID: 11500000, guid: bc3b478e75cb2412d81bd85158b1439b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1631491947
@@ -1417,7 +1417,7 @@ GameObject:
   - component: {fileID: 1631491948}
   - component: {fileID: 1631491949}
   m_Layer: 5
-  m_Name: UIGame
+  m_Name: GameStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1631491947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fbebd348d79646028bf3cd840a65ef6, type: 3}
+  m_Script: {fileID: 11500000, guid: 89dc56af563364ceda7435eee0765d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _playTimeText: {fileID: 166974145}
@@ -1469,7 +1469,7 @@ GameObject:
   - component: {fileID: 1641664209}
   - component: {fileID: 1641664210}
   m_Layer: 5
-  m_Name: UIPlayer
+  m_Name: PlayerStaus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1505,7 +1505,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1641664208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e6d2a25ca1b95444b74556af14d2b1c, type: 3}
+  m_Script: {fileID: 11500000, guid: 582e2cb34cf69409fa0ee147bbfd5114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1571688293}

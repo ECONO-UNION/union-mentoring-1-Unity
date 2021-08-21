@@ -1,37 +1,35 @@
-﻿namespace Union.Services.Game
+﻿using UnityEngine;
+using UnityEngine.Assertions;
+
+namespace Union.Services.Game
 {
-    public enum GameStates
+    public enum States
     {
         Ready,
-        Start,
         Playing,
         Pause,
-        Win,
-        Draw,
-        Lose,
+        End,
     }
 
-    public abstract class GameState
+    public abstract class State
     {
-        protected GameLogic GameLogic { get; set; }
-        public GameStates GameStates { get; protected set; } // TO DO : Dictionary 구조로 인해 필요가 없어짐, 추후 정리 필요
+        protected GameFiniteStateMachine _gameFiniteStateMachine { get; set; }
 
         public abstract void Enter();
         public abstract void Run();
         public abstract void Exit();
     }
 
-    public class ReadyGame : GameState
+    public class Ready : State
     {
-        public ReadyGame(GameLogic gameLogic)
+        public Ready(GameFiniteStateMachine gameFiniteStateMachine)
         {
-            this.GameStates = GameStates.Ready;
-            this.GameLogic = gameLogic;
+            this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
         public override void Enter()
         {
-
+            Debug.Log("OnEnter : Ready");
         }
 
         public override void Run()
@@ -41,74 +39,47 @@
 
         public override void Exit()
         {
-
+            Debug.Log("OnExit : Ready");
         }
     }
 
-    public class StartGame : GameState
+    public class Playing : State
     {
-        public StartGame(GameLogic gameLogic)
+        public Playing(GameFiniteStateMachine gameFiniteStateMachine)
         {
-            this.GameStates = GameStates.Start;
-            this.GameLogic = gameLogic;
+            this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
         public override void Enter()
         {
-
+            Debug.Log("OnEnter : Playing");
         }
 
         public override void Run()
         {
-
-        }
-
-        public override void Exit()
-        {
-
-        }
-    }
-
-    public class PlayingGame : GameState
-    {
-        public PlayingGame(GameLogic gameLogic)
-        {
-            this.GameStates = GameStates.Playing;
-            this.GameLogic = gameLogic;
-        }
-
-        public override void Enter()
-        {
-
-        }
-
-        public override void Run()
-        {
-            // TO DO : Lose & Draw 로직 고민 필요 (Player 상태 가져오기)
             if (BattleField.Instance.currentEnemyCount <= 0)
             {
-                this.GameLogic.SetState(GameStates.Win);
-                UnityEngine.Debug.Log("게임 승리");
+                this._gameFiniteStateMachine.IssueCommand(GameFiniteStateMachine.Constants.EndCommand);
+                Assert.AreEqual(this._gameFiniteStateMachine.GetCurrentState(), States.End);
             }
         }
 
         public override void Exit()
         {
-
+            Debug.Log("OnExit : Playing");
         }
     }
 
-    public class PauseGame : GameState
+    public class Pause : State
     {
-        public PauseGame(GameLogic gameLogic)
+        public Pause(GameFiniteStateMachine gameFiniteStateMachine)
         {
-            this.GameStates = GameStates.Pause;
-            this.GameLogic = gameLogic;
+            this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
         public override void Enter()
         {
-
+            Debug.Log("OnEnter : Pause");
         }
 
         public override void Run()
@@ -118,20 +89,20 @@
 
         public override void Exit()
         {
-
+            Debug.Log("OnExit : Pause");
         }
     }
 
-    public class WinGame : GameState
+    public class End : State
     {
-        public WinGame(GameLogic gameLogic)
+        public End(GameFiniteStateMachine gameFiniteStateMachine)
         {
-            this.GameStates = GameStates.Win;
-            this.GameLogic = gameLogic;
+            this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
+
         public override void Enter()
         {
-
+            Debug.Log("OnEnter : End");
         }
 
         public override void Run()
@@ -141,55 +112,8 @@
 
         public override void Exit()
         {
-
+            Debug.Log("OnExit : End");
         }
     }
 
-    public class DrawGame : GameState
-    {
-        public DrawGame(GameLogic gameLogic)
-        {
-            this.GameStates = GameStates.Lose;
-            this.GameLogic = gameLogic;
-        }
-
-        public override void Enter()
-        {
-
-        }
-
-        public override void Run()
-        {
-
-        }
-
-        public override void Exit()
-        {
-
-        }
-    }
-
-    public class LoseGame : GameState
-    {
-        public LoseGame(GameLogic gameLogic)
-        {
-            this.GameStates = GameStates.Lose;
-            this.GameLogic = gameLogic;
-        }
-
-        public override void Enter()
-        {
-
-        }
-
-        public override void Run()
-        {
-
-        }
-
-        public override void Exit()
-        {
-
-        }
-    }
 }

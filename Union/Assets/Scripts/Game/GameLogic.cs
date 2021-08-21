@@ -1,24 +1,22 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Union.Services.Game
 {
     public class GameLogic : Singleton<GameLogic>
     {
-        private Dictionary<GameStates, GameState> _gameStates;
-        private GameState _currentGameState;
-
         public GameTime GameTime { get; private set; }
+
+        private GameFiniteStateMachine _gameFiniteStateMachine;
 
         private void Awake()
         {
             this.GameTime = new GameTime();
+            this._gameFiniteStateMachine = new GameFiniteStateMachine();
         }
 
         private void Start()
         {
-            Initialize();
-            SetState(GameStates.Playing);
+            this._gameFiniteStateMachine.Initialize();
         }
 
         private void Update()
@@ -28,40 +26,12 @@ namespace Union.Services.Game
                 this.GameTime.UpdatePlayTime(Time.deltaTime);
             }
 
-            this._currentGameState.Run();
-        }
-
-        private void Initialize()
-        {
-            this._gameStates = new Dictionary<GameStates, GameState>();
-
-            this._gameStates.Add(GameStates.Ready, new ReadyGame(this));
-            this._gameStates.Add(GameStates.Start, new StartGame(this));
-            this._gameStates.Add(GameStates.Playing, new PlayingGame(this));
-            this._gameStates.Add(GameStates.Pause, new PauseGame(this));
-            this._gameStates.Add(GameStates.Win, new WinGame(this));
-            this._gameStates.Add(GameStates.Draw, new DrawGame(this));
-            this._gameStates.Add(GameStates.Lose, new LoseGame(this));
-        }
-
-        public void SetState(GameStates gameStates)
-        {
-            this._currentGameState?.Exit();
-            this._currentGameState = GetGameState(gameStates);
-            this._currentGameState?.Enter();
-        }
-
-        private GameState GetGameState(GameStates gameStates)
-        {
-            if (this._gameStates.ContainsKey(gameStates) == false)
-                return null;
-
-            return this._gameStates[gameStates];
+            this._gameFiniteStateMachine.Run();
         }
 
         public bool IsPlaying()
         {
-            if (this._currentGameState.GameStates != GameStates.Playing)
+            if (this._gameFiniteStateMachine.CurrentState != States.Playing)
                 return false;            
 
             return true;
