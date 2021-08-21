@@ -11,6 +11,12 @@
             this._maxAmount = 0;
         }
 
+        public Stat(int amount)
+        {
+            this._amount = amount;
+            this._maxAmount = amount;
+        }
+
         public void Reset()
         {
             this._amount = 0;

@@ -8,30 +8,18 @@ namespace Union.Services.Charcater.Player
 
         private void Awake()
         {
-            this.BaseStat = new BaseStat();
+            this.BaseStat = new BaseStat(100, 10, 10, 10, 20, 10);
             this._finiteStateMachine = new FiniteStateMachine(this);
         }
 
         private void Start()
         {
-            Initialize();
             this._finiteStateMachine.Initialize();
         }
 
         private void Update()
         {
             this._finiteStateMachine.Run();
-        }
-
-        private void Initialize()
-        {
-            this.BaseStat.HealthPoint.Set(100);
-
-            this.BaseStat.PhysicalPower.Set(10);
-            this.BaseStat.PhysicalDefense.Set(10);
-            this.BaseStat.WalkingSpeed.Set(10);
-            this.BaseStat.RunningSpeed.Set(20);
-            this.BaseStat.JumpingPower.Set(10);
         }
 
         private void OnCollisionEnter(Collision collision)

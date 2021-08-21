@@ -34,7 +34,7 @@ namespace Union.Services.Charcater.Enemy
 
         public override void Run()
         {
-            if (this._enemy.BaseStat.healthPoint.Get() <= 0)
+            if (this._enemy.BaseStat.HealthPoint.Get() <= 0)
             {
                 this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constatns.DieCommand);
                 Assert.AreEqual(this._finiteStateMachine.CurrentState, States.Dead);

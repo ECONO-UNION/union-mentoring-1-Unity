@@ -8,13 +8,12 @@ namespace Union.Services.Charcater.Enemy
         
         private void Awake()
         {
-            this.BaseStat = new BaseStat();
+            this.BaseStat = new BaseStat(20, 10, 10, 10, 20, 10);
             this._finiteStateMachine = new FiniteStateMachine(this);
         }
 
         private void Start()
         {
-            Initialize();
             this._finiteStateMachine.Initialize();
         }
 
@@ -23,25 +22,12 @@ namespace Union.Services.Charcater.Enemy
             this._finiteStateMachine.Run();
         }
 
-        private void Initialize()
-        {
-            this.BaseStat.healthPoint.Set(20);
-
-            this.BaseStat.physicalPower.Set(10);
-            this.BaseStat.physicalDefense.Set(10);
-            this.BaseStat.walkingSpeed.Set(10);
-            this.BaseStat.runningSpeed.Set(20);
-            this.BaseStat.jumpingPower.Set(10);
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.transform.tag == "Ground")
-            {
                 return;
-            }
 
-            this.BaseStat.healthPoint.Decrease(10);
+            this.BaseStat.HealthPoint.Decrease(10);
         }
     }
 }
