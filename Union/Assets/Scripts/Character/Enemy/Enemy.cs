@@ -1,25 +1,26 @@
 ﻿using UnityEngine;
 
-namespace Union.Services.Charcater
+namespace Union.Services.Charcater.Enemy
 {
     public class Enemy : Character
     {
-        private EnemyState _enemyState;
+        private EnemyFiniteStateMachine _enemyFiniteStateMachine;
         
         private void Awake()
         {
             this.CharacterStat = new CharacterStat();
+            this._enemyFiniteStateMachine = new EnemyFiniteStateMachine(this);
         }
 
         private void Start()
         {
             Initialize();
-            SetState(EnemyStates.Alive);
+            this._enemyFiniteStateMachine.Initialize();
         }
 
         private void Update()
         {
-            this._enemyState.Run();
+            this._enemyFiniteStateMachine.Run();
         }
 
         private void Initialize()
@@ -31,28 +32,6 @@ namespace Union.Services.Charcater
             this.CharacterStat.walkingSpeed.Set(10);
             this.CharacterStat.runningSpeed.Set(20);
             this.CharacterStat.jumpingPower.Set(10);
-        }
-
-        public void SetState(EnemyStates enemyStates)
-        {
-            this._enemyState?.Exit();
-            CreateEnemyState(enemyStates);
-            this._enemyState?.Enter();
-        }
-
-        private void CreateEnemyState(EnemyStates enemyStates)
-        {
-            switch (enemyStates)
-            {
-                case EnemyStates.Alive:
-                    this._enemyState = new AliveEnemy(this, this.CharacterStat.healthPoint);
-                    break;
-                case EnemyStates.Dead:
-                    this._enemyState = new DeadEnemy(this);
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void OnCollisionEnter(Collision collision)
