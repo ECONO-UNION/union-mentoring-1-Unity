@@ -39,6 +39,7 @@ namespace InputSystem
                 return;
             }
             BindKey();
+            MouseInput = new MouseInput(); 
         }
 
         private void BindKey()
