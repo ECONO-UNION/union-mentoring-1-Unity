@@ -4,23 +4,23 @@ namespace Union.Services.Charcater.Enemy
 {
     public class Enemy : Character
     {
-        private EnemyFiniteStateMachine _enemyFiniteStateMachine;
+        private FiniteStateMachine _finiteStateMachine;
         
         private void Awake()
         {
             this.CharacterStat = new CharacterStat();
-            this._enemyFiniteStateMachine = new EnemyFiniteStateMachine(this);
+            this._finiteStateMachine = new FiniteStateMachine(this);
         }
 
         private void Start()
         {
             Initialize();
-            this._enemyFiniteStateMachine.Initialize();
+            this._finiteStateMachine.Initialize();
         }
 
         private void Update()
         {
-            this._enemyFiniteStateMachine.Run();
+            this._finiteStateMachine.Run();
         }
 
         private void Initialize()

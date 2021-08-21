@@ -4,7 +4,7 @@ using Union.Services.FiniteStateMachine;
 
 namespace Union.Services.Charcater.Enemy
 {
-    public class EnemyFiniteStateMachine
+    public class FiniteStateMachine
     {
         public static class Constatns
         {
@@ -24,7 +24,7 @@ namespace Union.Services.Charcater.Enemy
         private List<KeyValuePair<States, State>> _states;
         private Machine<States> _machine;
 
-        public EnemyFiniteStateMachine(Enemy enemy)
+        public FiniteStateMachine(Enemy enemy)
         {
             this._enemy = enemy;
         }

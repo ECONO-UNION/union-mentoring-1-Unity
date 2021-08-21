@@ -12,7 +12,7 @@ namespace Union.Services.Charcater.Enemy
     public abstract class State
     {
         protected Enemy _enemy { get; set; }
-        protected EnemyFiniteStateMachine _enemyFiniteStateMachine { get; set; }
+        protected FiniteStateMachine _finiteStateMachine { get; set; }
 
         public abstract void Enter();
         public abstract void Run();
@@ -21,10 +21,10 @@ namespace Union.Services.Charcater.Enemy
 
     public class Alive : State
     {
-        public Alive(Enemy enemy, EnemyFiniteStateMachine enemyFiniteStateMachine)
+        public Alive(Enemy enemy, FiniteStateMachine finiteStateMachine)
         {
             this._enemy = enemy;
-            this._enemyFiniteStateMachine = enemyFiniteStateMachine;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
@@ -36,8 +36,8 @@ namespace Union.Services.Charcater.Enemy
         {
             if (this._enemy.CharacterStat.healthPoint.Get() <= 0)
             {
-                this._enemyFiniteStateMachine.IssueCommand(EnemyFiniteStateMachine.Constatns.DieCommand);
-                Assert.AreEqual(this._enemyFiniteStateMachine.CurrentState, States.Dead);
+                this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constatns.DieCommand);
+                Assert.AreEqual(this._finiteStateMachine.CurrentState, States.Dead);
             }
         }
 
@@ -49,10 +49,10 @@ namespace Union.Services.Charcater.Enemy
 
     public class Dead : State
     {
-        public Dead(Enemy enemy, EnemyFiniteStateMachine enemyFiniteStateMachine)
+        public Dead(Enemy enemy, FiniteStateMachine finiteStateMachine)
         {
             this._enemy = enemy;
-            this._enemyFiniteStateMachine = enemyFiniteStateMachine;
+            this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
