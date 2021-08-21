@@ -11,7 +11,7 @@ namespace Union.Services.Game
         private void Awake()
         {
             this.GameTime = new GameTime();
-            this._gameFiniteStateMachine = new GameFiniteStateMachine();
+            this._gameFiniteStateMachine = new GameFiniteStateMachine(this);
         }
 
         private void Start()
@@ -21,17 +21,17 @@ namespace Union.Services.Game
 
         private void Update()
         {
-            if (IsPlaying() == true)
-            {
-                this.GameTime.UpdatePlayTime(Time.deltaTime);
-            }
-
             this._gameFiniteStateMachine.Run();
+        }
+
+        public void UpdatePlayTime(float addTime)
+        {
+            this.GameTime.UpdatePlayTime(addTime);
         }
 
         public bool IsPlaying()
         {
-            if (this._gameFiniteStateMachine.CurrentState != States.Playing)
+            if (this._gameFiniteStateMachine.CurrentStates != States.Playing)
                 return false;            
 
             return true;

@@ -13,6 +13,7 @@ namespace Union.Services.Game
 
     public abstract class State
     {
+        protected GameLogic _gameLogic { get; set; }
         protected GameFiniteStateMachine _gameFiniteStateMachine { get; set; }
 
         public abstract void Enter();
@@ -22,8 +23,9 @@ namespace Union.Services.Game
 
     public class Ready : State
     {
-        public Ready(GameFiniteStateMachine gameFiniteStateMachine)
+        public Ready(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
         {
+            this._gameLogic = gameLogic;
             this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
@@ -45,8 +47,9 @@ namespace Union.Services.Game
 
     public class Playing : State
     {
-        public Playing(GameFiniteStateMachine gameFiniteStateMachine)
+        public Playing(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
         {
+            this._gameLogic = gameLogic;
             this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
@@ -57,10 +60,12 @@ namespace Union.Services.Game
 
         public override void Run()
         {
+            this._gameLogic.UpdatePlayTime(Time.deltaTime);
+
             if (BattleField.Instance.currentEnemyCount <= 0)
             {
                 this._gameFiniteStateMachine.IssueCommand(GameFiniteStateMachine.Constants.EndCommand);
-                Assert.AreEqual(this._gameFiniteStateMachine.GetCurrentState(), States.End);
+                Assert.AreEqual(this._gameFiniteStateMachine.CurrentStates, States.End);
             }
         }
 
@@ -72,8 +77,9 @@ namespace Union.Services.Game
 
     public class Pause : State
     {
-        public Pause(GameFiniteStateMachine gameFiniteStateMachine)
+        public Pause(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
         {
+            this._gameLogic = gameLogic;
             this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 
@@ -95,8 +101,9 @@ namespace Union.Services.Game
 
     public class End : State
     {
-        public End(GameFiniteStateMachine gameFiniteStateMachine)
+        public End(GameLogic gameLogic, GameFiniteStateMachine gameFiniteStateMachine)
         {
+            this._gameLogic = gameLogic;
             this._gameFiniteStateMachine = gameFiniteStateMachine;
         }
 

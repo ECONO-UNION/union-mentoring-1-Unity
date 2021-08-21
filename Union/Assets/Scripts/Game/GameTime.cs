@@ -4,9 +4,9 @@
     {
         public float playTime { get; private set; }
 
-        public void UpdatePlayTime(float updateTime)
+        public void UpdatePlayTime(float addTime)
         {
-            this.playTime += updateTime;
+            this.playTime += addTime;
         }
     }
 }

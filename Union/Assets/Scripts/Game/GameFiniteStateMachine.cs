@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 using Union.Services.FiniteStateMachine;
 
@@ -15,7 +14,7 @@ namespace Union.Services.Game
             public const string EndCommand = "end";
         }
 
-        public States CurrentState
+        public States CurrentStates
         {
             get
             {
@@ -23,12 +22,14 @@ namespace Union.Services.Game
             }
         }
 
+        private GameLogic _gameLogic;
+
         private List<KeyValuePair<States, State>> _states;
         private Machine<States> _machine;
 
-        public void Run()
+        public GameFiniteStateMachine(GameLogic gameLogic)
         {
-            this._machine.Run();
+            this._gameLogic = gameLogic;
         }
 
         public void Initialize()
@@ -56,10 +57,10 @@ namespace Union.Services.Game
         {
             this._states = new List<KeyValuePair<States, State>>();
 
-            this._states.Add(new KeyValuePair<States, State>(States.Ready, new Ready(this)));
-            this._states.Add(new KeyValuePair<States, State>(States.Playing, new Playing(this)));
-            this._states.Add(new KeyValuePair<States, State>(States.Pause, new Pause(this)));
-            this._states.Add(new KeyValuePair<States, State>(States.End, new End(this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Ready, new Ready(this._gameLogic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Playing, new Playing(this._gameLogic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.Pause, new Pause(this._gameLogic, this)));
+            this._states.Add(new KeyValuePair<States, State>(States.End, new End(this._gameLogic, this)));
         }
 
         private void SetOnEvent()
@@ -72,6 +73,11 @@ namespace Union.Services.Game
             }
         }
 
+        public void Run()
+        {
+            this._machine.Run();
+        }
+
         public void IssueCommand(string command)
         {
             if (this._machine == null)
@@ -80,9 +86,5 @@ namespace Union.Services.Game
             this._machine.IssueCommand(command);
         }
 
-        public States GetCurrentState()
-        {
-            return this._machine.CurrentState;
-        }
     }
 }
