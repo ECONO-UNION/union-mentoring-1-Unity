@@ -38,11 +38,11 @@ namespace Union.Services.UI
         private void UpdateHealthPointUI()
         {
             const float Test_HPBarFillAmountWeight = 10.0f;
-            this._healthPointBar.fillAmount = Mathf.Lerp(this._healthPointBar.fillAmount, (float)this._player.CharacterStat.healthPoint.Get() / this._player.CharacterStat.healthPoint.GetMax(), Time.deltaTime * Test_HPBarFillAmountWeight);
+            this._healthPointBar.fillAmount = Mathf.Lerp(this._healthPointBar.fillAmount, (float)this._player.BaseStat.healthPoint.Get() / this._player.BaseStat.healthPoint.GetMax(), Time.deltaTime * Test_HPBarFillAmountWeight);
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("HP : ");
-            stringBuilder.Append(this._player.CharacterStat.healthPoint.Get().ToString());
+            stringBuilder.Append(this._player.BaseStat.healthPoint.Get().ToString());
             this._healthPointText.text = stringBuilder.ToString();
         }
     }

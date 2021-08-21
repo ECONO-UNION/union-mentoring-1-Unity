@@ -2,7 +2,7 @@ using Union.Services.Stat;
 
 namespace Union.Services.Charcater
 {
-    public class CharacterStat
+    public class BaseStat
     {
         public Stat.Stat healthPoint;
 
@@ -14,7 +14,7 @@ namespace Union.Services.Charcater
 
         public Stat.Stat jumpingPower;
 
-        public CharacterStat()
+        public BaseStat()
         {
             this.healthPoint = new Stat.Stat();
 

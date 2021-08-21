@@ -8,7 +8,7 @@ namespace Union.Services.UI
     public class CharacterHealthPointHeadUpDisplay : MonoBehaviour
     {
         private Character _character;
-        private CharacterStat _characterStat;
+        private BaseStat _baseStat;
 
         private GameObject _headUpDisplayCanavs;
         private Image _headUpDispalyHealthPointBar;
@@ -27,7 +27,7 @@ namespace Union.Services.UI
         public void Initialize()
         {
             this._character = this.gameObject.GetComponent<Character>();
-            this._characterStat = this._character.CharacterStat;
+            this._baseStat = this._character.BaseStat;
 
             this._headUpDisplayCanavs = this.gameObject.transform.Find("HeadUpDisplayCanvas").gameObject;
             this._headUpDispalyHealthPointBar = this._headUpDisplayCanavs.transform.Find("HealthPointBar").GetComponent<Image>();
@@ -37,7 +37,7 @@ namespace Union.Services.UI
         {
             const float Test_HPBarFillAmountWeight = 10.0f;
             this._headUpDispalyHealthPointBar.fillAmount = Mathf.Lerp(this._headUpDispalyHealthPointBar.fillAmount,
-                                                                      (float)this._characterStat.healthPoint.Get() / this._characterStat.healthPoint.GetMax(),
+                                                                      (float)this._baseStat.healthPoint.Get() / this._baseStat.healthPoint.GetMax(),
                                                                       Time.deltaTime * Test_HPBarFillAmountWeight);
         }
 
