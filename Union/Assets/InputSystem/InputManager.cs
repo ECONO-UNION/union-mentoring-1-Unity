@@ -25,63 +25,68 @@ namespace InputSystem
             }
         }
 
-        private Dictionary<AxisName, AxisKey> _axisKeys = new Dictionary<AxisName, AxisKey>();
-        private Dictionary<ButtonName, ButtonKey> _buttonKeys = new Dictionary<ButtonName, ButtonKey>();
+        private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
+        private InputSetting _inputSetting;
+
+        public MouseInput MouseInput { get; private set; }
 
         private void Awake()
         {
-            BindButtonKeys();
-            BindAxisKeys();
-        }
-        private void BindAxisKeys()
-        {
-            var keyTypes = Enum.GetValues(typeof(AxisName));
-            foreach (var keyType in keyTypes)
+            _inputSetting = Resources.Load<InputSetting>(InputSystemSetting.Path);
+            if (_inputSetting == null)
             {
-                _axisKeys[(AxisName)keyType] = new AxisKey(keyType.ToString());
+                Debug.LogError("Input System을 설정하지 않았습니다");
+                return;
             }
+            BindKey();
+            MouseInput = new MouseInput(); 
         }
 
-        private void BindButtonKeys()
+        private void BindKey()
         {
-            var keyTypes = Enum.GetValues(typeof(ButtonName));
-            foreach (var keyType in keyTypes)
+            foreach (var keyButton in _inputSetting.Key)
             {
-                _buttonKeys[(ButtonName)keyType] = new ButtonKey(keyType.ToString());
+                KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.Name);
+                _keyInputs[name] = new KeyInput(keyButton.Code);
             }
         }
 
         private void Update()
         {
-            foreach (var key in _axisKeys.Values)
+            foreach (var key in _keyInputs.Values)
             {
-                key.Value = Input.GetAxis(key.Name);
+                key.IsKeyPressed = Input.GetKey(key.Code);
+                key.IsKeyDown = Input.GetKeyDown(key.Code);
+                key.IsKeyUp = Input.GetKeyUp(key.Code);
             }
-
-            foreach (var key in _buttonKeys.Values)
-            {
-                key.IsButtonPressed = Input.GetButton(key.Name);
-                key.IsButtonDown = Input.GetButtonDown(key.Name);
-                key.IsButtonUp = Input.GetButtonUp(key.Name);
-            }
+            MouseInput.Run();
         }
 
-        public AxisKey GetAxisKey(AxisName type)
+        public KeyInput GetKey(KeyName name)
         {
-            if (!_axisKeys.ContainsKey(type))
+            if (!_keyInputs.ContainsKey(name))
             {
-                _axisKeys[type] = new AxisKey(type.ToString());
+                Key keyButton = _inputSetting.Key.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
+                if (keyButton == null)
+                {
+                    Debug.LogError("Invalid Key Name");
+                    return null;
+                }
+                _keyInputs[name] = new KeyInput(keyButton.Code);
             }
-            return _axisKeys[type];
+            return _keyInputs[name];
         }
 
-        public ButtonKey GetButtonKey(ButtonName type)
+        // KEY TEST 용도입니다 //
+        private void OnGUI()
         {
-            if (!_buttonKeys.ContainsKey(type))
+            int height = 0;
+            foreach (var key in _keyInputs)
             {
-                _buttonKeys[type] = new ButtonKey(type.ToString());
+                GUI.Label(new Rect(100, 40 + height, 80, 20), key.Key.ToString());
+                GUI.Label(new Rect(20, 40 + height, 80, 20), key.Value.Code.ToString());
+                height += 20;
             }
-            return _buttonKeys[type];
         }
     }
 }

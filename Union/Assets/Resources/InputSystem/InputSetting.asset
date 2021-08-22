@@ -12,17 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639179f1e61d950439870736029ba54a, type: 3}
   m_Name: InputSetting
   m_EditorClassIdentifier: 
-  inputAxes:
-  - name: Horizontal
-    negativeButton: left
-    positiveButton: right
-  - name: Vertical
-    negativeButton: down
-    positiveButton: up
-  inputButtons:
-  - name: Attack
-    button: Z
-  - name: Jump
-    button: X
-  - name: Run
-    button: C
+  _key:
+  - _name: Left
+    _code: 276
+  - _name: Right
+    _code: 275
+  - _name: Up
+    _code: 273
+  - _name: Down
+    _code: 274
+  - _name: Crouch
+    _code: 122
+  - _name: Walk
+    _code: 120
+  - _name: Jump
+    _code: 99
+  - _name: Sprint
+    _code: 118
+  - _name: Attack
+    _code: 323

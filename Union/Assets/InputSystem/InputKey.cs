@@ -1,26 +1,17 @@
+using UnityEngine;
+
 namespace InputSystem
 {
-    public class AxisKey
+    public class KeyInput
     {
-        public float Value { get; set; }
-        public string Name { get; private set; }
+        public bool IsKeyPressed { get; set; }
+        public bool IsKeyUp { get; set; }
+        public bool IsKeyDown { get; set; }
+        public KeyCode Code { get; set; }
 
-        public AxisKey(string name)
+        public KeyInput(KeyCode code)
         {
-            Name = name;
-        }
-    }
-
-    public class ButtonKey
-    {
-        public bool IsButtonPressed { get; set; }
-        public bool IsButtonUp { get; set; }
-        public bool IsButtonDown { get; set; }
-        public string Name { get; private set; }
-
-        public ButtonKey(string name)
-        {
-            Name = name;
+            Code = code;
         }
     }
 }
