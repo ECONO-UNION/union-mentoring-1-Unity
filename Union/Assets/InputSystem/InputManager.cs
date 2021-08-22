@@ -78,16 +78,6 @@ namespace InputSystem
 
         public KeyInput GetKey(KeyName name)
         {
-            if (!KeyInputs.ContainsKey(name))
-            {
-                Key keyButton = _inputSetting.Key.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
-                if (keyButton == null)
-                {
-                    Debug.LogError("Invalid Key Name");
-                    return null;
-                }
-                KeyInputs[name] = new KeyInput(keyButton.Code);
-            }
             return KeyInputs[name];
         }
 
