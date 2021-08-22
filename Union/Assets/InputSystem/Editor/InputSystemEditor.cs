@@ -3,12 +3,14 @@ using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-using System;
 
 namespace InputSystem
 {
     public class InputSystemEditor : EditorWindow
     {
+        private const string _resourcePath = "Assets/Resources/";
+        private const string _extension = "asset";
+
         private InputSetting _inputSetting;
         private SerializedObject _serializedObject;
 
@@ -54,7 +56,7 @@ namespace InputSystem
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Directory Path : ");
-            GUILayout.Label("Assets/Resources/", _subLabelStyle);
+            GUILayout.Label(_resourcePath, _subLabelStyle);
             _directory = EditorGUILayout.TextField(_directory, GUILayout.Width(_textFieldSize));
             GUILayout.EndHorizontal();
 
@@ -65,12 +67,12 @@ namespace InputSystem
 
             if (GUILayout.Button("Refresh", GUILayout.Width(_buttonsSize)))
             {
-                OnRefreshButton();
+                RefreshButton();
             }
             GUILayout.Space(_spaceSize);
         }
 
-        private void OnRefreshButton()
+        private void RefreshButton()
         {
             if (string.IsNullOrEmpty(_directory) || string.IsNullOrEmpty(_settingName))
             {
@@ -81,7 +83,7 @@ namespace InputSystem
             if (!Directory.Exists(_directory))
                 Directory.CreateDirectory(_directory);
 
-            string path = $"Assets/Resources/{_directory}/{_settingName}.asset";
+            string path = string.Format($"{Path.Combine(_resourcePath, _directory, _settingName)}.{_extension}");
             _inputSetting = AssetDatabase.LoadAssetAtPath(path, typeof(InputSetting)) as InputSetting;
             if (_inputSetting == null)
             {
