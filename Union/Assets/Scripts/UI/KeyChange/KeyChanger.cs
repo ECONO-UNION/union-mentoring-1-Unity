@@ -1,45 +1,36 @@
-using UnityEngine.EventSystems;
+using InputSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-namespace Union.Services.UI
+namespace Union.Services.UI.KeyChange
 {
-    public class PageKeyChange : MonoBehaviour
+    public class KeyChanger : MonoBehaviour
     {
+        [SerializeField]
+        private KeySetting _keySetting;
         [SerializeField]
         private EventSystem _eventSystem;
 
-        [SerializeField]
-        private KeyChanger _keyChangerPrefab;
-        private KeyChanger _currentKeyChanger;
+        private int _selectedKeyIndex;
+        private bool _isChangeState;
 
-        private void Start()
+        public void ClickChangeToReady(int index)
         {
-            var keyInputs = InputSystem.InputManager.Instance.KeyInputs;
-            foreach (var input in keyInputs)
-            {
-                var keyChanger = Instantiate(_keyChangerPrefab, transform);
-                keyChanger.Set(input.Key, input.Value.Code, ExecuteKeyChanger);
-            }
-        }
-
-        private void ExecuteKeyChanger(KeyChanger keyChanger)
-        {
-            _currentKeyChanger = keyChanger;
+            _selectedKeyIndex = index;
             _eventSystem.enabled = false;
+            _isChangeState = true;
         }
 
         private void OnGUI()
         {
-            if (_currentKeyChanger == null)
+            if (!_isChangeState)
                 return;
 
             KeyCode pressedKey = GetPressedKey();
             if (pressedKey == KeyCode.None)
                 return;
 
-            _currentKeyChanger.ChangeKey(pressedKey);
-            _eventSystem.enabled = true;
-            _currentKeyChanger = null;
+            ChangeKey(pressedKey);
         }
 
         private KeyCode GetPressedKey()
@@ -61,6 +52,16 @@ namespace Union.Services.UI
                     pressedKey = KeyCode.Mouse2;
             }
             return pressedKey;
+        }
+
+        private void ChangeKey(KeyCode pressedKey)
+        {
+            _eventSystem.enabled = true;
+            _isChangeState = false;
+
+            _keySetting.ChangeKeyMapElement(_selectedKeyIndex, pressedKey);
+            KeyName keyName = _keySetting.GetElementKeyName(_selectedKeyIndex);
+            InputSystem.InputManager.Instance.ChangeKey(keyName, pressedKey);
         }
     }
 }
