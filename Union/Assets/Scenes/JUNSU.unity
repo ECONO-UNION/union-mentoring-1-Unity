@@ -515,14 +515,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 7
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -864,14 +864,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 8
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1055,14 +1055,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1267,14 +1267,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1632,14 +1632,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2525,14 +2525,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2737,14 +2737,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2949,10 +2949,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3319,14 +3319,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Union.Services.UI.KeyChanger, Assembly-CSharp
-        m_MethodName: OnClickChangeReady
-        m_Mode: 1
+      - m_Target: {fileID: 6300160176524035169}
+        m_TargetAssemblyTypeName: Union.Services.UI.KeyChange.KeyChanger, Assembly-CSharp
+        m_MethodName: ClickChangeToReady
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3726,7 +3726,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6300160176524035167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f39bfe108aa2664baa9a7312e383d3e, type: 3}
+  m_Script: {fileID: 11500000, guid: c142727ee45727649a29f8f94efdcc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _keyMapElements:
@@ -3757,7 +3757,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6300160176524035167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c9f77ba424682a4d8aa257ff375efed, type: 3}
+  m_Script: {fileID: 11500000, guid: 0534e26ab83eb1b4ca48ceda6e93cef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _keySetting: {fileID: 6300160176524035168}
