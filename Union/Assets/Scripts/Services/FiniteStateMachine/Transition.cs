@@ -28,9 +28,14 @@ namespace Union.Services.FiniteStateMachine
             }
         }
 
-        public bool IsConditionFunctionExist()
+        public bool IsNoCondition()
         {
-            return this.conditionFunction == null || this.conditionFunction();
+            return this.conditionFunction == null;
+        }
+
+        public bool IsMeetCondition()
+        {
+            return this.conditionFunction();
         }
     }
 

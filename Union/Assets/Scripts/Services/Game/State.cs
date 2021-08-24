@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
+﻿using System;
+using UnityEngine;
 
 namespace Union.Services.Game
 {
@@ -13,9 +13,6 @@ namespace Union.Services.Game
 
     public abstract class State
     {
-        protected Logic _logic { get; set; }
-        protected FiniteStateMachine _finiteStateMachine { get; set; }
-
         public abstract void Enter();
         public abstract void Run();
         public abstract void Exit();
@@ -23,14 +20,13 @@ namespace Union.Services.Game
 
     public class Ready : State
     {
-        public Ready(Logic logic, FiniteStateMachine finiteStateMachine)
+        public Ready()
         {
-            this._logic = logic;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
-        {
+        {            
             Debug.Log("OnEnter : Ready");
         }
 
@@ -47,10 +43,9 @@ namespace Union.Services.Game
 
     public class Playing : State
     {
-        public Playing(Logic logic, FiniteStateMachine finiteStateMachine)
+        public Playing()
         {
-            this._logic = logic;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
@@ -60,13 +55,7 @@ namespace Union.Services.Game
 
         public override void Run()
         {
-            this._logic.UpdatePlayTime(UnityEngine.Time.deltaTime);
-
-            if (BattleField.Instance.currentEnemyCount <= 0)
-            {
-                this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constants.EndCommand);
-                Assert.AreEqual(this._finiteStateMachine.CurrentStates, States.End);
-            }
+            Logic.Instance.UpdatePlayTime(UnityEngine.Time.deltaTime);
         }
 
         public override void Exit()
@@ -77,10 +66,9 @@ namespace Union.Services.Game
 
     public class Pause : State
     {
-        public Pause(Logic logic, FiniteStateMachine finiteStateMachine)
+        public Pause()
         {
-            this._logic = logic;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
@@ -101,10 +89,9 @@ namespace Union.Services.Game
 
     public class End : State
     {
-        public End(Logic logic, FiniteStateMachine finiteStateMachine)
+        public End()
         {
-            this._logic = logic;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()

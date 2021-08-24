@@ -10,17 +10,17 @@ namespace Union.Services.FiniteStateMachine
 
 		public void Run()
         {
-			if (OnRan != null) OnRan();
+			OnRan?.Invoke();
         }
 
 		public void Enter()
 		{
-			if (OnEntered != null) OnEntered();
+			OnEntered?.Invoke();
 		}
 
 		public void Exit()
 		{
-			if (OnExited != null) OnExited();
+			OnExited?.Invoke();
 		}
 	}
 }

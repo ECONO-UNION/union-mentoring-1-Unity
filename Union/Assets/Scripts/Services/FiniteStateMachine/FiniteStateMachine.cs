@@ -8,7 +8,7 @@ using UnityEngine;
  */
 namespace Union.Services.FiniteStateMachine
 { 
-    public class Machine<TState> where TState : IComparable
+    public class FiniteStateMachine<TState> where TState : IComparable
     {
         public TState CurrentState { get; private set; }
 
@@ -21,7 +21,7 @@ namespace Union.Services.FiniteStateMachine
 
         private bool _isInitialisingState;
 
-        public Machine(params TState[] states)
+        public FiniteStateMachine(params TState[] states)
         {
             if (states.Length < 1)
             {
@@ -38,7 +38,7 @@ namespace Union.Services.FiniteStateMachine
             }
         }
 
-        public static Machine<TState> FromEnum()
+        public static FiniteStateMachine<TState> FromEnum()
         {
             if (typeof(Enum).IsAssignableFrom(typeof(TState)) == false)
             {
@@ -51,10 +51,10 @@ namespace Union.Services.FiniteStateMachine
                 states.Add(value);
             }
 
-            return new Machine<TState>(states.ToArray());
+            return new FiniteStateMachine<TState>(states.ToArray());
         }
 
-        public Machine<TState> AddTransition(TState fromState, TState toState, string command, Transition<TState> transition = null)
+        public FiniteStateMachine<TState> AddTransition(TState fromState, TState toState, string command, Transition<TState> transition = null)
         {
             if (this._transitions.ContainsKey(fromState) == false)
             {
@@ -71,7 +71,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> AddTransition(TState fromState, TState toState, string command, Func<bool> condition)
+        public FiniteStateMachine<TState> AddTransition(TState fromState, TState toState, string command, Func<bool> condition)
         {
             if (this._transitions.ContainsKey(fromState) == false)
             {
@@ -88,7 +88,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> OnRun(TState state, Action handler)
+        public FiniteStateMachine<TState> OnRun(TState state, Action handler)
         {
             if (this._transitions.ContainsKey(state) == false)
             {
@@ -105,7 +105,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> OnEnter(TState state, Action handler)
+        public FiniteStateMachine<TState> OnEnter(TState state, Action handler)
         {
             if (this._transitions.ContainsKey(state) == false)
             {
@@ -122,7 +122,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> OnExit(TState state, Action handler)
+        public FiniteStateMachine<TState> OnExit(TState state, Action handler)
         {
             if (this._transitions.ContainsKey(state) == false)
             {
@@ -139,7 +139,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> OnChange(Action<TState, TState> handler)
+        public FiniteStateMachine<TState> OnChange(Action<TState, TState> handler)
         {
             if (handler == null)
             {
@@ -151,7 +151,7 @@ namespace Union.Services.FiniteStateMachine
             return this;
         }
 
-        public Machine<TState> OnChange(TState fromState, TState toState, Action handler)
+        public FiniteStateMachine<TState> OnChange(TState fromState, TState toState, Action handler)
         {
             if (this._transitions.ContainsKey(fromState) == false)
             {
@@ -197,6 +197,37 @@ namespace Union.Services.FiniteStateMachine
             }
 
             this._controller[this.CurrentState].Run();
+
+            CheckConditionAndTransition();
+        }
+
+        private void CheckConditionAndTransition()
+        {
+            if (this._currentTransition != null)
+                return;
+
+            if (this._isInitialisingState == true)
+            {
+                Debug.LogWarning("Do not call IssueCommand from OnStateChange and OnStateEnter handlers");
+                return;
+            }
+
+            var transitionsForCurrentState = this._transitions[this.CurrentState];
+            foreach (KeyValuePair<string, Transition<TState>> item in transitionsForCurrentState)
+            {
+                var transition = item.Value;
+                if (transition.IsNoCondition() == true)
+                    continue;
+
+                if (transition.IsMeetCondition() == true)
+                {
+                    transition.OnComplete += HandleTransitionComplete;
+                    this._currentTransition = transition;
+                    this._controller[this.CurrentState].Exit();
+                    transition.Begin();
+                    return;
+                }                    
+            }
         }
 
         public void IssueCommand(string command)
@@ -204,23 +235,23 @@ namespace Union.Services.FiniteStateMachine
             if (this._currentTransition != null)
                 return;
 
-            var transitionsForCurrentState = this._transitions[this.CurrentState];
-            if (transitionsForCurrentState.ContainsKey(command) == true)
+            if (this._isInitialisingState == true)
             {
-                if (this._isInitialisingState == true)
-                {
-                    Debug.LogWarning("Do not call IssueCommand from OnStateChange and OnStateEnter handlers");
-                    return;
-                }
+                Debug.LogWarning("Do not call IssueCommand from OnStateChange and OnStateEnter handlers");
+                return;
+            }
 
-                var transition = transitionsForCurrentState[command];
-                if (transition.IsConditionFunctionExist() == true)
-                {
-                    transition.OnComplete += HandleTransitionComplete;
-                    this._currentTransition = transition;
-                    this._controller[this.CurrentState].Exit();
-                    transition.Begin();
-                }
+            var transitionsForCurrentState = this._transitions[this.CurrentState];
+            if (transitionsForCurrentState.ContainsKey(command) == false)
+                return;
+
+            var transition = transitionsForCurrentState[command];
+            if (transition.IsNoCondition() == true || transition.IsMeetCondition() == true)
+            {
+                transition.OnComplete += HandleTransitionComplete;
+                this._currentTransition = transition;
+                this._controller[this.CurrentState].Exit();
+                transition.Begin();
             }
         }
 

@@ -22,7 +22,7 @@ namespace Union.Services.Charcater.Enemy
         private Enemy _enemy;
 
         private List<KeyValuePair<States, State>> _states;
-        private Machine<States> _machine;
+        private FiniteStateMachine<States> _machine;
 
         public FiniteStateMachine(Enemy enemy)
         {
@@ -41,7 +41,7 @@ namespace Union.Services.Charcater.Enemy
 
         private void CreateMachine()
         {
-            this._machine = Machine<States>.FromEnum()
+            this._machine = FiniteStateMachine<States>.FromEnum()
                 .AddTransition(States.Alive, States.Dead, Constatns.DieCommand)
                 ;
         }

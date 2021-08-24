@@ -22,7 +22,7 @@ namespace Union.Services.Charcater.Player
         private Player _player;
 
         private List<KeyValuePair<States, State>> _states;
-        private Machine<States> _machine;
+        private FiniteStateMachine<States> _machine;
 
         public FiniteStateMachine(Player player)
         {
@@ -41,7 +41,7 @@ namespace Union.Services.Charcater.Player
 
         private void CreateMachine()
         {
-            this._machine = Machine<States>.FromEnum()
+            this._machine = FiniteStateMachine<States>.FromEnum()
                 .AddTransition(States.Alive, States.Dead, Constatns.DieCommand)
                 ;
         }

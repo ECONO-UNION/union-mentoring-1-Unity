@@ -4,12 +4,12 @@
     {
         public Time Time { get; private set; }
 
-        private FiniteStateMachine _finiteStateMachine;
+        private FiniteStateMachineController _finiteStateMachine;
 
         private void Awake()
         {
             this.Time = new Time();
-            this._finiteStateMachine = new FiniteStateMachine(this);
+            this._finiteStateMachine = new FiniteStateMachineController();
         }
 
         private void Start()
