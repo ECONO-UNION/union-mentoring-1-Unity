@@ -14,6 +14,14 @@ namespace Union.Services.UI.KeyChange
         private int _selectedKeyIndex;
         private bool _isChangeState;
 
+        private void Awake()
+        {
+            if (_keySetting == null)
+                _keySetting = GetComponent<KeySetting>();
+            if (_eventSystem == null)
+                _eventSystem = FindObjectOfType<EventSystem>();
+        }
+
         public void ClickChangeToReady(int index)
         {
             _selectedKeyIndex = index;
