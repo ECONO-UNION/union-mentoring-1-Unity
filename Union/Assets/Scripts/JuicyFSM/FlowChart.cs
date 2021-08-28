@@ -13,25 +13,17 @@ namespace JuicyFSM
             private Rect _rect;
             [SerializeField]
             private string _actionName;
-            [SerializeField]
-            private bool _isStartNode;
-            [SerializeField]
-            private List<Edge> _edges;
 
             public Rect Rect { get => _rect; set => _rect = value; }
             public string ActionName { get => _actionName; internal set => _actionName = value; }
-            public bool IsStartNode { get => _isStartNode; internal set => _isStartNode = value; }
-            public List<Edge> Edges { get => _edges; internal set => _edges = value; }
 
             public Node()
             {
-                _isStartNode = true;
                 _rect = new Rect(Screen.width / 4, Screen.height / 4, 170, 30);
             }
 
             public Node(float xPosition, float yPosition)
             {
-                _isStartNode = false;
                 _rect = new Rect(xPosition, yPosition, 170, 30);
             }
         }
@@ -39,30 +31,60 @@ namespace JuicyFSM
         [System.Serializable]
         public class Edge
         {
+            [SerializeReference]
+            private Node _start;
+            [SerializeReference]
+            private Node _end;
             [SerializeField]
             private string _conditionName;
-            [SerializeField]
-            private Node _target;
 
+            public Node Start { get => _start; internal set => _start = value; }
+            public Node End { get => _end; internal set => _end = value; }
             public string ConditionName { get => _conditionName; internal set => _conditionName = value; }
-            public Node Target { get => _target; internal set => _target = value; }
+
+            public Edge(Node start, Node end, string conditionName)
+            {
+                _start = start;
+                _end = end;
+                _conditionName = conditionName;
+            }
         }
 
         [HideInInspector]
-        [SerializeField]
+        [SerializeReference]
         private List<Node> _nodes;
+        [HideInInspector]
+        [SerializeReference]
         private Node _currentNode;
+        [HideInInspector]
+        [SerializeReference]
+        private Node _startNode;
+
+        [HideInInspector]
+        [SerializeReference]
+        private List<Edge> _edges;
+        [HideInInspector]
+        [SerializeReference]
+        private Node _edgeNode;
+        private string _conditionName;
+
         public List<Node> Nodes { get => _nodes; }
         public Node CurrentNode { get => _currentNode; }
+        public Node StartNode { get => _startNode; }
+
+        public List<Edge> Edges { get => _edges; }
+        public Node EdgeNode { get => _edgeNode; }
 
         public FlowChart()
         {
-            Node startState = new Node();
+            _startNode = new Node();
             _nodes = new List<Node>();
-            _nodes.Add(startState);
+            _edges = new List<Edge>();
+            _nodes.Add(_startNode);
         }
 
-        public void ValidateActionTypes(List<string> actionCategory)
+        #region NODE
+        public void ValidateCategories(List<string> actionCategory, List<string> conditionCategory)
         {
             string errorActionName = "<color=red>NOT FOUND</color>";
             foreach (var node in _nodes)
@@ -71,6 +93,14 @@ namespace JuicyFSM
                     continue;
 
                 node.ActionName = errorActionName;
+            }
+
+            foreach (var edge in _edges)
+            {
+                if (conditionCategory.Exists(x => x == edge.ConditionName) || string.IsNullOrEmpty(edge.ConditionName))
+                    continue;
+
+                edge.ConditionName = errorActionName;
             }
         }
 
@@ -89,7 +119,7 @@ namespace JuicyFSM
 
         public void ChangeActionName(string name)
         {
-            _currentNode.ActionName = name;
+            CurrentNode.ActionName = name;
         }
 
         public void AddNode(Vector2 position)
@@ -98,17 +128,37 @@ namespace JuicyFSM
             _nodes.Add(node);
         }
 
-        public void DeleteNode()
+        public void RemoveNode()
         {
+            Edges.RemoveAll(x => x.Start == _currentNode || x.End == _currentNode);
             _nodes.Remove(_currentNode);
             _currentNode = null;
         }
 
         public void ChangeStartNode()
         {
-            Node prevStartNode = _nodes.Find(x => x.IsStartNode);
-            prevStartNode.IsStartNode = false;
-            _currentNode.IsStartNode = true;
+            _startNode = _currentNode;
+        }
+        #endregion
+
+        #region EDGE
+        public void SelectEdgeNode(string conditionName)
+        {
+            _edgeNode = _currentNode;
+            _conditionName = conditionName;
+        }
+
+        public void SetEdgeNodeToNull()
+        {
+            _edgeNode = null;
+        }
+
+        public void ConnectEdge()
+        {
+            Edge edge = new Edge(_edgeNode, _currentNode,_conditionName);
+            _edges.Add(edge);
+            _edgeNode = null;
         }
     }
+    #endregion
 }

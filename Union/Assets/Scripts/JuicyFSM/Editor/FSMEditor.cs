@@ -28,15 +28,19 @@ namespace JuicyFSM.Editor
         private const string _errorDescription = "User defined Action class could not be found.";
         private const string _errorOK = "OK";
 
+        // Editor
         private FlowChart _currentFlowChart;
         private List<string> _actionCategory = new List<string>();
+        private List<string> _conditionCategory = new List<string>();
         private Vector2 _mousePosition;
 
+        // Node
         private Vector2 _scrollPosition;
         private GUIStyle _nodeViewStyle;
         private float _nodeViewSize;
         private int _buttonSize;
 
+        // Style
         private Color _HighlightEditorColor;
         private Color _NormalEditorColor;
         private Color _originEditorColor;
@@ -76,20 +80,27 @@ namespace JuicyFSM.Editor
             _edgeStyle.fontStyle = FontStyle.Bold;
             _edgeStyle.fontSize = 12;
 
-            RefreshActionTypes();
+            RefreshCategories();
             if (_currentFlowChart != null)
             {
-                _currentFlowChart.ValidateActionTypes(_actionCategory);
+                _currentFlowChart.ValidateCategories(_actionCategory, _conditionCategory);
             }
         }
 
-        private void RefreshActionTypes()
+        private void RefreshCategories()
         {
             _actionCategory.Clear();
-            var subClassTypes = Assembly.GetAssembly(typeof(Action)).GetTypes().Where(t => t.IsSubclassOf(typeof(Action)));
-            foreach (Type subClass in subClassTypes)
+            var actionTypes = Assembly.GetAssembly(typeof(Action)).GetTypes().Where(t => t.IsSubclassOf(typeof(Action)));
+            foreach (Type subClass in actionTypes)
             {
                 _actionCategory.Add(subClass.Name);
+            }
+
+            _conditionCategory.Clear();
+            var conditionTypes = Assembly.GetAssembly(typeof(Condition)).GetTypes().Where(t => t.IsSubclassOf(typeof(Condition)));
+            foreach (Type subClass in conditionTypes)
+            {
+                _conditionCategory.Add(subClass.Name);
             }
         }
 
@@ -100,7 +111,7 @@ namespace JuicyFSM.Editor
                 if (_currentFlowChart == null || _currentFlowChart != Selection.activeObject as FlowChart)
                 {
                     _currentFlowChart = Selection.activeObject as FlowChart;
-                    _currentFlowChart.ValidateActionTypes(_actionCategory);
+                    _currentFlowChart.ValidateCategories(_actionCategory, _conditionCategory);
                     Repaint();
                 }
             }
@@ -111,8 +122,8 @@ namespace JuicyFSM.Editor
             DrawSaveButton();
             BeginScroll();
             {
-                ProcessMouseEvent();
                 DrawBackground();
+                UpdateMouseEvent();
                 DrawEdges();
                 DrawNodes();
             }
@@ -180,21 +191,18 @@ namespace JuicyFSM.Editor
             if (_currentFlowChart == null)
                 return;
 
-            foreach (var node in _currentFlowChart.Nodes)
+            foreach (var edge in _currentFlowChart.Edges)
             {
-                foreach (var edge in node.Edges)
-                {
-                    Rect startNode = node.Rect;
-                    Rect endNode = edge.Target.Rect;
-                    Vector3 startPosition = new Vector3(startNode.x + startNode.width / 2, startNode.y + startNode.height / 2, 0);
-                    Vector3 endPosition = new Vector3(endNode.x + endNode.width / 2, endNode.y + endNode.height / 2, 0);
+                Rect startNode = edge.Start.Rect;
+                Rect endNode = edge.End.Rect;
+                Vector3 startPosition = new Vector3(startNode.x + startNode.width / 2, startNode.y + startNode.height / 2, 0);
+                Vector3 endPosition = new Vector3(endNode.x + endNode.width / 2, endNode.y + endNode.height / 2, 0);
 
-                    Handles.color = Color.white;
-                    Handles.DrawLine(startPosition, endPosition);
+                Handles.color = Color.white;
+                Handles.DrawLine(startPosition, endPosition);
 
-                    Rect edgeRect = new Rect((startPosition + endPosition) / 2, Vector2.zero);
-                    GUI.Label(edgeRect, edge.ConditionName, _edgeStyle);
-                }
+                Rect edgeRect = new Rect((startPosition + endPosition) / 2, Vector2.zero);
+                GUI.Label(edgeRect, edge.ConditionName, _edgeStyle);
             }
         }
 
@@ -204,32 +212,34 @@ namespace JuicyFSM.Editor
             if (_currentFlowChart == null)
                 return;
 
-            for (int i = 0; i < _currentFlowChart.Nodes.Count; i++)
+            int index = 0;
+            foreach (var node in _currentFlowChart.Nodes)
             {
-                bool isStartNode = _currentFlowChart.Nodes[i].IsStartNode;
+                bool isStartNode = node == _currentFlowChart.StartNode;
                 if (isStartNode)
                     GUI.color = _HighlightEditorColor;
                 else
                     GUI.color = _NormalEditorColor;
-                _currentFlowChart.Nodes[i].Rect
-                    = GUILayout.Window(i, _currentFlowChart.Nodes[i].Rect, DrawNodeWindow, isStartNode ? _startNodeName : "");
+                node.Rect = GUILayout.Window(index, node.Rect, DrawNodeWindow, isStartNode ? _startNodeName : "");
+                index++;
             }
+
             GUI.color = _originEditorColor;
             EndWindows();
         }
 
-        private void DrawNodeWindow(int id)
+        private void DrawNodeWindow(int index)
         {
             string actionText = "";
             string buttonText = "";
-            if (string.IsNullOrEmpty(_currentFlowChart.Nodes[id].ActionName))
+            if (string.IsNullOrEmpty(_currentFlowChart.Nodes[index].ActionName))
             {
                 actionText = _emptyActionName;
                 buttonText = _selectAction;
             }
             else
             {
-                actionText = _currentFlowChart.Nodes[id].ActionName;
+                actionText = _currentFlowChart.Nodes[index].ActionName;
                 buttonText = _changeAction;
             }
             GUILayout.Label(actionText, _nodeStyle);
@@ -246,16 +256,89 @@ namespace JuicyFSM.Editor
                 GenericMenu menu = new GenericMenu();
                 foreach (var action in _actionCategory)
                 {
-                    menu.AddItem(new GUIContent(action), false, AddActionCallback, action);
+                    menu.AddItem(new GUIContent(action), false, ChangeNodeName, action);
                 }
                 menu.AddSeparator("");
-                menu.AddItem(new GUIContent(_emptyMenuName), false, AddActionCallback, "");
+                menu.AddItem(new GUIContent(_emptyMenuName), false, ChangeNodeName, "");
                 menu.ShowAsContext();
             }
             GUI.DragWindow();
         }
 
-        private void AddActionCallback(object obj)
+        #endregion
+
+        #region MOUSE EVENT
+        private void UpdateMouseEvent()
+        {
+            if (_currentFlowChart == null)
+                return;
+
+            if (Event.current.type == EventType.MouseDown)
+            {
+                _mousePosition = Event.current.mousePosition;
+                _currentFlowChart.SelectCurrentNode(_mousePosition);
+                if (Event.current.button == 0)
+                {
+                    if (_currentFlowChart.EdgeNode == null)
+                        return;
+
+                    if (_currentFlowChart.CurrentNode == null || _currentFlowChart.EdgeNode == _currentFlowChart.CurrentNode)
+                    {
+                        _currentFlowChart.SetEdgeNodeToNull();
+                        return;
+                    }
+
+                    _currentFlowChart.ConnectEdge();
+                }
+                else if (Event.current.button == 1)
+                {
+                    if (_currentFlowChart.EdgeNode != null)
+                    {
+                        _currentFlowChart.SetEdgeNodeToNull();
+                        return;
+                    }
+
+                    CreateBackgroundMenuItem();
+                }
+            }
+
+            if (_currentFlowChart.EdgeNode != null)
+            {
+                Vector3 startPosition = new Vector3(
+                    _currentFlowChart.CurrentNode.Rect.x + _currentFlowChart.CurrentNode.Rect.width / 2,
+                    _currentFlowChart.CurrentNode.Rect.y + _currentFlowChart.CurrentNode.Rect.height / 2, 0);
+                Handles.DrawLine(startPosition, Event.current.mousePosition);
+                Repaint();
+            }
+        }
+
+        private void CreateBackgroundMenuItem()
+        {
+            GenericMenu menu = new GenericMenu();
+            if (_currentFlowChart.CurrentNode == null)
+            {
+                menu.AddItem(new GUIContent(_addNode), false, ExecuteMenuAction, _addNode);
+            }
+            else
+            {
+                foreach (var condition in _conditionCategory)
+                {
+                    menu.AddItem(new GUIContent(string.Format($"{_addEdge}/{condition}")), false, SelectEdgeNode, condition);
+                }
+
+                if (_currentFlowChart.CurrentNode != _currentFlowChart.StartNode)
+                {
+                    menu.AddSeparator("");
+                    menu.AddItem(new GUIContent(_changeStartNode), false, ExecuteMenuAction, _changeStartNode);
+                    menu.AddItem(new GUIContent(_deleteNode), false, ExecuteMenuAction, _deleteNode);
+                }
+            }
+            menu.ShowAsContext();
+        }
+        #endregion
+
+        #region CALL_BACK
+        private void ChangeNodeName(object obj)
         {
             string key = obj.ToString();
             if (string.IsNullOrEmpty(key))
@@ -267,68 +350,31 @@ namespace JuicyFSM.Editor
                 _currentFlowChart.ChangeActionName(key);
             }
         }
-        #endregion
 
-        #region MOUSE EVENT
-        private void ProcessMouseEvent()
+        private void SelectEdgeNode(object obj)
         {
-            if (_currentFlowChart == null)
-                return;
-
-            Event e = Event.current;
-            if (e.type == EventType.MouseDown)
-            {
-                _mousePosition = e.mousePosition;
-                _currentFlowChart.SelectCurrentNode(_mousePosition);
-                if (e.button == 1)
-                {
-                    CreateMenuItem();
-                }
-            }
+            string key = obj.ToString();
+            _currentFlowChart.SelectEdgeNode(key);
         }
 
-        private void CreateMenuItem()
-        {
-            GenericMenu menu = new GenericMenu();
-            if (_currentFlowChart.CurrentNode == null)
-            {
-                menu.AddItem(new GUIContent(_addNode), false, MenuItemCallback, _addNode);
-            }
-            else
-            {
-                menu.AddItem(new GUIContent(_addEdge), false, MenuItemCallback, _addEdge);
-                if (!_currentFlowChart.CurrentNode.IsStartNode)
-                {
-                    menu.AddSeparator("");
-                    menu.AddItem(new GUIContent(_changeStartNode), false, MenuItemCallback, _changeStartNode);
-                    menu.AddItem(new GUIContent(_deleteNode), false, MenuItemCallback, _deleteNode);
-                }
-            }
-            menu.ShowAsContext();
-        }
-
-        private void MenuItemCallback(object obj)
+        private void ExecuteMenuAction(object obj)
         {
             string key = obj.ToString();
             if (key == _addNode)
             {
                 _currentFlowChart.AddNode(_mousePosition);
             }
-            else if (key == _deleteNode)
+            if (key == _deleteNode)
             {
-                _currentFlowChart.DeleteNode();
-            }
-            else if (key == _addEdge)
-            {
-
-            }
-            else if (key == _deleteEdge)
-            {
-
+                _currentFlowChart.RemoveNode();
             }
             else if (key == _changeStartNode)
             {
                 _currentFlowChart.ChangeStartNode();
+            }
+            if (key == _deleteEdge)
+            {
+                // DELETE
             }
         }
         #endregion

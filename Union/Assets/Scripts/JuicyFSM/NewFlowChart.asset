@@ -13,51 +13,25 @@ MonoBehaviour:
   m_Name: NewFlowChart
   m_EditorClassIdentifier: 
   _nodes:
-  - _rect:
-      serializedVersion: 2
-      x: 300
-      y: 181
-      width: 170
-      height: 81
-    _actionName: SecondAction
-    _isStartNode: 0
-  - _rect:
-      serializedVersion: 2
-      x: 242
-      y: 62
-      width: 170
-      height: 81
-    _actionName: BasicAction
-    _isStartNode: 1
-  - _rect:
-      serializedVersion: 2
-      x: -6
-      y: 169
-      width: 170
-      height: 81
-    _actionName: SecondAction
-    _isStartNode: 0
-  - _rect:
-      serializedVersion: 2
-      x: 484
-      y: 170
-      width: 170
-      height: 81
-    _actionName: BasicAction
-    _isStartNode: 0
-  - _rect:
-      serializedVersion: 2
-      x: 245
-      y: 291
-      width: 170
-      height: 81
-    _actionName: 
-    _isStartNode: 0
-  - _rect:
-      serializedVersion: 2
-      x: 63
-      y: 289
-      width: 170
-      height: 81
-    _actionName: 
-    _isStartNode: 0
+  - id: 0
+  _currentNode:
+    id: 1
+  _startNode:
+    id: 0
+  _edges: []
+  _edgeNode:
+    id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: FlowChart/Node, ns: JuicyFSM, asm: Assembly-CSharp}
+      data:
+        _rect:
+          serializedVersion: 2
+          x: 640
+          y: 135
+          width: 170
+          height: 80
+        _actionName: 
+    00000001:
+      type: {class: , ns: , asm: }
