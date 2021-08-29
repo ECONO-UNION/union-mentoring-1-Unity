@@ -14,7 +14,7 @@ namespace Union.Services.Game
             public const string EndCommand = "end";
         }
 
-        public States CurrentStates
+        public StateNumber CurrentStateNumber
         {
             get
             {
@@ -22,8 +22,8 @@ namespace Union.Services.Game
             }
         }
 
-        private List<KeyValuePair<States, State>> _states;
-        private FiniteStateMachine<States> _finiteStateMachine;
+        private List<KeyValuePair<StateNumber, State>> _states;
+        private FiniteStateMachine<StateNumber> _finiteStateMachine;
 
         public void Initialize()
         {
@@ -32,17 +32,17 @@ namespace Union.Services.Game
 
             SetOnEvent();
             
-            this._finiteStateMachine.SetState(States.Ready);
+            this._finiteStateMachine.SetState(StateNumber.Ready);
             this._finiteStateMachine.IssueCommand(Constants.StartCommand);
         }
 
         private void CreateMachine()
         {
-            this._finiteStateMachine = FiniteStateMachine<States>.FromEnum()
-                .AddTransition(States.Ready, States.Playing, Constants.StartCommand)
-                .AddTransition(States.Playing, States.Pause, Constants.PauseCommand)
-                .AddTransition(States.Pause, States.Playing, Constants.ResumeCommand)
-                .AddTransition(States.Playing, States.End, Constants.EndCommand, EndCommandCondition)
+            this._finiteStateMachine = FiniteStateMachine<StateNumber>.FromEnum()
+                .AddTransition(StateNumber.Ready, StateNumber.Playing, Constants.StartCommand)
+                .AddTransition(StateNumber.Playing, StateNumber.Pause, Constants.PauseCommand)
+                .AddTransition(StateNumber.Pause, StateNumber.Playing, Constants.ResumeCommand)
+                .AddTransition(StateNumber.Playing, StateNumber.End, Constants.EndCommand, EndCommandCondition)
                 ;
         }
 
@@ -58,17 +58,17 @@ namespace Union.Services.Game
 
         private void CreateStates()
         {
-            this._states = new List<KeyValuePair<States, State>>();
+            this._states = new List<KeyValuePair<StateNumber, State>>();
 
-            this._states.Add(new KeyValuePair<States, State>(States.Ready, new Ready()));
-            this._states.Add(new KeyValuePair<States, State>(States.Playing, new Playing()));
-            this._states.Add(new KeyValuePair<States, State>(States.Pause, new Pause()));
-            this._states.Add(new KeyValuePair<States, State>(States.End, new End()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Ready, new Ready()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Playing, new Playing()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Pause, new Pause()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.End, new End()));
         }
 
         private void SetOnEvent()
         {
-            foreach (KeyValuePair<States, State> kvp in this._states)
+            foreach (KeyValuePair<StateNumber, State> kvp in this._states)
             {
                 this._finiteStateMachine.OnEnter(kvp.Key, kvp.Value.Enter);
                 this._finiteStateMachine.OnRun(kvp.Key, kvp.Value.Run);

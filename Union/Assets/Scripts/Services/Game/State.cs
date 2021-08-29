@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Union.Services.Game
 {
-    public enum States
+    public enum StateNumber
     {
         Ready,
         Playing,

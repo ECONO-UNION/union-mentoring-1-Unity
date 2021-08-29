@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Union.Services.Charcater.Player
+namespace Union.Services.Charcater.Enemy
 {
-    public enum States
+    public enum StateNumber
     {
         Alive,
         Dead,
@@ -11,7 +11,7 @@ namespace Union.Services.Charcater.Player
 
     public abstract class State
     {
-        protected Player _player { get; set; }
+        protected Enemy _enemy { get; set; }
         protected FiniteStateMachine _finiteStateMachine { get; set; }
 
         public abstract void Enter();
@@ -21,46 +21,47 @@ namespace Union.Services.Charcater.Player
 
     public class Alive : State
     {
-        public Alive(Player player, FiniteStateMachine finiteStateMachine)
+        public Alive(Enemy enemy, FiniteStateMachine finiteStateMachine)
         {
-            this._player = player;
+            this._enemy = enemy;
             this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
         {
-            Debug.Log("OnEnter : Player Alive");
+            Debug.Log("OnEnter : Enemy Alive");
         }
 
         public override void Run()
         {
-            if (this._player.BaseStat.HealthPoint.Get() <= 0)
+            if (this._enemy.BaseStat.HealthPoint.Get() <= 0)
             {
                 this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constatns.DieCommand);
-                Assert.AreEqual(this._finiteStateMachine.CurrentState, States.Dead);
+                Assert.AreEqual(this._finiteStateMachine.CurrentState, StateNumber.Dead);
             }
         }
 
         public override void Exit()
         {
-            Debug.Log("OnExit : Player Alive");
+            Debug.Log("OnExit : Enemy Alive");
         }
     }
 
     public class Dead : State
     {
-        public Dead(Player player, FiniteStateMachine finiteStateMachine)
+        public Dead(Enemy enemy, FiniteStateMachine finiteStateMachine)
         {
-            this._player = player;
+            this._enemy = enemy;
             this._finiteStateMachine = finiteStateMachine;
         }
 
         public override void Enter()
         {
-            Debug.Log("OnEnter : Player Dead");
+            Debug.Log("OnEnter : Enemy Dead");
 
-            this._player.enabled = false;
-            this._player.gameObject.SetActive(false);
+            Union.Services.Game.BattleField.Instance.DecreaseEnemyCount(1);
+            this._enemy.enabled = false;
+            this._enemy.gameObject.SetActive(false);
         }
 
         public override void Run()
@@ -70,7 +71,7 @@ namespace Union.Services.Charcater.Player
 
         public override void Exit()
         {
-            Debug.Log("OnExit : Player Dead");
+            Debug.Log("OnExit : Enemy Dead");
         }
     }
 }
