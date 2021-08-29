@@ -1,0 +1,2 @@
+﻿infoID,name,HealthPoint,PhysicalPower,PhysicalDefense,WalkingSpeed,RunningSpeed,JumpingPower
+1001,Test_Player_01,100,10,10,10,20,10
