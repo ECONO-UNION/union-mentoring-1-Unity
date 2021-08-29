@@ -19,41 +19,34 @@ namespace Union.Services.Charcater.Player
             }
         }
 
-        private Player _player;
-
         private List<KeyValuePair<StateNumber, State>> _states;
         private FiniteStateMachine<StateNumber> _machine;
 
         public FiniteStateMachineController(Player player)
         {
-            this._player = player;
+            CreateMachine(player);
+            CreateStates();
+
+            SetOnEvent();
         }
 
         public void Initialize()
         {
-            CreateMachine();
-            CreateStates();
-
-            SetOnEvent();
-
             this._machine.SetState(StateNumber.Alive);
         }
 
-        private void CreateMachine()
+        private void CreateMachine(Player player)
         {
             this._machine = FiniteStateMachine<StateNumber>.FromEnum()
-                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand, DieCommandCondition)
-                ;
-        }
+                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand, () =>
+                {
+                    if (player.BaseStat.HealthPoint.Get() <= 0)
+                    {
+                        return true;
+                    }
 
-        private bool DieCommandCondition()
-        {
-            if (this._player.BaseStat.HealthPoint.Get() <= 0)
-            {
-                return true;
-            }
-
-            return false;
+                    return false;
+                });
         }
 
         private void CreateStates()
