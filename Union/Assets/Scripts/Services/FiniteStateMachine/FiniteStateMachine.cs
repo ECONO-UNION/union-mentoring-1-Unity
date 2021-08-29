@@ -15,7 +15,7 @@ namespace Union.Services.FiniteStateMachine
         private Transition<TState> _currentTransition;
 
         private readonly Dictionary<TState, Dictionary<string, Transition<TState>>> _transitions;
-        private readonly Dictionary<TState, Controller> _controller;
+        private readonly Dictionary<TState, EventExecutor> _eventExecutor;
 
         private event Action<TState, TState> _onStateChange;
 
@@ -29,12 +29,12 @@ namespace Union.Services.FiniteStateMachine
             }
 
             this._transitions = new Dictionary<TState, Dictionary<string, Transition<TState>>>();
-            this._controller = new Dictionary<TState, Controller>();
+            this._eventExecutor = new Dictionary<TState, EventExecutor>();
 
             foreach (var value in states)
             {
                 this._transitions.Add(value, new Dictionary<string, Transition<TState>>());
-                this._controller.Add(value, new Controller());
+                this._eventExecutor.Add(value, new EventExecutor());
             }
         }
 
@@ -100,7 +100,7 @@ namespace Union.Services.FiniteStateMachine
                 throw new ArgumentNullException("handler");
             }
 
-            this._controller[state].OnRan += handler;
+            this._eventExecutor[state].OnRan += handler;
 
             return this;
         }
@@ -117,7 +117,7 @@ namespace Union.Services.FiniteStateMachine
                 throw new ArgumentNullException("handler");
             }
 
-            this._controller[state].OnEntered += handler;
+            this._eventExecutor[state].OnEntered += handler;
 
             return this;
         }
@@ -134,7 +134,7 @@ namespace Union.Services.FiniteStateMachine
                 throw new ArgumentNullException("handler");
             }
 
-            this._controller[state].OnExited += handler;
+            this._eventExecutor[state].OnExited += handler;
 
             return this;
         }
@@ -196,7 +196,7 @@ namespace Union.Services.FiniteStateMachine
                 throw new ArgumentException("unknown state", "state");
             }
 
-            this._controller[this.CurrentState].Run();
+            this._eventExecutor[this.CurrentState].Run();
 
             CheckConditionAndTransition();
         }
@@ -223,7 +223,7 @@ namespace Union.Services.FiniteStateMachine
                 {
                     transition.OnComplete += HandleTransitionComplete;
                     this._currentTransition = transition;
-                    this._controller[this.CurrentState].Exit();
+                    this._eventExecutor[this.CurrentState].Exit();
                     transition.Begin();
                     return;
                 }                    
@@ -250,7 +250,7 @@ namespace Union.Services.FiniteStateMachine
             {
                 transition.OnComplete += HandleTransitionComplete;
                 this._currentTransition = transition;
-                this._controller[this.CurrentState].Exit();
+                this._eventExecutor[this.CurrentState].Exit();
                 transition.Begin();
             }
         }
@@ -270,7 +270,7 @@ namespace Union.Services.FiniteStateMachine
                 this._onStateChange(previousState, this.CurrentState);
             }
 
-            this._controller[this.CurrentState].Enter();
+            this._eventExecutor[this.CurrentState].Enter();
             this._isInitialisingState = false;
         }
     }

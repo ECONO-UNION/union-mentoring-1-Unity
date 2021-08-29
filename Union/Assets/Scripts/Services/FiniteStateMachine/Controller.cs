@@ -2,7 +2,7 @@
 
 namespace Union.Services.FiniteStateMachine
 {
-    public class Controller
+    public class EventExecutor
     {
 		public event Action OnRan;
 		public event Action OnEntered;
