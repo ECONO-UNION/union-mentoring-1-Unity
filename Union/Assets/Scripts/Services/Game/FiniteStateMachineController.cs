@@ -25,13 +25,16 @@ namespace Union.Services.Game
         private List<KeyValuePair<StateNumber, State>> _states;
         private FiniteStateMachine<StateNumber> _finiteStateMachine;
 
-        public void Initialize()
+        public FiniteStateMachineController()
         {
             CreateMachine();
             CreateStates();
 
             SetOnEvent();
-            
+        }
+
+        public void Initialize()
+        {
             this._finiteStateMachine.SetState(StateNumber.Ready);
             this._finiteStateMachine.IssueCommand(Constants.StartCommand);
         }
