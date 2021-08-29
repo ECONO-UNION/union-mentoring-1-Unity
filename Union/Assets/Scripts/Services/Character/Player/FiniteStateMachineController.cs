@@ -4,7 +4,7 @@ using Union.Services.FiniteStateMachine;
 
 namespace Union.Services.Charcater.Player
 {
-    public class FiniteStateMachine
+    public class FiniteStateMachineController
     {
         public static class Constatns
         {
@@ -24,7 +24,7 @@ namespace Union.Services.Charcater.Player
         private List<KeyValuePair<StateNumber, State>> _states;
         private FiniteStateMachine<StateNumber> _machine;
 
-        public FiniteStateMachine(Player player)
+        public FiniteStateMachineController(Player player)
         {
             this._player = player;
         }
@@ -42,16 +42,26 @@ namespace Union.Services.Charcater.Player
         private void CreateMachine()
         {
             this._machine = FiniteStateMachine<StateNumber>.FromEnum()
-                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand)
+                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand, DieCommandCondition)
                 ;
+        }
+
+        private bool DieCommandCondition()
+        {
+            if (this._player.BaseStat.HealthPoint.Get() <= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void CreateStates()
         {
             this._states = new List<KeyValuePair<StateNumber, State>>();
 
-            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Alive, new Alive(this._player, this)));
-            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Dead, new Dead(this._player, this)));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Alive, new Alive()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Dead, new Dead()));
         }
 
         private void SetOnEvent()

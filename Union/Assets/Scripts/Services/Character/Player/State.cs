@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Union.Services.Charcater.Player
 {
@@ -11,9 +10,6 @@ namespace Union.Services.Charcater.Player
 
     public abstract class State
     {
-        protected Player _player { get; set; }
-        protected FiniteStateMachine _finiteStateMachine { get; set; }
-
         public abstract void Enter();
         public abstract void Run();
         public abstract void Exit();
@@ -21,10 +17,9 @@ namespace Union.Services.Charcater.Player
 
     public class Alive : State
     {
-        public Alive(Player player, FiniteStateMachine finiteStateMachine)
+        public Alive()
         {
-            this._player = player;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
@@ -34,11 +29,7 @@ namespace Union.Services.Charcater.Player
 
         public override void Run()
         {
-            if (this._player.BaseStat.HealthPoint.Get() <= 0)
-            {
-                this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constatns.DieCommand);
-                Assert.AreEqual(this._finiteStateMachine.CurrentState, StateNumber.Dead);
-            }
+            
         }
 
         public override void Exit()
@@ -49,18 +40,14 @@ namespace Union.Services.Charcater.Player
 
     public class Dead : State
     {
-        public Dead(Player player, FiniteStateMachine finiteStateMachine)
+        public Dead()
         {
-            this._player = player;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
         {
             Debug.Log("OnEnter : Player Dead");
-
-            this._player.enabled = false;
-            this._player.gameObject.SetActive(false);
         }
 
         public override void Run()
