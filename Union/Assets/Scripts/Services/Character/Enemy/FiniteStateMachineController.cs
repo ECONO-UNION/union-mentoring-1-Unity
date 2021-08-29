@@ -4,7 +4,7 @@ using Union.Services.FiniteStateMachine;
 
 namespace Union.Services.Charcater.Enemy
 {
-    public class FiniteStateMachine
+    public class FiniteStateMachineController
     {
         public static class Constatns
         {
@@ -19,39 +19,42 @@ namespace Union.Services.Charcater.Enemy
             }
         }
 
-        private Enemy _enemy;
-
         private List<KeyValuePair<StateNumber, State>> _states;
         private FiniteStateMachine<StateNumber> _machine;
 
-        public FiniteStateMachine(Enemy enemy)
+        public FiniteStateMachineController(Enemy enemy)
         {
-            this._enemy = enemy;
+            CreateMachine(enemy);
+            CreateStates();
+
+            SetOnEvent();
         }
 
         public void Initialize()
         {
-            CreateMachine();
-            CreateStates();
-
-            SetOnEvent();
-
             this._machine.SetState(StateNumber.Alive);
         }
 
-        private void CreateMachine()
+        private void CreateMachine(Enemy enemy)
         {
             this._machine = FiniteStateMachine<StateNumber>.FromEnum()
-                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand)
-                ;
+                .AddTransition(StateNumber.Alive, StateNumber.Dead, Constatns.DieCommand, () =>
+                {
+                    if (enemy.BaseStat.HealthPoint.Get() <= 0)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                });
         }
 
         private void CreateStates()
         {
             this._states = new List<KeyValuePair<StateNumber, State>>();
 
-            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Alive, new Alive(this._enemy, this)));
-            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Dead, new Dead(this._enemy, this)));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Alive, new Alive()));
+            this._states.Add(new KeyValuePair<StateNumber, State>(StateNumber.Dead, new Dead()));
         }
 
         private void SetOnEvent()

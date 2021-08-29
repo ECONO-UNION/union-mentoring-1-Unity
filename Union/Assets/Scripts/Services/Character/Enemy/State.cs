@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Union.Services.Charcater.Enemy
 {
@@ -11,9 +10,6 @@ namespace Union.Services.Charcater.Enemy
 
     public abstract class State
     {
-        protected Enemy _enemy { get; set; }
-        protected FiniteStateMachine _finiteStateMachine { get; set; }
-
         public abstract void Enter();
         public abstract void Run();
         public abstract void Exit();
@@ -21,10 +17,9 @@ namespace Union.Services.Charcater.Enemy
 
     public class Alive : State
     {
-        public Alive(Enemy enemy, FiniteStateMachine finiteStateMachine)
+        public Alive()
         {
-            this._enemy = enemy;
-            this._finiteStateMachine = finiteStateMachine;
+            
         }
 
         public override void Enter()
@@ -34,11 +29,7 @@ namespace Union.Services.Charcater.Enemy
 
         public override void Run()
         {
-            if (this._enemy.BaseStat.HealthPoint.Get() <= 0)
-            {
-                this._finiteStateMachine.IssueCommand(FiniteStateMachine.Constatns.DieCommand);
-                Assert.AreEqual(this._finiteStateMachine.CurrentState, StateNumber.Dead);
-            }
+            
         }
 
         public override void Exit()
@@ -49,19 +40,16 @@ namespace Union.Services.Charcater.Enemy
 
     public class Dead : State
     {
-        public Dead(Enemy enemy, FiniteStateMachine finiteStateMachine)
+        public Dead()
         {
-            this._enemy = enemy;
-            this._finiteStateMachine = finiteStateMachine;
+
         }
 
         public override void Enter()
         {
             Debug.Log("OnEnter : Enemy Dead");
 
-            Union.Services.Game.BattleField.Instance.DecreaseEnemyCount(1);
-            this._enemy.enabled = false;
-            this._enemy.gameObject.SetActive(false);
+            Game.BattleField.Instance.DecreaseEnemyCount(1);
         }
 
         public override void Run()

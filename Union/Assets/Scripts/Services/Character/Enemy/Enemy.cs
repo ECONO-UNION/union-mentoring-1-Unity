@@ -4,22 +4,28 @@ namespace Union.Services.Charcater.Enemy
 {
     public class Enemy : Character
     {
-        private FiniteStateMachine _finiteStateMachine;
+        private FiniteStateMachineController _finiteStateMachineController;
         
         private void Awake()
         {
             this.BaseStat = new BaseStat(20, 10, 10, 10, 20, 10);
-            this._finiteStateMachine = new FiniteStateMachine(this);
+            this._finiteStateMachineController = new FiniteStateMachineController(this);
         }
 
         private void Start()
         {
-            this._finiteStateMachine.Initialize();
+            this._finiteStateMachineController.Initialize();
         }
 
         private void Update()
         {
-            this._finiteStateMachine.Run();
+            this._finiteStateMachineController.Run();
+
+            if (this._finiteStateMachineController.CurrentState == StateNumber.Dead)
+            {
+                this.gameObject.SetActive(false);
+                this.enabled = false;
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
