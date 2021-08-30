@@ -9,7 +9,7 @@ namespace Union.Util.Csv
     public class Reader
     {
         private string _csvPath;
-        private List<Dictionary<string, string>> _data;
+        private List<Dictionary<string, string>> _datas;
 
         public Reader(string csvPath)
         {
@@ -19,19 +19,25 @@ namespace Union.Util.Csv
         public void Read()
         {
             const string BaseCsvPath = "Csv/";
-            const string LineSplitChars = @"\r\n|\n\r|\n|\r";
-
             string fullCsvPath = BaseCsvPath + this._csvPath;
             TextAsset data = Resources.Load(fullCsvPath) as TextAsset;
-            var lines = Regex.Split(data.text, LineSplitChars);
 
+            const string LineSplitChars = @"\r\n|\n\r|\n|\r";
+            var lines = Regex.Split(data.text, LineSplitChars);
             if (lines.Length <= 1)
             {
                 Debug.LogError("error : " + fullCsvPath + " line 길이 에러");
                 return;
             }
 
-            this._data = new List<Dictionary<string, string>>();
+            if (this._datas == null)
+            {
+                this._datas = new List<Dictionary<string, string>>();
+            }
+            else
+            {
+                this._datas.Clear();
+            }
 
             const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
             char[] trimChars = { '\"' };
@@ -56,16 +62,16 @@ namespace Union.Util.Csv
                     entry[header[j]] = value;
                 }
 
-                this._data.Add(entry);
+                this._datas.Add(entry);
             }
         }
 
         public int GetInfoID(int index)
         {
-            return int.Parse(this._data[index]["infoID"]);
+            return int.Parse(this._datas[index]["infoID"]);
         }
 
-        public T GetData<T>(string key, int infoID)
+        public T GetData<T>(string key, int infoID) where T : struct
         {
             Dictionary<string, string> data = FindData(infoID);
 
@@ -97,14 +103,14 @@ namespace Union.Util.Csv
         {
             string id = infoID.ToString();
 
-            for (int i = 0; i < this._data.Count; i++)
+            for (int i = 0; i < this._datas.Count; i++)
             {
-                if (this._data[i]["infoID"] != id)
+                if (this._datas[i]["infoID"] != id)
                 {
                     continue;
                 }
 
-                return this._data[i];
+                return this._datas[i];
             }
 
             return null;
