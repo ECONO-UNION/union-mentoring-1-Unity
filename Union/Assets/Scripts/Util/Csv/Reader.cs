@@ -8,15 +8,6 @@ namespace Union.Util.Csv
 {
     public class Reader
     {
-        private static class Constants
-        {
-            public const string BaseCsvPath = "Csv/";
-
-            public const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
-            public const string LineSplitChars = @"\r\n|\n\r|\n|\r";
-            public static char[] TrimChars = { '\"' };
-        }
-
         private string _csvPath;
         private List<Dictionary<string, string>> _data;
 
@@ -27,9 +18,12 @@ namespace Union.Util.Csv
 
         public void Read()
         {
-            string fullCsvPath = Constants.BaseCsvPath + this._csvPath;
+            const string BaseCsvPath = "Csv/";
+            const string LineSplitChars = @"\r\n|\n\r|\n|\r";
+
+            string fullCsvPath = BaseCsvPath + this._csvPath;
             TextAsset data = Resources.Load(fullCsvPath) as TextAsset;
-            var lines = Regex.Split(data.text, Constants.LineSplitChars);
+            var lines = Regex.Split(data.text, LineSplitChars);
 
             if (lines.Length <= 1)
             {
@@ -39,10 +33,12 @@ namespace Union.Util.Csv
 
             this._data = new List<Dictionary<string, string>>();
 
-            var header = Regex.Split(lines[0], Constants.SplitChars);
+            const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+            char[] trimChars = { '\"' };
+            var header = Regex.Split(lines[0], SplitChars);
             for (var i = 1; i < lines.Length; i++)
             {
-                var values = Regex.Split(lines[i], Constants.SplitChars);
+                var values = Regex.Split(lines[i], SplitChars);
 
                 if (values.Length == 0 || values[0] == "")
                 {
@@ -53,7 +49,7 @@ namespace Union.Util.Csv
                 for (var j = 0; j < header.Length && j < values.Length; j++)
                 {
                     string value = values[j];
-                    value = value.TrimStart(Constants.TrimChars).TrimEnd(Constants.TrimChars).Replace("\\", "");
+                    value = value.TrimStart(trimChars).TrimEnd(trimChars).Replace("\\", "");
                     value = value.Replace("<br>", "\n");
                     value = value.Replace("<c>", ",");
 
