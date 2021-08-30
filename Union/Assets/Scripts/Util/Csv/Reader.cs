@@ -71,7 +71,7 @@ namespace Union.Util.Csv
             return int.Parse(this._datas[index]["infoID"]);
         }
 
-        public T GetData<T>(string key, int infoID) where T : struct
+        public T GetData<T>(string key, int infoID)
         {
             Dictionary<string, string> data = FindData(infoID);
 
