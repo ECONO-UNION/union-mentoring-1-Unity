@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodes:
   - id: 0
+  - id: 1
+  - id: 2
   _currentNode:
     id: 1
   _startNode:
     id: 0
   _edges: []
   _edgeNode:
-    id: 1
+    id: 3
   references:
     version: 1
     00000000:
@@ -28,10 +30,30 @@ MonoBehaviour:
       data:
         _rect:
           serializedVersion: 2
-          x: 640
-          y: 135
+          x: 296
+          y: 115
           width: 170
           height: 80
         _actionName: 
     00000001:
+      type: {class: FlowChart/Node, ns: JuicyFSM, asm: Assembly-CSharp}
+      data:
+        _rect:
+          serializedVersion: 2
+          x: 389
+          y: 264
+          width: 170
+          height: 80
+        _actionName: 
+    00000002:
+      type: {class: FlowChart/Node, ns: JuicyFSM, asm: Assembly-CSharp}
+      data:
+        _rect:
+          serializedVersion: 2
+          x: 148
+          y: 260
+          width: 170
+          height: 80
+        _actionName: 
+    00000003:
       type: {class: , ns: , asm: }
