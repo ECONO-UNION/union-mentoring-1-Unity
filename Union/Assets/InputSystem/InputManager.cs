@@ -25,9 +25,9 @@ namespace InputSystem
             }
         }
 
-        private Dictionary<KeyName, KeyInput> _keyInputs = new Dictionary<KeyName, KeyInput>();
         private InputSetting _inputSetting;
 
+        public Dictionary<KeyName, KeyInput> KeyInputs { get; private set; }
         public MouseInput MouseInput { get; private set; }
 
         private void Awake()
@@ -44,16 +44,30 @@ namespace InputSystem
 
         private void BindKey()
         {
+            KeyInputs = new Dictionary<KeyName, KeyInput>();
             foreach (var keyButton in _inputSetting.Key)
             {
                 KeyName name = EnumMapper.GetEnumType<KeyName>(keyButton.Name);
-                _keyInputs[name] = new KeyInput(keyButton.Code);
+                KeyCode code = GetUserSettingKeyCode(name);
+                if (code == KeyCode.None)
+                    code = keyButton.Code;
+
+                KeyInputs[name] = new KeyInput(code);
             }
+        }
+
+        private KeyCode GetUserSettingKeyCode(KeyName keyName)
+        {
+            string userSettingKey = PlayerPrefs.GetString(keyName.ToString());
+            if (string.IsNullOrEmpty(userSettingKey))
+                return KeyCode.None;
+            else
+                return EnumMapper.GetEnumType<KeyCode>(userSettingKey);
         }
 
         private void Update()
         {
-            foreach (var key in _keyInputs.Values)
+            foreach (var key in KeyInputs.Values)
             {
                 key.IsKeyPressed = Input.GetKey(key.Code);
                 key.IsKeyDown = Input.GetKeyDown(key.Code);
@@ -64,24 +78,20 @@ namespace InputSystem
 
         public KeyInput GetKey(KeyName name)
         {
-            if (!_keyInputs.ContainsKey(name))
-            {
-                Key keyButton = _inputSetting.Key.Find(x => EnumMapper.GetEnumType<KeyName>(x.Name) == name);
-                if (keyButton == null)
-                {
-                    Debug.LogError("Invalid Key Name");
-                    return null;
-                }
-                _keyInputs[name] = new KeyInput(keyButton.Code);
-            }
-            return _keyInputs[name];
+            return KeyInputs[name];
+        }
+
+        public void ChangeKey(KeyName targetKey, KeyCode changeKeyCode)
+        {
+            KeyInputs[targetKey].Code = changeKeyCode;
+            PlayerPrefs.SetString(targetKey.ToString(), changeKeyCode.ToString());
         }
 
         // KEY TEST 용도입니다 //
         private void OnGUI()
         {
             int height = 0;
-            foreach (var key in _keyInputs)
+            foreach (var key in KeyInputs)
             {
                 GUI.Label(new Rect(100, 40 + height, 80, 20), key.Key.ToString());
                 GUI.Label(new Rect(20, 40 + height, 80, 20), key.Value.Code.ToString());
