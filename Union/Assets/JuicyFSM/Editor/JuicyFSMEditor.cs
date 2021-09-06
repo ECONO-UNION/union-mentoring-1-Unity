@@ -13,10 +13,10 @@ namespace JuicyFSM
 
     public class JuicyFSMEditor : EditorWindow
     {
-        private FlowChartView flowChartView;
-        private InspectorView inspectorView;
+        private FlowChartView _flowChartView;
+        private InspectorView _inspectorView;
 
-        [MenuItem("JuicyFSM/Editor ...")]
+        [MenuItem("JuicyFSM/Editor...")]
         public static void OpenWindow()
         {
             JuicyFSMEditor wnd = GetWindow<JuicyFSMEditor>();
@@ -43,8 +43,32 @@ namespace JuicyFSM
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(JuicyFSMEditorPath.ussPath);
             root.styleSheets.Add(styleSheet);
 
-            flowChartView = root.Q<FlowChartView>();
-            inspectorView = root.Q<InspectorView>();
+            _flowChartView = root.Q<FlowChartView>();
+            _inspectorView = root.Q<InspectorView>();
+            OnSelectionChange();
+        }
+
+        /// <summary>
+        /// Unity Asset선택시 실행되는 콜백함수
+        /// </summary>
+        private void OnSelectionChange()
+        {
+            FlowChart flowChart = Selection.activeObject as FlowChart;
+            if (flowChart)
+            {
+                _flowChartView?.PopulateView(flowChart);
+            }
+            else
+            {
+                if (!Selection.activeGameObject)
+                    return;
+
+                FlowChartRunner runner = Selection.activeGameObject.GetComponent<FlowChartRunner>();
+                if (runner == null)
+                    return;
+
+                flowChart = runner.FlowChart;
+            }
         }
     }
 }
