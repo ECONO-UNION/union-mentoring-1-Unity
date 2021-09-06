@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
->
-    <engine:Label text="Hello World! From UXML" />
-</engine:UXML>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="JuicyFSMEditor.uss" />
+    <JuicyFSM.SplitView>
+        <ui:VisualElement name="left-panel">
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgba(37, 37, 37, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="right-panel">
+            <ui:Label text="FlowChart" display-tooltip-when-elided="true" style="background-color: rgba(37, 37, 37, 255);" />
+            <JuicyFSM.FlowChartView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </JuicyFSM.SplitView>
+</ui:UXML>
