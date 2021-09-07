@@ -7,9 +7,8 @@ namespace JuicyFlowChart
     {
         public enum State
         {
-            Running,
-            Failure,
-            Success,
+            Enabled,
+            Disabled
         }
 
         // TODO :Hide Inspector
@@ -19,35 +18,20 @@ namespace JuicyFlowChart
         private Vector2 _position;
         [SerializeField]
         private List<Node> _children = new List<Node>();
+        protected State _state = State.Disabled;
 
-        private State _state = State.Running;
-        private bool _isStarted = false;
+        public abstract void Run();
 
         public string Guid { get => _guid; set => _guid = value; }
         public Vector2 Position { get => _position; set => _position = value; }
         public List<Node> Children { get => _children; }
-
-        public void Run()
+        internal void ChangeToDisableState()
         {
-            if (_state != State.Running)
-                return;
-
-            if (!_isStarted)
+            _state = State.Disabled;
+            foreach (Node child in _children)
             {
-                OnStart();
-                _isStarted = true;
-            }
-            _state = OnUpdate();
-
-            if (_state == State.Failure || _state == State.Success)
-            {
-                OnStop();
-                _isStarted = false;
+                child.ChangeToDisableState();
             }
         }
-
-        protected abstract void OnStart();
-        protected abstract void OnStop();
-        protected abstract State OnUpdate();
     }
 }

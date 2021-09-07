@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SimpleAction
   m_EditorClassIdentifier: 
   _guid: ac7261e3b3aa74841bbde54969761e41
-  _position: {x: 165, y: 159}
+  _position: {x: 150, y: 186}
   _children: []
 --- !u!114 &-3030390525491719042
 MonoBehaviour:
@@ -28,7 +28,7 @@ MonoBehaviour:
   m_Name: SimpleAction
   m_EditorClassIdentifier: 
   _guid: 440f9c1286a229541b54b2189e7c66e5
-  _position: {x: -110.5, y: -52.5}
+  _position: {x: -28, y: -77}
   _children: []
 --- !u!114 &-1622171733727351420
 MonoBehaviour:
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: HardCondition
   m_EditorClassIdentifier: 
   _guid: b31a4e52d880b3d4d852a6af53ab569f
-  _position: {x: 437, y: 14}
+  _position: {x: 346, y: 0}
   _children:
   - {fileID: -6351846756239286107}
 --- !u!114 &4098989497929184602
@@ -109,5 +109,5 @@ MonoBehaviour:
   m_Name: SimpleAction
   m_EditorClassIdentifier: 
   _guid: 9fe15ad4f51dd68499499ac91726e4f8
-  _position: {x: 0, y: 0}
+  _position: {x: 53, y: 25}
   _children: []
