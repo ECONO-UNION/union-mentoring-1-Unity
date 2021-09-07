@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
 
-namespace JuicyFSM
+namespace JuicyFlowChart
 {
     public class SplitView : TwoPaneSplitView
     {

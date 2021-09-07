@@ -3,7 +3,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace JuicyFSM
+namespace JuicyFlowChart
 {
     public class NodeView : UnityEditor.Experimental.GraphView.Node
     {

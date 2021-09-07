@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace JuicyFSM
+namespace JuicyFlowChart
 {
     [CreateAssetMenu()]
     public class FlowChart : ScriptableObject
     {
         [SerializeField]
+        private Node rootNode;
+        [SerializeField]
         private List<Node> _nodes = new List<Node>();
 
         public List<Node> Nodes { get => _nodes; }
+
+        public void Run()
+        {
+            rootNode.Run();
+        }
 
         public Node CreateNode<T>() where T : Node
         {

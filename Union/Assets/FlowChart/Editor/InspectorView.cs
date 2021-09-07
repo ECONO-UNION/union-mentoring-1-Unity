@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace JuicyFSM
+namespace JuicyFlowChart
 {
     public class InspectorView : VisualElement
     {

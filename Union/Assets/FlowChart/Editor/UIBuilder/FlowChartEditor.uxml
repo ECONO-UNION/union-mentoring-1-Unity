@@ -1,13 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="JuicyFSMEditor.uss" />
-    <JuicyFSM.SplitView>
+    <JuicyFlowChart.SplitView>
         <ui:VisualElement name="left-panel">
-            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-            <JuicyFSM.InspectorView />
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgba(47, 47, 47, 255);" />
         </ui:VisualElement>
         <ui:VisualElement name="right-panel">
-            <ui:Label text="FlowChart" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-            <JuicyFSM.FlowChartView focusable="true" style="flex-grow: 1;" />
+            <ui:Label text="FlowChart" display-tooltip-when-elided="true" style="background-color: rgba(47, 47, 47, 255);" />
+            <JuicyFlowChart.FlowChartView focusable="true" style="flex-grow: 1;" />
         </ui:VisualElement>
-    </JuicyFSM.SplitView>
+    </JuicyFlowChart.SplitView>
 </ui:UXML>

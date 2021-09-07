@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace JuicyFSM
+namespace JuicyFlowChart
 {
-    public abstract class Condition : Node
+    public abstract class Action : Node
     {
 
     }
