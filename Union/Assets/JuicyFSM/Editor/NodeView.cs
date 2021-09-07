@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace JuicyFSM
 {
@@ -22,6 +23,27 @@ namespace JuicyFSM
 
             style.left = node.Position.x;
             style.top = node.Position.y;
+
+            CreateInputPorts();
+            CreateOutputPorts();
+        }
+
+        private void CreateInputPorts()
+        {
+            input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
+            input.portName = "";
+            input.style.flexDirection = FlexDirection.Row;
+            input.style.paddingLeft = 12;
+            inputContainer.Add(input);
+        }
+
+        private void CreateOutputPorts()
+        {
+            output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, typeof(bool));
+            output.portName = "";
+            output.style.flexDirection = FlexDirection.RowReverse;
+            output.style.paddingRight = 12;
+            outputContainer.Add(output);
         }
 
         public override void SetPosition(Rect newPos)
