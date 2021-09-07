@@ -68,12 +68,6 @@ namespace JuicyFSM
             return GetNodeByGuid(node.Guid) as NodeView;
         }
 
-        private void CreateNode(Type type)
-        {
-            Node node = _flowChart.CreateNode(type);
-            CreateNodeView(node);
-        }
-
         private void CreateNodeView(Node node)
         {
             NodeView nodeView = new NodeView(node);
@@ -127,20 +121,22 @@ namespace JuicyFSM
             if (_flowChart == null)
                 return;
 
-            {
-                var types = TypeCache.GetTypesDerivedFrom<Action>();
-                foreach (var type in types)
-                {
-                    evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type));
-                }
-            }
+            ShowNodeTypes<Action>(evt);
             evt.menu.AppendSeparator();
+            ShowNodeTypes<Condition>(evt);
+        }
+
+        private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : Node
+        {
+            var types = TypeCache.GetTypesDerivedFrom<T>();
+            foreach (var type in types)
             {
-                var types = TypeCache.GetTypesDerivedFrom<Condition>();
-                foreach (var type in types)
+                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) =>
                 {
-                    evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) => CreateNode(type));
-                }
+                    var createNodeMethod = typeof(FlowChart).GetMethod("CreateNode").MakeGenericMethod(type);
+                    Node node = createNodeMethod.Invoke(_flowChart, null) as Node;
+                    CreateNodeView(node);
+                });
             }
         }
     }

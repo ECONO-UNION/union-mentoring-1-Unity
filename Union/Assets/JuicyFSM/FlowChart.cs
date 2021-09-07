@@ -13,10 +13,10 @@ namespace JuicyFSM
 
         public List<Node> Nodes { get => _nodes; }
 
-        public Node CreateNode(Type nodeType)
+        public Node CreateNode<T>() where T : Node
         {
-            Node node = ScriptableObject.CreateInstance(nodeType) as Node;
-            node.name = nodeType.Name;
+            Node node = ScriptableObject.CreateInstance<T>();
+            node.name = node.GetType().Name;
             node.Guid = GUID.Generate().ToString();
 
             Undo.RecordObject(this, "FlowChart (CreateNode)");
