@@ -26,7 +26,7 @@ namespace JuicyFlowChart
 
         public string Guid { get => _guid; set => _guid = value; }
         public Vector2 Position { get => _position; set => _position = value; }
-        public List<Node> Children { get => _children; }
+        public List<Node> Children { get => _children; set => _children = value; }
         public bool IsRoot { get => _isRoot; set => _isRoot = value; }
         internal void ChangeToDisableState()
         {
@@ -35,6 +35,14 @@ namespace JuicyFlowChart
             {
                 child.ChangeToDisableState();
             }
+        }
+
+        public Node Clone()
+        {
+            Node node = Instantiate(this);
+            node.name = name;
+            node.Children = _children.ConvertAll(c => c.Clone());
+            return node;
         }
     }
 }

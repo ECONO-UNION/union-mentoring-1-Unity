@@ -10,7 +10,7 @@ namespace JuicyFlowChart
 
         private void Start()
         {
-            // Clone
+            _flowChart = _flowChart.Clone();
         }
 
         private void Update()

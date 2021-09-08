@@ -48,26 +48,54 @@ namespace JuicyFlowChart
             OnSelectionChange();
         }
 
+        private void OnEnable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange obj)
+        {
+            switch (obj)
+            {
+                case PlayModeStateChange.EnteredEditMode:
+                    OnSelectionChange();
+                    break;
+                case PlayModeStateChange.ExitingEditMode:
+                    break;
+                case PlayModeStateChange.EnteredPlayMode:
+                    OnSelectionChange();
+                    break;
+                case PlayModeStateChange.ExitingPlayMode:
+                    break;
+            }
+        }
+
         /// <summary>
         /// Unity Asset선택시 실행되는 콜백함수
         /// </summary>
         private void OnSelectionChange()
         {
             FlowChart flowChart = Selection.activeObject as FlowChart;
+            if (!flowChart)
+            {
+                if (Selection.activeGameObject)
+                {
+                    FlowChartRunner runner = Selection.activeGameObject.GetComponent<FlowChartRunner>();
+                    if (runner)
+                    {
+                        flowChart = runner.FlowChart;
+                    }
+                }
+            }
             if (flowChart)
             {
                 _flowChartView?.PopulateView(flowChart);
-            }
-            else
-            {
-                if (!Selection.activeGameObject)
-                    return;
-
-                FlowChartRunner runner = Selection.activeGameObject.GetComponent<FlowChartRunner>();
-                if (runner == null)
-                    return;
-
-                flowChart = runner.FlowChart;
             }
         }
     }

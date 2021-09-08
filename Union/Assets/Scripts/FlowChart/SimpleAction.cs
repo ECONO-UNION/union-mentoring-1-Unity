@@ -7,11 +7,11 @@ public class SimpleAction : Action
 
     protected override void OnStart()
     {
-        Debug.Log("START" + TEST);
+        Debug.Log("START" + Children.Count);
     }
 
     protected override void OnUpdate()
     {
-        Debug.Log("Update : " + TEST);
+        Debug.Log("Update : " + Children.Count);
     }
 }

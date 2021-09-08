@@ -36,6 +36,9 @@ namespace JuicyFlowChart
         internal void PopulateView(FlowChart flowChart)
         {
             _flowChart = flowChart;
+            Label flowChartName = this.Q<Label>("flowChartName");
+            flowChartName.text = flowChart.name;
+
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;

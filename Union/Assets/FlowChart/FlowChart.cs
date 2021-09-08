@@ -13,7 +13,7 @@ namespace JuicyFlowChart
         [SerializeField]
         private List<Node> _nodes = new List<Node>();
 
-        public List<Node> Nodes { get => _nodes; }
+        public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
         private Node RootNode { get => _rootNode; }
 
         public void Run()
@@ -86,6 +86,25 @@ namespace JuicyFlowChart
             Undo.RecordObject(parent, "FlowChart (RemoveChild)");
             parent.Children.Remove(child);
             EditorUtility.SetDirty(parent);
+        }
+
+        public FlowChart Clone()
+        {
+            FlowChart flowChart = Instantiate(this);
+            flowChart.SetRootNode(flowChart.RootNode.Clone());
+            flowChart.Nodes = new List<Node>();
+            Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
+            return flowChart;
+        }
+
+        public void Traverse(Node node, Action<Node> visiter)
+        {
+            if (node)
+            {
+                visiter.Invoke(node);
+                var children = node.Children;
+                children.ForEach((n) => Traverse(n, visiter));
+            }
         }
     }
 }
