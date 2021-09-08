@@ -15,6 +15,9 @@ namespace JuicyFlowChart
     {
         private FlowChartView _flowChartView;
         private InspectorView _inspectorView;
+        private FlowChart _flowChart;
+        private Label _flowChartName; 
+
 
         [MenuItem("FlowChart/Editor...")]
         public static void OpenWindow()
@@ -45,6 +48,7 @@ namespace JuicyFlowChart
 
             _flowChartView = root.Q<FlowChartView>();
             _inspectorView = root.Q<InspectorView>();
+            _flowChartName = _flowChartView.Q<Label>("flowChartName");
             OnSelectionChange();
         }
 
@@ -81,21 +85,40 @@ namespace JuicyFlowChart
         /// </summary>
         private void OnSelectionChange()
         {
-            FlowChart flowChart = Selection.activeObject as FlowChart;
-            if (!flowChart)
+            FlowChart selectedFlowChart = Selection.activeObject as FlowChart;
+            if (selectedFlowChart)
             {
                 if (Selection.activeGameObject)
                 {
                     FlowChartRunner runner = Selection.activeGameObject.GetComponent<FlowChartRunner>();
                     if (runner)
                     {
-                        flowChart = runner.FlowChart;
+                        _flowChart = runner.FlowChart;
                     }
                 }
+                else
+                {
+                    _flowChart = selectedFlowChart;
+                }
             }
-            if (flowChart)
+
+            if (_flowChart)
             {
-                _flowChartView?.PopulateView(flowChart);
+                _flowChartView?.PopulateView(_flowChart);
+                _flowChartName.text = _flowChart.name;
+            }
+            else
+            {
+                _flowChartView.ClearView();
+                _flowChartName.text = "";
+            }
+        }
+
+        private void OnProjectChange()
+        {
+            if (_flowChart)
+            {
+                _flowChartName.text = _flowChart.name;
             }
         }
     }

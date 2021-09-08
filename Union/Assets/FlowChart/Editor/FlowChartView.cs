@@ -11,6 +11,7 @@ namespace JuicyFlowChart
     {
         public new class UxmlFactory : UxmlFactory<FlowChartView, GraphView.UxmlTraits> { }
         private FlowChart _flowChart;
+        private Label _flowChartName;
 
         public FlowChartView()
         {
@@ -23,21 +24,11 @@ namespace JuicyFlowChart
 
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(FlowChartEditorPath.ussPath);
             styleSheets.Add(styleSheet);
-
-            Undo.undoRedoPerformed += OnUndoRedo;
-        }
-
-        private void OnUndoRedo()
-        {
-            PopulateView(_flowChart);
-            AssetDatabase.SaveAssets();
         }
 
         internal void PopulateView(FlowChart flowChart)
         {
             _flowChart = flowChart;
-            Label flowChartName = this.Q<Label>("flowChartName");
-            flowChartName.text = flowChart.name;
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
@@ -45,6 +36,11 @@ namespace JuicyFlowChart
 
             DrawNode();
             DrawEdge();
+        }
+
+        internal void ClearView()
+        {
+            DeleteElements(graphElements.ToList());
         }
 
         private void DrawNode()
@@ -89,6 +85,9 @@ namespace JuicyFlowChart
         /// </summary>
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
+            if (_flowChart == null)
+                return graphViewChange;
+
             // Delete Node
             if (graphViewChange.elementsToRemove != null)
             {

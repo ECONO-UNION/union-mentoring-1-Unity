@@ -37,13 +37,11 @@ namespace JuicyFlowChart
                 SetRootNode(node);
             }
 
-            Undo.RecordObject(this, "FlowChart (CreateNode)");
             _nodes.Add(node);
             if (!Application.isPlaying)
             {
                 AssetDatabase.AddObjectToAsset(node, this);
             }
-            Undo.RegisterCompleteObjectUndo(node, "FlowChart (CreateNode)");
             AssetDatabase.SaveAssets();
             return node;
         }
@@ -55,7 +53,7 @@ namespace JuicyFlowChart
                 _rootNode.IsRoot = false;
                 _nodes.ForEach((node) =>
                 {
-                    if(node.Children.Contains(target))
+                    if (node.Children.Contains(target))
                     {
                         node.Children.Remove(target);
                     }
@@ -67,23 +65,22 @@ namespace JuicyFlowChart
 
         public void DeleteNode(Node node)
         {
-            Undo.RecordObject(node, "FlowChart (DeleteNode)");
+            if (node.IsRoot)
+                _rootNode = null;
+
             _nodes.Remove(node);
             AssetDatabase.RemoveObjectFromAsset(node);
-            Undo.DestroyObjectImmediate(node);
             AssetDatabase.SaveAssets();
         }
 
         public void AddChild(Node parent, Node child)
         {
-            Undo.RecordObject(parent, "FlowChart (AddChild)");
             parent.Children.Add(child);
             EditorUtility.SetDirty(parent);
         }
 
         public void RemoveChild(Node parent, Node child)
         {
-            Undo.RecordObject(parent, "FlowChart (RemoveChild)");
             parent.Children.Remove(child);
             EditorUtility.SetDirty(parent);
         }
