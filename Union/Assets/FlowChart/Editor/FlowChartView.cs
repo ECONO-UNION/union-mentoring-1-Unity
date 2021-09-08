@@ -71,8 +71,14 @@ namespace JuicyFlowChart
 
         private void CreateNodeView(Node node)
         {
-            NodeView nodeView = new NodeView(node);
+            NodeView nodeView = new NodeView(node, SetRootNode);
             AddElement(nodeView);
+        }
+
+        private void SetRootNode(Node node)
+        {
+            _flowChart.SetRootNode(node);
+            PopulateView(_flowChart);
         }
 
         /// <summary>
@@ -122,8 +128,8 @@ namespace JuicyFlowChart
             if (_flowChart == null)
                 return;
 
-            ShowNodeTypes<Action>(evt);
             evt.menu.AppendSeparator();
+            ShowNodeTypes<Action>(evt);
             ShowNodeTypes<Condition>(evt);
         }
 
@@ -132,7 +138,7 @@ namespace JuicyFlowChart
             var types = TypeCache.GetTypesDerivedFrom<T>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", (a) =>
+                evt.menu.AppendAction($"Create {type.BaseType.Name}/{type.Name}", (a) =>
                 {
                     var createNodeMethod = typeof(FlowChart).GetMethod("CreateNode").MakeGenericMethod(type);
                     Node node = createNodeMethod.Invoke(_flowChart, null) as Node;
@@ -148,7 +154,7 @@ namespace JuicyFlowChart
         {
             return ports.ToList().Where(endPort =>
             endPort.direction != startPort.direction &&
-            endPort.node != startPort.node ).ToList();
+            endPort.node != startPort.node).ToList();
         }
     }
 }

@@ -5,14 +5,19 @@ namespace JuicyFlowChart
 {
     public abstract class Action : Node
     {
-        protected abstract void Act();
+        protected abstract void OnStart();
+        protected abstract void OnUpdate();
 
         public sealed override void Run()
         {
-            _state = State.Enabled;
+            if (_state == State.Disabled)
+            {
+                _state = State.Enabled;
+                OnStart();
+            }
 
-            Act();
-            foreach(Node child in Children)
+            OnUpdate();
+            foreach (Node child in Children)
             {
                 child.Run();
             }

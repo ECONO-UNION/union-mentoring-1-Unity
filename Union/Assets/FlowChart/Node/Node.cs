@@ -18,6 +18,8 @@ namespace JuicyFlowChart
         private Vector2 _position;
         [SerializeField]
         private List<Node> _children = new List<Node>();
+        [SerializeField]
+        private bool _isRoot;
         protected State _state = State.Disabled;
 
         public abstract void Run();
@@ -25,6 +27,7 @@ namespace JuicyFlowChart
         public string Guid { get => _guid; set => _guid = value; }
         public Vector2 Position { get => _position; set => _position = value; }
         public List<Node> Children { get => _children; }
+        public bool IsRoot { get => _isRoot; set => _isRoot = value; }
         internal void ChangeToDisableState()
         {
             _state = State.Disabled;

@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System;
 
 namespace JuicyFlowChart
 {
@@ -10,21 +11,24 @@ namespace JuicyFlowChart
         private Node _node;
         private Port input;
         private Port output;
+        private Action<Node> _onRootNodeSet;
 
         public Node Node { get => _node; }
         public Port Input { get => input; }
         public Port Output { get => output; }
 
-        public NodeView(Node node)
+        public NodeView(Node node, System.Action<Node> OnRootNodeSet)
         {
             _node = node;
-            title = node.name;
-            viewDataKey = node.Guid;
+            title = _node.name;
+            viewDataKey = _node.Guid;
+            _onRootNodeSet = OnRootNodeSet;
 
-            style.left = node.Position.x;
-            style.top = node.Position.y;
+            style.left = _node.Position.x;
+            style.top = _node.Position.y;
 
-            CreateInputPorts();
+            if (!_node.IsRoot)
+                CreateInputPorts();
             CreateOutputPorts();
         }
 
@@ -52,6 +56,20 @@ namespace JuicyFlowChart
             Undo.RecordObject(_node, "Behaviour Tree (Set Position)");
             _node.Position = newPos.position;
             EditorUtility.SetDirty(_node);
+        }
+
+        /// <summary>
+        /// 마우스 우클릭시 실행되는 콜백함수
+        /// </summary>
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            if (!_node.IsRoot)
+            {
+                evt.menu.AppendAction($"Set root", (a) =>
+                {
+                    _onRootNodeSet?.Invoke(_node);
+                });
+            }
         }
     }
 }

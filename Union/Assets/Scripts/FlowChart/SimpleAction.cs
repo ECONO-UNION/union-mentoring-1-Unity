@@ -3,8 +3,15 @@ using UnityEngine;
 
 public class SimpleAction : Action
 {
-    protected override void Act()
+    public int TEST;
+
+    protected override void OnStart()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("START" + TEST);
+    }
+
+    protected override void OnUpdate()
+    {
+        Debug.Log("Update : " + TEST);
     }
 }

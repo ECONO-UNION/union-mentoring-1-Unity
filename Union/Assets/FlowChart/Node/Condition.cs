@@ -11,6 +11,7 @@ namespace JuicyFlowChart
         {
             if (Check())
             {
+                _state = State.Enabled;
                 foreach (Node child in Children)
                 {
                     child.Run();

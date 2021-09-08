@@ -9,15 +9,22 @@ namespace JuicyFlowChart
     public class FlowChart : ScriptableObject
     {
         [SerializeField]
-        private Node rootNode;
+        private Node _rootNode;
         [SerializeField]
         private List<Node> _nodes = new List<Node>();
 
         public List<Node> Nodes { get => _nodes; }
+        private Node RootNode { get => _rootNode; }
 
         public void Run()
         {
-            rootNode.Run();
+            if (_rootNode == null)
+            {
+                Debug.LogWarning("Not found root node");
+                return;
+            }
+
+            _rootNode.Run();
         }
 
         public Node CreateNode<T>() where T : Node
@@ -25,6 +32,10 @@ namespace JuicyFlowChart
             Node node = ScriptableObject.CreateInstance<T>();
             node.name = node.GetType().Name;
             node.Guid = GUID.Generate().ToString();
+            if (_rootNode == null)
+            {
+                SetRootNode(node);
+            }
 
             Undo.RecordObject(this, "FlowChart (CreateNode)");
             _nodes.Add(node);
@@ -35,6 +46,23 @@ namespace JuicyFlowChart
             Undo.RegisterCompleteObjectUndo(node, "FlowChart (CreateNode)");
             AssetDatabase.SaveAssets();
             return node;
+        }
+
+        public void SetRootNode(Node target)
+        {
+            if (_rootNode != null)
+            {
+                _rootNode.IsRoot = false;
+                _nodes.ForEach((node) =>
+                {
+                    if(node.Children.Contains(target))
+                    {
+                        node.Children.Remove(target);
+                    }
+                });
+            }
+            _rootNode = target;
+            target.IsRoot = true;
         }
 
         public void DeleteNode(Node node)
