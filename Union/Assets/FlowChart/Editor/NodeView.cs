@@ -16,8 +16,9 @@ namespace JuicyFlowChart
         public Node Node { get => _node; }
         public Port Input { get => input; }
         public Port Output { get => output; }
+        public Action<NodeView> OnNodeSelected { get; internal set; }
 
-        public NodeView(Node node, System.Action<Node> OnRootNodeSet)
+        public NodeView(Node node, Action<Node> OnRootNodeSet)
         {
             _node = node;
             title = _node.name;
@@ -56,6 +57,25 @@ namespace JuicyFlowChart
             Undo.RecordObject(_node, "Behaviour Tree (Set Position)");
             _node.Position = newPos.position;
             EditorUtility.SetDirty(_node);
+        }
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            if (OnNodeSelected != null)
+            {
+                OnNodeSelected.Invoke(this);
+            }
+        }
+
+        public void SortChildren()
+        {
+            _node.Children.Sort(SortByHorizontalPosition);
+        }
+
+        private int SortByHorizontalPosition(Node left, Node right)
+        {
+            return left.Position.x < right.Position.x ? -1 : 1;
         }
 
         /// <summary>

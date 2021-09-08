@@ -15,6 +15,9 @@ namespace JuicyFlowChart
 
         private void Update()
         {
+            if (_flowChart == null)
+                return;
+
             _flowChart.Run();
         }
     }

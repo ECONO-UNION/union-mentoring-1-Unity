@@ -14,7 +14,7 @@ namespace JuicyFlowChart
         private List<Node> _nodes = new List<Node>();
 
         public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
-        private Node RootNode { get => _rootNode; }
+        public Node RootNode { get => _rootNode; internal set => _rootNode = value; }
 
         public void Run()
         {
@@ -27,11 +27,12 @@ namespace JuicyFlowChart
             _rootNode.Run();
         }
 
-        public Node CreateNode<T>() where T : Node
+        public Node CreateNode<T>(Vector2 position) where T : Node
         {
             Node node = ScriptableObject.CreateInstance<T>();
             node.name = node.GetType().Name;
             node.Guid = GUID.Generate().ToString();
+            node.Position = position;
             if (_rootNode == null)
             {
                 SetRootNode(node);
@@ -88,7 +89,8 @@ namespace JuicyFlowChart
         public FlowChart Clone()
         {
             FlowChart flowChart = Instantiate(this);
-            flowChart.SetRootNode(flowChart.RootNode.Clone());
+            flowChart.name = string.Format($"{name} (RUNTIME)");
+            flowChart.RootNode = flowChart.RootNode.Clone();
             flowChart.Nodes = new List<Node>();
             Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
             return flowChart;

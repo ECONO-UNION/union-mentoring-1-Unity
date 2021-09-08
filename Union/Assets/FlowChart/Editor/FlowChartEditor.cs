@@ -16,7 +16,7 @@ namespace JuicyFlowChart
         private FlowChartView _flowChartView;
         private InspectorView _inspectorView;
         private FlowChart _flowChart;
-        private Label _flowChartName; 
+        private Label _flowChartName;
 
 
         [MenuItem("FlowChart/Editor...")]
@@ -49,6 +49,8 @@ namespace JuicyFlowChart
             _flowChartView = root.Q<FlowChartView>();
             _inspectorView = root.Q<InspectorView>();
             _flowChartName = _flowChartView.Q<Label>("flowChartName");
+
+            _flowChartView.OnNodeSelected = OnNodeSelectionChanged;
             OnSelectionChange();
         }
 
@@ -80,26 +82,31 @@ namespace JuicyFlowChart
             }
         }
 
+        private void OnNodeSelectionChanged(NodeView node)
+        {
+            _inspectorView.UpdateSelection(node);
+        }
+
         /// <summary>
         /// Unity Asset선택시 실행되는 콜백함수
         /// </summary>
         private void OnSelectionChange()
         {
             FlowChart selectedFlowChart = Selection.activeObject as FlowChart;
-            if (selectedFlowChart)
+            if (!selectedFlowChart)
             {
                 if (Selection.activeGameObject)
                 {
                     FlowChartRunner runner = Selection.activeGameObject.GetComponent<FlowChartRunner>();
-                    if (runner)
+                    if (runner && runner.FlowChart != null)
                     {
                         _flowChart = runner.FlowChart;
                     }
                 }
-                else
-                {
-                    _flowChart = selectedFlowChart;
-                }
+            }
+            else
+            {
+                _flowChart = selectedFlowChart;
             }
 
             if (_flowChart)

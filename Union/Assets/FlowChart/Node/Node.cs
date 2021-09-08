@@ -11,15 +11,22 @@ namespace JuicyFlowChart
             Disabled
         }
 
-        // TODO :Hide Inspector
+        [HideInInspector]
         [SerializeField]
         private string _guid;
+
+        [HideInInspector]
         [SerializeField]
         private Vector2 _position;
+
+        [HideInInspector]
         [SerializeField]
         private List<Node> _children = new List<Node>();
+
+        [HideInInspector]
         [SerializeField]
         private bool _isRoot;
+
         protected State _state = State.Disabled;
 
         public abstract void Run();

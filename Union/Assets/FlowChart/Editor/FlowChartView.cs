@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -13,6 +14,8 @@ namespace JuicyFlowChart
         private FlowChart _flowChart;
         private Label _flowChartName;
 
+        public Action<NodeView> OnNodeSelected { get; internal set; }
+
         public FlowChartView()
         {
             Insert(0, new GridBackground());
@@ -25,6 +28,7 @@ namespace JuicyFlowChart
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(FlowChartEditorPath.ussPath);
             styleSheets.Add(styleSheet);
         }
+
 
         internal void PopulateView(FlowChart flowChart)
         {
@@ -71,6 +75,7 @@ namespace JuicyFlowChart
         private void CreateNodeView(Node node)
         {
             NodeView nodeView = new NodeView(node, SetRootNode);
+            nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }
 
@@ -81,7 +86,7 @@ namespace JuicyFlowChart
         }
 
         /// <summary>
-        /// 그래프 뷰 내에서 특정 이벤트(삭제, 엣지생성 등)가 발생했을 경우 실행되는 콜백함수
+        /// 그래프 뷰 내에서 특정 이벤트(삭제, 엣지생성, 노드이동 등)가 발생했을 경우 실행되는 콜백함수
         /// </summary>
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
@@ -119,6 +124,16 @@ namespace JuicyFlowChart
                     _flowChart.AddChild(parentView.Node, childView.Node);
                 });
             }
+
+            // Sort Node
+            if (graphViewChange.movedElements != null)
+            {
+                nodes.ForEach((n) =>
+                {
+                    NodeView view = n as NodeView;
+                    view.SortChildren();
+                });
+            }
             return graphViewChange;
         }
 
@@ -137,13 +152,18 @@ namespace JuicyFlowChart
 
         private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : Node
         {
+            VisualElement contentViewContainer = ElementAt(1);
+            Vector3 screenMousePosition = evt.localMousePosition;
+            Vector2 worldMousePosition = screenMousePosition - contentViewContainer.transform.position;
+            worldMousePosition *= 1 / contentViewContainer.transform.scale.x;
+
             var types = TypeCache.GetTypesDerivedFrom<T>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"Create {type.BaseType.Name}/{type.Name}", (a) =>
+                evt.menu.AppendAction($"Create {type.BaseType.Name}/{type.Name}", (actionEvent) =>
                 {
                     var createNodeMethod = typeof(FlowChart).GetMethod("CreateNode").MakeGenericMethod(type);
-                    Node node = createNodeMethod.Invoke(_flowChart, null) as Node;
+                    Node node = createNodeMethod.Invoke(_flowChart, new object[] { worldMousePosition }) as Node;
                     CreateNodeView(node);
                 });
             }
