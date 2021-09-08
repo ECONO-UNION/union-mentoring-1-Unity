@@ -1,7 +1,7 @@
 using JuicyFlowChart;
 using UnityEngine;
 
-public class HardCondition : Condition
+public class PositiveCondition : Condition
 {
     protected override bool Check()
     {

@@ -18,19 +18,29 @@ namespace JuicyFlowChart
         public Port Output { get => output; }
         public Action<NodeView> OnNodeSelected { get; internal set; }
 
-        public NodeView(Node node, Action<Node> OnRootNodeSet)
+        public NodeView(Node node, Action<Node> OnRootNodeSet) : base(FlowChartEditorPath.nodeViewUxml)
         {
             _node = node;
             title = _node.name;
             viewDataKey = _node.Guid;
             _onRootNodeSet = OnRootNodeSet;
 
-            style.left = _node.Position.x;
-            style.top = _node.Position.y;
+            InitNodeStyle();
 
             if (!_node.IsRoot)
                 CreateInputPorts();
             CreateOutputPorts();
+            SetupClasses();
+        }
+
+        private void InitNodeStyle()
+        {
+            style.left = _node.Position.x;
+            style.top = _node.Position.y;
+            style.marginTop = 0;
+            style.marginBottom = 0;
+            style.marginLeft = 0;
+            style.marginRight = 0;
         }
 
         private void CreateInputPorts()
@@ -49,6 +59,22 @@ namespace JuicyFlowChart
             output.style.flexDirection = FlexDirection.RowReverse;
             output.style.paddingRight = 12;
             outputContainer.Add(output);
+        }
+
+        private void SetupClasses()
+        {
+            if (_node.IsRoot)
+            {
+                AddToClassList("root");
+            }
+            else if (_node is Action)
+            {
+                AddToClassList("action");
+            }
+            else if (_node is Condition)
+            {
+                AddToClassList("condition");
+            }
         }
 
         public override void SetPosition(Rect newPos)
@@ -89,6 +115,25 @@ namespace JuicyFlowChart
                 {
                     _onRootNodeSet?.Invoke(_node);
                 });
+            }
+        }
+
+        internal void UpdateState()
+        {
+            RemoveFromClassList("enable");
+            RemoveFromClassList("disable");
+
+            if (Application.isPlaying)
+            {
+                switch (_node.CurrentState)
+                {
+                    case Node.State.Enable:
+                        AddToClassList("enable");
+                        break;
+                    case Node.State.Disable:
+                        AddToClassList("disable");
+                        break;
+                }
             }
         }
     }

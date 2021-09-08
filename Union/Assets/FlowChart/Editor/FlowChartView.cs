@@ -178,5 +178,14 @@ namespace JuicyFlowChart
             endPort.direction != startPort.direction &&
             endPort.node != startPort.node).ToList();
         }
+
+        internal void UpdateNodeState()
+        {
+            nodes.ForEach((n) =>
+            {
+                NodeView view = n as NodeView;
+                view.UpdateState();
+            });
+        }
     }
 }

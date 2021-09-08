@@ -9,6 +9,7 @@ namespace JuicyFlowChart
     {
         public const string uxmlPath = "Assets/FlowChart/Editor/UIBuilder/FlowChartEditor.uxml";
         public const string ussPath = "Assets/FlowChart/Editor/UIBuilder/FlowChartEditor.uss";
+        public const string nodeViewUxml = "Assets/FlowChart/Editor/UIBuilder/NodeView.uxml";
     }
 
     public class FlowChartEditor : EditorWindow
@@ -127,6 +128,11 @@ namespace JuicyFlowChart
             {
                 _flowChartName.text = _flowChart.name;
             }
+        }
+
+        private void OnInspectorUpdate()
+        {
+            _flowChartView?.UpdateNodeState();
         }
     }
 }

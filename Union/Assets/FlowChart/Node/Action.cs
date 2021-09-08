@@ -10,9 +10,9 @@ namespace JuicyFlowChart
 
         public sealed override void Run()
         {
-            if (_state == State.Disabled)
+            if (_state == State.Disable)
             {
-                _state = State.Enabled;
+                _state = State.Enable;
                 OnStart();
             }
 

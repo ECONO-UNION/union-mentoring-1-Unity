@@ -7,8 +7,8 @@ namespace JuicyFlowChart
     {
         public enum State
         {
-            Enabled,
-            Disabled
+            Enable,
+            Disable
         }
 
         [HideInInspector]
@@ -27,7 +27,7 @@ namespace JuicyFlowChart
         [SerializeField]
         private bool _isRoot;
 
-        protected State _state = State.Disabled;
+        protected State _state = State.Disable;
 
         public abstract void Run();
 
@@ -35,9 +35,11 @@ namespace JuicyFlowChart
         public Vector2 Position { get => _position; set => _position = value; }
         public List<Node> Children { get => _children; set => _children = value; }
         public bool IsRoot { get => _isRoot; set => _isRoot = value; }
+        public State CurrentState { get => _state; }
+
         internal void ChangeToDisableState()
         {
-            _state = State.Disabled;
+            _state = State.Disable;
             foreach (Node child in _children)
             {
                 child.ChangeToDisableState();
