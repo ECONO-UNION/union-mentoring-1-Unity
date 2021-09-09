@@ -19,7 +19,6 @@ namespace JuicyFlowChart
         private FlowChart _flowChart;
         private Label _flowChartName;
 
-
         [MenuItem("FlowChart/Editor...")]
         public static void OpenWindow()
         {
@@ -113,12 +112,14 @@ namespace JuicyFlowChart
             if (_flowChart)
             {
                 _flowChartView?.PopulateView(_flowChart);
-                _flowChartName.text = _flowChart.name;
+                if (_flowChartName != null)
+                    _flowChartName.text = _flowChart.name;
             }
             else
             {
-                _flowChartView.ClearView();
-                _flowChartName.text = "";
+                _flowChartView?.ClearView();
+                if (_flowChartName != null)
+                    _flowChartName.text = "";
             }
         }
 
@@ -126,7 +127,8 @@ namespace JuicyFlowChart
         {
             if (_flowChart)
             {
-                _flowChartName.text = _flowChart.name;
+                if (_flowChartName != null)
+                    _flowChartName.text = _flowChart.name;
             }
         }
 

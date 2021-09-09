@@ -37,6 +37,7 @@ MonoBehaviour:
   _position: {x: 336.00003, y: 299}
   _children:
   - {fileID: 7608154934322956144}
+  - {fileID: 2885994217356969686}
   _isRoot: 0
 --- !u!114 &2885994217356969686
 MonoBehaviour:
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_Name: SimpleAction
   m_EditorClassIdentifier: 
   _guid: babd2889848040e49b70b511bb608ede
-  _position: {x: 540.50006, y: 472.65002}
+  _position: {x: 486.00006, y: 455.00006}
   _children: []
   _isRoot: 0
   TEST: 0
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_Name: SimpleAction
   m_EditorClassIdentifier: 
   _guid: af93e45cd2e79944693d6f01bd70de72
-  _position: {x: 786.00006, y: 454.99997}
+  _position: {x: 786.00006, y: 455}
   _children: []
   _isRoot: 0
   TEST: 0
