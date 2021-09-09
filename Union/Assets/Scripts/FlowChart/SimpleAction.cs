@@ -12,6 +12,6 @@ public class SimpleAction : Action
 
     protected override void OnUpdate()
     {
-        Debug.Log("Update : " + TEST);
+        Debug.Log(gameObject.transform.position);
     }
 }

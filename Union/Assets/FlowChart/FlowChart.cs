@@ -86,11 +86,11 @@ namespace JuicyFlowChart
             EditorUtility.SetDirty(parent);
         }
 
-        public FlowChart Clone()
+        public FlowChart Clone(GameObject gameObject)
         {
             FlowChart flowChart = Instantiate(this);
             flowChart.name = string.Format($"{name} (RUNTIME)");
-            flowChart.RootNode = flowChart.RootNode.Clone();
+            flowChart.RootNode = flowChart.RootNode.Clone(gameObject);
             flowChart.Nodes = new List<Node>();
             Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
             return flowChart;
