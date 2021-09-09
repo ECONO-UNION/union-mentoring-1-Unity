@@ -27,10 +27,7 @@ namespace JuicyFlowChart
         [SerializeField]
         private bool _isRoot;
 
-        [HideInInspector]
-        [SerializeField]
         protected GameObject gameObject;
-
         protected State _state = State.Disable;
 
         public abstract void Run();
@@ -52,8 +49,8 @@ namespace JuicyFlowChart
 
         public Node Clone(GameObject gameObject)
         {
-            this.gameObject = gameObject;
             Node node = Instantiate(this);
+            node.gameObject = gameObject;
             node.name = name;
             node.Children = _children.ConvertAll(c => c.Clone(gameObject));
             return node;
