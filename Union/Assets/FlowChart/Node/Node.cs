@@ -30,7 +30,7 @@ namespace JuicyFlowChart
         protected GameObject gameObject;
         protected State _state = State.Disable;
 
-        public abstract void Run();
+        public abstract void Update();
 
         public string Guid { get => _guid; set => _guid = value; }
         public Vector2 Position { get => _position; set => _position = value; }

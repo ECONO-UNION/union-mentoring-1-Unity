@@ -16,7 +16,7 @@ namespace JuicyFlowChart
         public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
         public Node RootNode { get => _rootNode; internal set => _rootNode = value; }
 
-        public void Run()
+        public void Update()
         {
             if (_rootNode == null)
             {
@@ -24,7 +24,7 @@ namespace JuicyFlowChart
                 return;
             }
 
-            _rootNode.Run();
+            _rootNode.Update();
         }
 
         public Node CreateNode<T>(Vector2 position) where T : Node

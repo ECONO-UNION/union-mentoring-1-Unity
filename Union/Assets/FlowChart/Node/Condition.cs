@@ -7,14 +7,14 @@ namespace JuicyFlowChart
     {
         protected abstract bool Check();
 
-        public sealed override void Run()
+        public sealed override void Update()
         {
             if (Check())
             {
                 _state = State.Enable;
                 foreach (Node child in Children)
                 {
-                    child.Run();
+                    child.Update();
                 }
             }
             else

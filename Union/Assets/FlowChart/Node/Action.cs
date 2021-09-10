@@ -8,7 +8,7 @@ namespace JuicyFlowChart
         protected abstract void OnStart();
         protected abstract void OnUpdate();
 
-        public sealed override void Run()
+        public sealed override void Update()
         {
             if (_state == State.Disable)
             {
@@ -19,7 +19,7 @@ namespace JuicyFlowChart
             OnUpdate();
             foreach (Node child in Children)
             {
-                child.Run();
+                child.Update();
             }
         }
     }

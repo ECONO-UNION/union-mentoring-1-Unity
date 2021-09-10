@@ -30,7 +30,7 @@ namespace JuicyFlowChart
         }
 
 
-        internal void PopulateView(FlowChart flowChart)
+        internal void ShowView(FlowChart flowChart)
         {
             _flowChart = flowChart;
 
@@ -82,7 +82,7 @@ namespace JuicyFlowChart
         private void SetRootNode(Node node)
         {
             _flowChart.SetRootNode(node);
-            PopulateView(_flowChart);
+            ShowView(_flowChart);
         }
 
         /// <summary>

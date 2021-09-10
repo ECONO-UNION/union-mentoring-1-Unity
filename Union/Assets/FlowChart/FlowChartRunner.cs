@@ -18,7 +18,7 @@ namespace JuicyFlowChart
             if (_flowChart == null)
                 return;
 
-            _flowChart.Run();
+            _flowChart.Update();
         }
     }
 }

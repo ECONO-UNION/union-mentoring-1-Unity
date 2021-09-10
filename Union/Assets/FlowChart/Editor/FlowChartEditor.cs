@@ -111,7 +111,7 @@ namespace JuicyFlowChart
 
             if (_flowChart)
             {
-                _flowChartView?.PopulateView(_flowChart);
+                _flowChartView?.ShowView(_flowChart);
                 if (_flowChartName != null)
                     _flowChartName.text = _flowChart.name;
             }
