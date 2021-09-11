@@ -16,22 +16,13 @@ namespace JuicyFlowChart
         public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
         public Node RootNode { get => _rootNode; internal set => _rootNode = value; }
 
-        public void Update()
+        public Node CreateNode(string name, string baseType, Vector2 position)
         {
-            if (_rootNode == null)
-            {
-                Debug.LogWarning("Not found root node");
-                return;
-            }
-
-            _rootNode.Update();
-        }
-
-        public Node CreateNode<T>(Vector2 position) where T : Node
-        {
-            Node node = ScriptableObject.CreateInstance<T>();
-            node.name = node.GetType().Name;
-            node.Guid = GUID.Generate().ToString();
+            Node node = ScriptableObject.CreateInstance<Node>();
+            node.Name = name;
+            node.name = name;
+            node.BaseType = baseType;
+            node.GUID = GUID.Generate().ToString();
             node.Position = position;
             if (_rootNode == null)
             {
@@ -51,7 +42,6 @@ namespace JuicyFlowChart
         {
             if (_rootNode != null)
             {
-                _rootNode.IsRoot = false;
                 _nodes.ForEach((node) =>
                 {
                     if (node.Children.Contains(target))
@@ -61,13 +51,14 @@ namespace JuicyFlowChart
                 });
             }
             _rootNode = target;
-            target.IsRoot = true;
         }
 
         public void DeleteNode(Node node)
         {
-            if (node.IsRoot)
+            if (node.GUID == _rootNode.GUID)
+            {
                 _rootNode = null;
+            }
 
             _nodes.Remove(node);
             AssetDatabase.RemoveObjectFromAsset(node);
@@ -86,14 +77,27 @@ namespace JuicyFlowChart
             EditorUtility.SetDirty(parent);
         }
 
+        #region Runtime
+        public void Update()
+        {
+            //if (_rootNode == null)
+            //{
+            //    Debug.LogWarning("Not found root node");
+            //    return;
+            //}
+
+            //_rootNode.Update();
+        }
+
         public FlowChart Clone(GameObject gameObject)
         {
-            FlowChart flowChart = Instantiate(this);
-            flowChart.name = string.Format($"{name} (RUNTIME)");
-            flowChart.RootNode = flowChart.RootNode.Clone(gameObject);
-            flowChart.Nodes = new List<Node>();
-            Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
-            return flowChart;
+            //FlowChart flowChart = Instantiate(this);
+            //flowChart.name = string.Format($"{name} (RUNTIME)");
+            //flowChart.RootNode = flowChart.RootNode.Clone(gameObject);
+            //flowChart.Nodes = new List<Node>();
+            //Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
+            //return flowChart;
+            return null;
         }
 
         public void Traverse(Node node, Action<Node> visiter)
@@ -105,5 +109,6 @@ namespace JuicyFlowChart
                 children.ForEach((n) => Traverse(n, visiter));
             }
         }
+        #endregion
     }
 }

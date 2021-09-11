@@ -18,6 +18,7 @@ namespace JuicyFlowChart
         private InspectorView _inspectorView;
         private FlowChart _flowChart;
         private Label _flowChartName;
+        private Button _saveButton;
 
         [MenuItem("FlowChart/Editor...")]
         public static void OpenWindow()
@@ -49,6 +50,8 @@ namespace JuicyFlowChart
             _flowChartView = root.Q<FlowChartView>();
             _inspectorView = root.Q<InspectorView>();
             _flowChartName = _flowChartView.Q<Label>("flowChartName");
+            _saveButton = root.Q<Button>("save");
+            _saveButton.clicked += () => { AssetDatabase.SaveAssets(); Debug.Log("SAVE"); };
 
             _flowChartView.OnNodeSelected = OnNodeSelectionChanged;
             OnSelectionChange();

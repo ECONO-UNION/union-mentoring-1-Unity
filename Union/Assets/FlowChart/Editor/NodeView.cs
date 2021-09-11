@@ -12,22 +12,24 @@ namespace JuicyFlowChart
         private Port input;
         private Port output;
         private Action<Node> _onRootNodeSet;
+        private bool _isRoot;
 
         public Node Node { get => _node; }
         public Port Input { get => input; }
         public Port Output { get => output; }
         public Action<NodeView> OnNodeSelected { get; internal set; }
 
-        public NodeView(Node node, Action<Node> OnRootNodeSet) : base(FlowChartEditorPath.nodeViewUxml)
+        public NodeView(Node node, bool isRoot, Action<Node> OnRootNodeSet) : base(FlowChartEditorPath.nodeViewUxml)
         {
             _node = node;
-            title = _node.name;
-            viewDataKey = _node.Guid;
+            _isRoot = isRoot;
+            title = _node.Name;
+            viewDataKey = _node.GUID;
             _onRootNodeSet = OnRootNodeSet;
 
             InitNodeStyle();
 
-            if (!_node.IsRoot)
+            if (!_isRoot)
                 CreateInputPorts();
             CreateOutputPorts();
             SetupClasses();
@@ -63,15 +65,15 @@ namespace JuicyFlowChart
 
         private void SetupClasses()
         {
-            if (_node.IsRoot)
+            if (_isRoot)
             {
                 AddToClassList("root");
             }
-            else if (_node is Action)
+            else if (_node.BaseType == "Action")
             {
                 AddToClassList("action");
             }
-            else if (_node is Condition)
+            else if (_node.BaseType == "Condition")
             {
                 AddToClassList("condition");
             }
@@ -80,9 +82,7 @@ namespace JuicyFlowChart
         public override void SetPosition(Rect newPos)
         {
             base.SetPosition(newPos);
-            Undo.RecordObject(_node, "Behaviour Tree (Set Position)");
             _node.Position = newPos.position;
-            EditorUtility.SetDirty(_node);
         }
 
         public override void OnSelected()
@@ -109,7 +109,7 @@ namespace JuicyFlowChart
         /// </summary>
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if (!_node.IsRoot)
+            if (!_isRoot)
             {
                 evt.menu.AppendAction($"Set root", (a) =>
                 {
@@ -120,21 +120,21 @@ namespace JuicyFlowChart
 
         internal void UpdateState()
         {
-            RemoveFromClassList("enable");
-            RemoveFromClassList("disable");
+            //RemoveFromClassList("enable");
+            //RemoveFromClassList("disable");
 
-            if (Application.isPlaying)
-            {
-                switch (_node.CurrentState)
-                {
-                    case Node.State.Enable:
-                        AddToClassList("enable");
-                        break;
-                    case Node.State.Disable:
-                        AddToClassList("disable");
-                        break;
-                }
-            }
+            //if (Application.isPlaying)
+            //{
+            //    switch (_node.CurrentState)
+            //    {
+            //        case Node.State.Enable:
+            //            AddToClassList("enable");
+            //            break;
+            //        case Node.State.Disable:
+            //            AddToClassList("disable");
+            //            break;
+            //    }
+            //}
         }
     }
 }

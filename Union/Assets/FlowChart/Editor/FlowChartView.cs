@@ -69,12 +69,12 @@ namespace JuicyFlowChart
 
         private NodeView FindNodeView(Node node)
         {
-            return GetNodeByGuid(node.Guid) as NodeView;
+            return GetNodeByGuid(node.GUID) as NodeView;
         }
 
         private void CreateNodeView(Node node)
         {
-            NodeView nodeView = new NodeView(node, SetRootNode);
+            NodeView nodeView = new NodeView(node, node.GUID == _flowChart.RootNode.GUID, SetRootNode);
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }
@@ -150,7 +150,7 @@ namespace JuicyFlowChart
             ShowNodeTypes<Condition>(evt);
         }
 
-        private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : Node
+        private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : RuntimeNode
         {
             VisualElement contentViewContainer = ElementAt(1);
             Vector3 screenMousePosition = evt.localMousePosition;
@@ -162,9 +162,7 @@ namespace JuicyFlowChart
             {
                 evt.menu.AppendAction($"Create {type.BaseType.Name}/{type.Name}", (actionEvent) =>
                 {
-                    var createNodeMethod = typeof(FlowChart).GetMethod("CreateNode").MakeGenericMethod(type);
-                    Node node = createNodeMethod.Invoke(_flowChart, new object[] { worldMousePosition }) as Node;
-                    CreateNodeView(node);
+                    _flowChart.CreateNode(type.Name, type.BaseType.Name, worldMousePosition);
                 });
             }
         }

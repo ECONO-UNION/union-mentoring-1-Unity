@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JuicyFlowChart
 {
-    public abstract class Action : Node
+    public abstract class Action : RuntimeNode
     {
         protected abstract void OnStart();
         protected abstract void OnUpdate();
@@ -17,7 +17,7 @@ namespace JuicyFlowChart
             }
 
             OnUpdate();
-            foreach (Node child in Children)
+            foreach (RuntimeNode child in Children)
             {
                 child.Update();
             }

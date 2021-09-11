@@ -12,18 +12,18 @@ namespace JuicyFlowChart
 
         internal void UpdateSelection(NodeView nodeView)
         {
-            Clear();
+            //Clear();
 
-            UnityEngine.Object.DestroyImmediate(editor);
-            editor = Editor.CreateEditor(nodeView.Node);
-            IMGUIContainer container = new IMGUIContainer(() =>
-            {
-                if (editor.target)
-                {
-                    editor.OnInspectorGUI();
-                }
-            });
-            Add(container);
+            //UnityEngine.Object.DestroyImmediate(editor);
+            //editor = Editor.CreateEditor(nodeView.Node);
+            //IMGUIContainer container = new IMGUIContainer(() =>
+            //{
+            //    if (editor.target)
+            //    {
+            //        editor.OnInspectorGUI();
+            //    }
+            //});
+            //Add(container);
         }
     }
 }

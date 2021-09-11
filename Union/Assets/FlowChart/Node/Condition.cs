@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JuicyFlowChart
 {
-    public abstract class Condition : Node
+    public abstract class Condition : RuntimeNode
     {
         protected abstract bool Check();
 
@@ -12,7 +12,7 @@ namespace JuicyFlowChart
             if (Check())
             {
                 _state = State.Enable;
-                foreach (Node child in Children)
+                foreach (RuntimeNode child in Children)
                 {
                     child.Update();
                 }
@@ -22,7 +22,7 @@ namespace JuicyFlowChart
                 if (_state == State.Enable)
                 {
                     _state = State.Disable;
-                    foreach (Node child in Children)
+                    foreach (RuntimeNode child in Children)
                     {
                         child.ChangeToDisableState();
                     }
