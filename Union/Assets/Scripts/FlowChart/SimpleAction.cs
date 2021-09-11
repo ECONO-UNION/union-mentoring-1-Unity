@@ -4,8 +4,8 @@ using UnityEngine;
 public class SimpleAction : Action
 {
     public int TEST = 3;
+    public float TEST2;
     public GameObject go1;
-    [SerializeField]
     private GameObject go;
 
     protected override void Start()
