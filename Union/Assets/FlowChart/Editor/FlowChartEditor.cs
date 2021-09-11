@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -85,9 +86,9 @@ namespace JuicyFlowChart
             }
         }
 
-        private void OnNodeSelectionChanged(NodeView node)
+        private void OnNodeSelectionChanged(NodeView nodeView)
         {
-            _inspectorView.UpdateSelection(node);
+            _inspectorView.UpdateSelection(nodeView);
         }
 
         /// <summary>

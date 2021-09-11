@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,10 +13,15 @@ namespace JuicyFlowChart
 
         internal void UpdateSelection(NodeView nodeView)
         {
-            //Clear();
+            Node node = nodeView.Node;
+            Type type = FlowChart.GetNodeType(node.Name);
+            var instance = JsonUtility.FromJson(node.Data, type);
+            //Debug.Log(instance.GetType());
 
+
+            //Clear();
             //UnityEngine.Object.DestroyImmediate(editor);
-            //editor = Editor.CreateEditor(nodeView.Node);
+            //editor = Editor.CreateEditor((UnityEngine.Object)instance);
             //IMGUIContainer container = new IMGUIContainer(() =>
             //{
             //    if (editor.target)

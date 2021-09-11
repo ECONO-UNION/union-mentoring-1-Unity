@@ -16,20 +16,22 @@ namespace JuicyFlowChart
         public int RootID { get => _rootID; internal set => _rootID = value; }
         public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
 
+        private static Dictionary<string, Type> _nodeTypes = new Dictionary<string, Type>();
+        public static Type GetNodeType(string key)
+        {
+            Type type;
+            if (!_nodeTypes.TryGetValue(key, out type))
+            {
+                type = Type.GetType(key);
+                _nodeTypes[key] = type;
+            }
+            return type;
+        }
+
         public Node CreateNode(string type, string baseType, Vector2 position)
         {
             Node node = new Node();
             node.Name = type;
-
-            // TODO : 데이터 저장해야함
-            var a = Type.GetType(type).GetFields
-                        (
-                            System.Reflection.BindingFlags.NonPublic |
-                            System.Reflection.BindingFlags.Public |
-                            System.Reflection.BindingFlags.Instance |
-                            System.Reflection.BindingFlags.DeclaredOnly
-                        );
-            //node.Data = JsonUtility.ToJson();
 
             node.BaseType = baseType;
             node.ID = GUID.Generate().GetHashCode();
@@ -38,6 +40,9 @@ namespace JuicyFlowChart
             {
                 SetRootNode(node);
             }
+
+            var instance = Activator.CreateInstance(FlowChart.GetNodeType(type));
+            node.Data = JsonUtility.ToJson(instance);
 
             _nodes.Add(node);
             EditorUtility.SetDirty(this);
