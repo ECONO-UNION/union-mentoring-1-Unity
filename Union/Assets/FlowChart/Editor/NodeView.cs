@@ -11,21 +11,23 @@ namespace JuicyFlowChart
         private Node _node;
         private Port input;
         private Port output;
-        private Action<Node> _onRootNodeSet;
+        private System.Action<Node> _onRootNodeSet;
+        private System.Action _onNodeMove;
         private bool _isRoot;
 
         public Node Node { get => _node; }
         public Port Input { get => input; }
         public Port Output { get => output; }
-        public Action<NodeView> OnNodeSelected { get; internal set; }
+        public System.Action<NodeView> OnNodeSelected { get; internal set; }
 
-        public NodeView(Node node, bool isRoot, Action<Node> OnRootNodeSet) : base(FlowChartEditorPath.nodeViewUxml)
+        public NodeView(Node node, bool isRoot, System.Action<Node> OnRootNodeSet, System.Action OnNodeMove) : base(FlowChartEditorPath.nodeViewUxml)
         {
             _node = node;
             _isRoot = isRoot;
             title = _node.Name;
-            viewDataKey = _node.GUID;
+            viewDataKey = _node.ID.ToString();
             _onRootNodeSet = OnRootNodeSet;
+            _onNodeMove = OnNodeMove;
 
             InitNodeStyle();
 
@@ -83,6 +85,7 @@ namespace JuicyFlowChart
         {
             base.SetPosition(newPos);
             _node.Position = newPos.position;
+            _onNodeMove?.Invoke();
         }
 
         public override void OnSelected()
@@ -92,16 +95,6 @@ namespace JuicyFlowChart
             {
                 OnNodeSelected.Invoke(this);
             }
-        }
-
-        public void SortChildren()
-        {
-            _node.Children.Sort(SortByHorizontalPosition);
-        }
-
-        private int SortByHorizontalPosition(Node left, Node right)
-        {
-            return left.Position.x < right.Position.x ? -1 : 1;
         }
 
         /// <summary>

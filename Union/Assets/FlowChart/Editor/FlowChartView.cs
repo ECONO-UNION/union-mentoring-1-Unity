@@ -29,7 +29,6 @@ namespace JuicyFlowChart
             styleSheets.Add(styleSheet);
         }
 
-
         internal void ShowView(FlowChart flowChart)
         {
             _flowChart = flowChart;
@@ -56,10 +55,10 @@ namespace JuicyFlowChart
         {
             _flowChart.Nodes.ForEach(node =>
             {
-                node.Children.ForEach(c =>
+                node.ChildrenID.ForEach(childID =>
                 {
-                    NodeView parentView = FindNodeView(node);
-                    NodeView childView = FindNodeView(c);
+                    NodeView parentView = FindNodeView(node.ID);
+                    NodeView childView = FindNodeView(childID);
 
                     Edge edge = parentView.Output.ConnectTo(childView.Input);
                     AddElement(edge);
@@ -67,14 +66,15 @@ namespace JuicyFlowChart
             });
         }
 
-        private NodeView FindNodeView(Node node)
+        private NodeView FindNodeView(int nodeID)
         {
-            return GetNodeByGuid(node.GUID) as NodeView;
+            return GetNodeByGuid(nodeID.ToString()) as NodeView;
         }
+
 
         private void CreateNodeView(Node node)
         {
-            NodeView nodeView = new NodeView(node, node.GUID == _flowChart.RootNode.GUID, SetRootNode);
+            NodeView nodeView = new NodeView(node, node.ID == _flowChart.RootID, SetRootNode, ()=> EditorUtility.SetDirty(_flowChart));
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }
@@ -124,16 +124,6 @@ namespace JuicyFlowChart
                     _flowChart.AddChild(parentView.Node, childView.Node);
                 });
             }
-
-            // Sort Node
-            if (graphViewChange.movedElements != null)
-            {
-                nodes.ForEach((n) =>
-                {
-                    NodeView view = n as NodeView;
-                    view.SortChildren();
-                });
-            }
             return graphViewChange;
         }
 
@@ -150,7 +140,7 @@ namespace JuicyFlowChart
             ShowNodeTypes<Condition>(evt);
         }
 
-        private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : RuntimeNode
+        private void ShowNodeTypes<T>(ContextualMenuPopulateEvent evt) where T : Task
         {
             VisualElement contentViewContainer = ElementAt(1);
             Vector3 screenMousePosition = evt.localMousePosition;
@@ -162,7 +152,8 @@ namespace JuicyFlowChart
             {
                 evt.menu.AppendAction($"Create {type.BaseType.Name}/{type.Name}", (actionEvent) =>
                 {
-                    _flowChart.CreateNode(type.Name, type.BaseType.Name, worldMousePosition);
+                    Node node = _flowChart.CreateNode(type.Name, type.BaseType.Name, worldMousePosition);
+                    CreateNodeView(node);
                 });
             }
         }

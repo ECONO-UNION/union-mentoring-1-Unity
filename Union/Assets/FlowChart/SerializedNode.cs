@@ -8,7 +8,7 @@ namespace JuicyFlowChart
     public class SerializedNode
     {
         public string name;
-        public string guid;
+        public int guid;
         public string type;
         public string data;
         public Vector2 Position;
@@ -24,7 +24,7 @@ namespace JuicyFlowChart
             {
                 type = node.GetType().Name,
                 data = JsonUtility.ToJson(node),
-                guid = node.GUID
+                guid = node.ID
             };
             return result;
         }

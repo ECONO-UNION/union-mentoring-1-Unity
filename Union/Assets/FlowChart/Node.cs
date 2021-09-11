@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace JuicyFlowChart
 {
-    public class Node : ScriptableObject
+    [Serializable]
+    public class Node
     {
         public string Name;
         public string BaseType;
-        public string GUID;
+        public int ID;
+        public string Data;
         public Vector2 Position;
-        public List<Node> Children = new List<Node>();
+        public List<int> ChildrenID = new List<int>();
     }
 }

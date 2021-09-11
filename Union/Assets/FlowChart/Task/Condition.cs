@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace JuicyFlowChart
 {
-    public abstract class Condition : RuntimeNode
+    public abstract class Condition : Task
     {
         protected abstract bool Check();
 
-        public sealed override void Update()
+        public sealed override void Tick()
         {
             if (Check())
             {
                 _state = State.Enable;
-                foreach (RuntimeNode child in Children)
+                foreach (Task child in Children)
                 {
-                    child.Update();
+                    child.Tick();
                 }
             }
             else
@@ -22,7 +22,7 @@ namespace JuicyFlowChart
                 if (_state == State.Enable)
                 {
                     _state = State.Disable;
-                    foreach (RuntimeNode child in Children)
+                    foreach (Task child in Children)
                     {
                         child.ChangeToDisableState();
                     }

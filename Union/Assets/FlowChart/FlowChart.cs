@@ -9,72 +9,78 @@ namespace JuicyFlowChart
     public class FlowChart : ScriptableObject
     {
         [SerializeField]
-        private Node _rootNode;
+        private int _rootID;
         [SerializeField]
         private List<Node> _nodes = new List<Node>();
 
+        public int RootID { get => _rootID; internal set => _rootID = value; }
         public List<Node> Nodes { get => _nodes; internal set => _nodes = value; }
-        public Node RootNode { get => _rootNode; internal set => _rootNode = value; }
 
-        public Node CreateNode(string name, string baseType, Vector2 position)
+        public Node CreateNode(string type, string baseType, Vector2 position)
         {
-            Node node = ScriptableObject.CreateInstance<Node>();
-            node.Name = name;
-            node.name = name;
+            Node node = new Node();
+            node.Name = type;
+
+            // TODO : 데이터 저장해야함
+            var a = Type.GetType(type).GetFields
+                        (
+                            System.Reflection.BindingFlags.NonPublic |
+                            System.Reflection.BindingFlags.Public |
+                            System.Reflection.BindingFlags.Instance |
+                            System.Reflection.BindingFlags.DeclaredOnly
+                        );
+            //node.Data = JsonUtility.ToJson();
+
             node.BaseType = baseType;
-            node.GUID = GUID.Generate().ToString();
+            node.ID = GUID.Generate().GetHashCode();
             node.Position = position;
-            if (_rootNode == null)
+            if (_rootID == 0)
             {
                 SetRootNode(node);
             }
 
             _nodes.Add(node);
-            if (!Application.isPlaying)
-            {
-                AssetDatabase.AddObjectToAsset(node, this);
-            }
-            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
             return node;
         }
 
         public void SetRootNode(Node target)
         {
-            if (_rootNode != null)
+            if (_rootID == 0)
             {
                 _nodes.ForEach((node) =>
                 {
-                    if (node.Children.Contains(target))
+                    if (node.ChildrenID.Contains(target.ID))
                     {
-                        node.Children.Remove(target);
+                        _nodes.Remove(target);
                     }
                 });
             }
-            _rootNode = target;
+            _rootID = target.ID;
+            EditorUtility.SetDirty(this);
         }
 
         public void DeleteNode(Node node)
         {
-            if (node.GUID == _rootNode.GUID)
+            if (node.ID == _rootID)
             {
-                _rootNode = null;
+                _rootID = 0;
             }
 
             _nodes.Remove(node);
-            AssetDatabase.RemoveObjectFromAsset(node);
-            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
         }
 
         public void AddChild(Node parent, Node child)
         {
-            parent.Children.Add(child);
-            EditorUtility.SetDirty(parent);
+            parent.ChildrenID.Add(child.ID);
+            EditorUtility.SetDirty(this);
         }
 
         public void RemoveChild(Node parent, Node child)
         {
-            parent.Children.Remove(child);
-            EditorUtility.SetDirty(parent);
+            parent.ChildrenID.Remove(child.ID);
+            EditorUtility.SetDirty(this);
         }
 
         #region Runtime
@@ -102,12 +108,12 @@ namespace JuicyFlowChart
 
         public void Traverse(Node node, Action<Node> visiter)
         {
-            if (node)
-            {
-                visiter.Invoke(node);
-                var children = node.Children;
-                children.ForEach((n) => Traverse(n, visiter));
-            }
+            //if (node != null)
+            //{
+            //    visiter.Invoke(node);
+            //    var childrenID = node.ChildrenID;
+            //    childrenID.ForEach((n) => Traverse(n, visiter));
+            //}
         }
         #endregion
     }
