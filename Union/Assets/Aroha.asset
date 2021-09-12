@@ -16,21 +16,21 @@ MonoBehaviour:
   _nodes:
   - Name: SimpleAction
     BaseType: Action
-    ID: -1204304249
-    Data: '{"ABC":"11"}'
-    Position: {x: 96, y: -73}
-    ChildrenID: d0149f4dfd237a48
-  - Name: SimpleAction
-    BaseType: Action
     ID: 1302271184
     Data: '{"ABC":"222"}'
     Position: {x: -54, y: 82}
     ChildrenID: 
   - Name: SimpleAction
     BaseType: Action
+    ID: -1204304249
+    Data: '{"ABC":"11"}'
+    Position: {x: 96, y: -73}
+    ChildrenID: d0149f4dfd237a48
+  - Name: SimpleAction
+    BaseType: Action
     ID: 1215964157
     Data: '{"ABC":"333"}'
-    Position: {x: 246, y: 80}
+    Position: {x: 303, y: 82}
     ChildrenID: c876058d5925876f
   - Name: NegativeCondition
     BaseType: Condition

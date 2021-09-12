@@ -18,11 +18,11 @@ MonoBehaviour:
     BaseType: Action
     ID: 143471595
     Data: '{"ABC":"123"}'
-    Position: {x: 201, y: 68}
+    Position: {x: 168, y: 98}
     ChildrenID: 5c493be7
   - Name: SimpleAction
     BaseType: Action
-    ID: -415544996
-    Data: '{"ABC":"22"}'
-    Position: {x: 384, y: 236}
-    ChildrenID: 
+    ID: 143471595
+    Data: '{"ABC":"123"}'
+    Position: {x: 168, y: 98}
+    ChildrenID: 5c493be7

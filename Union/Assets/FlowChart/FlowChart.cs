@@ -8,8 +8,10 @@ namespace JuicyFlowChart
     [CreateAssetMenu()]
     public class FlowChart : ScriptableObject
     {
+        [HideInInspector]
         [SerializeField]
         private int _rootID;
+        [HideInInspector]
         [SerializeField]
         private List<Node> _nodes = new List<Node>();
 
