@@ -31,6 +31,7 @@ namespace JuicyFlowChart
 
         private void DrawInspectorView()
         {
+            EditorGUILayout.LabelField(_type.Name,EditorStyles.boldLabel);
             _objectDrawer.Draw(_selectedInstance, _fields, SaveField);
         }
 

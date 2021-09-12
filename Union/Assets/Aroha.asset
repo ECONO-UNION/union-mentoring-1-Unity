@@ -30,7 +30,7 @@ MonoBehaviour:
     BaseType: Action
     ID: 1215964157
     Data: '{"ABC":"333"}'
-    Position: {x: 246, y: 80}
+    Position: {x: 246.00002, y: 79.99999}
     ChildrenID: c876058d5925876f
   - Name: NegativeCondition
     BaseType: Condition
