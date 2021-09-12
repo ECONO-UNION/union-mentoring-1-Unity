@@ -12,7 +12,6 @@ namespace JuicyFlowChart
     {
         public new class UxmlFactory : UxmlFactory<FlowChartView, GraphView.UxmlTraits> { }
         private FlowChart _flowChart;
-        private Label _flowChartName;
 
         public Action<NodeView> OnNodeSelected { get; internal set; }
 
