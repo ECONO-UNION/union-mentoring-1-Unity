@@ -17,18 +17,18 @@ MonoBehaviour:
   - Name: SimpleAction
     BaseType: Action
     ID: -1204304249
-    Data: '{"TEST":2,"TEST2":13.0,"go1":{"instanceID":15948}}'
+    Data: '{"ABC":""}'
     Position: {x: 96, y: -53.5}
     ChildrenID: d0149f4dfd237a48
   - Name: SimpleAction
     BaseType: Action
     ID: 1302271184
-    Data: '{"TEST":232,"TEST2":213.1230010986328,"go1":{"instanceID":0}}'
-    Position: {x: -75.5, y: 98}
+    Data: '{"ABC":""}'
+    Position: {x: -54, y: 82}
     ChildrenID: 
   - Name: SimpleAction
     BaseType: Action
     ID: 1215964157
-    Data: '{"TEST":3,"TEST2":0.0,"go1":{"instanceID":15968}}'
-    Position: {x: 246, y: 81.5}
+    Data: '{"ABC":"sexy"}'
+    Position: {x: 246, y: 82}
     ChildrenID: 

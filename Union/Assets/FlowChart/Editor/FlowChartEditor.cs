@@ -88,7 +88,7 @@ namespace JuicyFlowChart
 
         private void OnNodeSelectionChanged(NodeView nodeView)
         {
-            _inspectorView.UpdateSelection(nodeView);
+            _inspectorView.ShowInspector(nodeView);
         }
 
         /// <summary>

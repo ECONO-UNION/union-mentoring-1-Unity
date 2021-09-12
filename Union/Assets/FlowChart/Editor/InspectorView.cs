@@ -15,7 +15,8 @@ namespace JuicyFlowChart
         private Type _type;
         private FieldInfo[] _fields;
         private ObjectDrawer _objectDrawer;
-        internal void UpdateSelection(NodeView nodeView)
+
+        internal void ShowInspector(NodeView nodeView)
         {
             Clear();
             _node = nodeView.Node;
