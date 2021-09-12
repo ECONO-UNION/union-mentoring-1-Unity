@@ -8,17 +8,19 @@ namespace JuicyFlowChart
         private FlowChart _flowChart;
         public FlowChart FlowChart { get => _flowChart; }
 
+        private Task _root;
+
         private void Start()
         {
-            _flowChart = _flowChart.Clone(gameObject);
+            _root = _flowChart.Clone(gameObject);
         }
 
         private void Update()
         {
-            if (_flowChart == null)
+            if (_root == null)
                 return;
 
-            _flowChart.Update();
+            _root.Tick();
         }
     }
 }

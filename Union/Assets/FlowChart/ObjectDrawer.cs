@@ -5,6 +5,10 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// object에서 파생된 클래스는 일반적으로 Editor에 표시하도록 지원되지 않는데,이를 각type별로 하나하나 그려주는 클래스
+/// 참고링크 : https://hacchi-man.hatenablog.com/entry/2021/04/16/220000
+/// </summary>
 public class ObjectDrawer
 {
     private Action _onChangeValue;

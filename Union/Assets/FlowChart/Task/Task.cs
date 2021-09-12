@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JuicyFlowChart
@@ -29,13 +30,15 @@ namespace JuicyFlowChart
             }
         }
 
-        public Task Clone(GameObject gameObject)
+        protected T GetComponent<T>() where T : MonoBehaviour
         {
-            Task node = MemberwiseClone() as Task;
-            node.gameObject = gameObject;
-            node.transform = gameObject.transform;
-            node.Children = _children.ConvertAll(c => c.Clone(gameObject));
-            return node;
+            return gameObject.GetComponent<T>();
+        }
+
+        public void SetGameObject(GameObject gameObject)
+        {
+            this.gameObject = gameObject;
+            this.transform = gameObject.transform;
         }
     }
 }

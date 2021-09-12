@@ -89,36 +89,28 @@ namespace JuicyFlowChart
         }
 
         #region Runtime
-        public void Update()
+        public Task Clone(GameObject gameObject)
         {
-            //if (_rootNode == null)
-            //{
-            //    Debug.LogWarning("Not found root node");
-            //    return;
-            //}
-
-            //_rootNode.Update();
+            Node rootNode = _nodes.Find(x => x.ID == _rootID);
+            Task rootTask = (Task)JsonUtility.FromJson(rootNode.Data, GetNodeType(rootNode.Name));
+            rootTask.SetGameObject(gameObject);
+            Traverse(rootNode, rootTask);
+            return rootTask;
         }
 
-        public FlowChart Clone(GameObject gameObject)
+        public void Traverse(Node node, Task task)
         {
-            //FlowChart flowChart = Instantiate(this);
-            //flowChart.name = string.Format($"{name} (RUNTIME)");
-            //flowChart.RootNode = flowChart.RootNode.Clone(gameObject);
-            //flowChart.Nodes = new List<Node>();
-            //Traverse(flowChart.RootNode, (n) => { flowChart.Nodes.Add(n); });
-            //return flowChart;
-            return null;
-        }
-
-        public void Traverse(Node node, Action<Node> visiter)
-        {
-            //if (node != null)
-            //{
-            //    visiter.Invoke(node);
-            //    var childrenID = node.ChildrenID;
-            //    childrenID.ForEach((n) => Traverse(n, visiter));
-            //}
+            if (node != null)
+            {
+                List<int> childrenID = node.ChildrenID;
+                childrenID.ForEach((nodeID) =>
+                {
+                    Node targetNode = _nodes.Find(x => x.ID == nodeID);
+                    Task targetTask = (Task)JsonUtility.FromJson(targetNode.Data, GetNodeType(targetNode.Name));
+                    task.Children.Add(targetTask);
+                    Traverse(targetNode, targetTask);
+                });
+            }
         }
         #endregion
     }
