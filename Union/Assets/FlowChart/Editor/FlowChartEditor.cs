@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -18,8 +19,12 @@ namespace JuicyFlowChart
         private FlowChartView _flowChartView;
         private InspectorView _inspectorView;
         private FlowChart _flowChart;
+
         private Label _flowChartName;
+        private string _selectedName;
+
         private Button _saveButton;
+        private Color _saveButtonColor = new Color(0.96f, 0.2f, 0.26f);
 
         [MenuItem("FlowChart/Editor...")]
         public static void OpenWindow()
@@ -52,7 +57,8 @@ namespace JuicyFlowChart
             _inspectorView = root.Q<InspectorView>();
             _flowChartName = _flowChartView.Q<Label>("flowChartName");
             _saveButton = root.Q<Button>("save");
-            _saveButton.clicked += () => { AssetDatabase.SaveAssets(); Debug.Log("SAVE"); };
+            _saveButton.clicked += SaveFlowChart;
+            _saveButton.style.backgroundColor = Color.gray;
 
             _flowChartView.OnNodeSelected = OnNodeSelectionChanged;
             OnSelectionChange();
@@ -88,7 +94,14 @@ namespace JuicyFlowChart
 
         private void OnNodeSelectionChanged(NodeView nodeView)
         {
-            _inspectorView.ShowInspector(nodeView);
+            _inspectorView.ShowInspector(nodeView, _flowChart);
+        }
+
+        private void SaveFlowChart()
+        {
+            AssetDatabase.SaveAssets();
+            Debug.Log("<color=cyan>SAVE COMPLETE</color>");
+            _saveButton.style.backgroundColor = Color.gray;
         }
 
         /// <summary>
@@ -96,6 +109,7 @@ namespace JuicyFlowChart
         /// </summary>
         private void OnSelectionChange()
         {
+            // Select FlowChart
             FlowChart selectedFlowChart = Selection.activeObject as FlowChart;
             if (!selectedFlowChart)
             {
@@ -105,26 +119,31 @@ namespace JuicyFlowChart
                     if (runner && runner.FlowChart != null)
                     {
                         _flowChart = runner.FlowChart;
+                        ConnectTaskToNode(runner.Root);
+                        _selectedName = string.Format($"{runner.name} - {_flowChart.name}");
                     }
                 }
             }
             else
             {
                 _flowChart = selectedFlowChart;
+                _selectedName = _flowChart.name;
+                ConnectTaskToNode(null);
             }
 
+            // Show FlowChart
             if (_flowChart)
             {
                 _flowChartView?.ShowView(_flowChart);
-                if (_flowChartName != null)
-                    _flowChartName.text = _flowChart.name;
             }
             else
             {
                 _flowChartView?.ClearView();
-                if (_flowChartName != null)
-                    _flowChartName.text = "";
             }
+
+            // Show FlowChart Name
+            if (_flowChartName != null)
+                _flowChartName.text = _selectedName;
         }
 
         private void OnProjectChange()
@@ -138,7 +157,47 @@ namespace JuicyFlowChart
 
         private void OnInspectorUpdate()
         {
+            if (_flowChart == null)
+                return;
+
             _flowChartView?.UpdateNodeState();
+            if(EditorUtility.IsDirty(_flowChart))
+            {
+                _saveButton.style.backgroundColor = _saveButtonColor;
+            }
+        }
+
+        private void ConnectTaskToNode(Task rootTask)
+        {
+            if (_flowChart.RootID == 0)
+                return;
+
+            Node rootNode = _flowChart.Nodes.Find(x => x.ID == _flowChart.RootID);
+            rootNode.Task = rootTask;
+            Traverse(rootNode, rootTask);
+        }
+
+        public void Traverse(Node node, Task task)
+        {
+            if (node != null)
+            {
+                List<int> childrenID = node.ChildrenID;
+                childrenID.ForEach((nodeID) =>
+                {
+                    Node targetNode = _flowChart.Nodes.Find(x => x.ID == nodeID);
+                    Task targetTask;
+                    if (task == null)
+                    {
+                        targetTask = null;
+                    }
+                    else
+                    {
+                        targetTask = task.Children.Find(x => x.NodeID == targetNode.ID);
+                    }
+                    targetNode.Task = targetTask;
+                    Traverse(targetNode, targetTask);
+                });
+            }
         }
     }
 }

@@ -90,7 +90,7 @@ namespace JuicyFlowChart
         /// </summary>
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
-            if (_flowChart == null)
+           if (_flowChart == null || Application.isPlaying)
                 return graphViewChange;
 
             // Delete Node
@@ -132,7 +132,7 @@ namespace JuicyFlowChart
         /// </summary>
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if (_flowChart == null)
+            if (_flowChart == null || Application.isPlaying)
                 return;
 
             evt.menu.AppendSeparator();
@@ -163,6 +163,12 @@ namespace JuicyFlowChart
         /// </summary>
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
+            if (Application.isPlaying)
+            {
+                List<Port> emptyPort = new List<Port>();
+                return emptyPort;
+            }
+
             return ports.ToList().Where(endPort =>
             endPort.direction != startPort.direction &&
             endPort.node != startPort.node).ToList();

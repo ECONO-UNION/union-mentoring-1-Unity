@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace JuicyFlowChart
-{
-    public abstract class Task
+{    public abstract class Task
     {
         public enum State
         {
@@ -12,13 +11,17 @@ namespace JuicyFlowChart
             Disable
         }
 
-        private List<Task> _children = new List<Task>();
         protected State _state = State.Disable;
         protected GameObject gameObject;
         protected Transform transform;
 
-        public List<Task> Children { get => _children; set => _children = value; }
+        private List<Task> _children = new List<Task>();
+        private int _nodeID;
+
         public State CurrentState { get => _state; }
+        public List<Task> Children { get => _children; set => _children = value; }
+        public int NodeID { get => _nodeID; set => _nodeID = value; }
+
         public abstract void Tick();
 
         internal void ChangeToDisableState()

@@ -30,23 +30,23 @@ MonoBehaviour:
     BaseType: Action
     ID: 1215964157
     Data: '{"ABC":"333"}'
-    Position: {x: 246.00002, y: 79.99999}
+    Position: {x: 246, y: 80}
     ChildrenID: c876058d5925876f
   - Name: NegativeCondition
     BaseType: Condition
     ID: -1929021752
     Data: '{}'
-    Position: {x: 161, y: 235}
+    Position: {x: 110, y: 302}
     ChildrenID: 
   - Name: PositiveCondition
     BaseType: Condition
     ID: 1871127897
     Data: '{}'
-    Position: {x: 371, y: 235}
+    Position: {x: 337.35004, y: 225.00005}
     ChildrenID: 19882260
   - Name: SimpleAction
     BaseType: Action
     ID: 1612875801
     Data: '{"ABC":"44"}'
-    Position: {x: 508, y: 402.12}
+    Position: {x: 500.40012, y: 393.8461}
     ChildrenID: 

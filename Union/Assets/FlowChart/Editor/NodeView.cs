@@ -83,6 +83,9 @@ namespace JuicyFlowChart
 
         public override void SetPosition(Rect newPos)
         {
+            if (Application.isPlaying)
+                return;
+
             base.SetPosition(newPos);
             _node.Position = newPos.position;
             _onNodeMove?.Invoke();
@@ -102,7 +105,7 @@ namespace JuicyFlowChart
         /// </summary>
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if (!_isRoot)
+            if (!_isRoot && !Application.isPlaying)
             {
                 evt.menu.AppendAction($"Set root", (a) =>
                 {
@@ -113,21 +116,24 @@ namespace JuicyFlowChart
 
         internal void UpdateState()
         {
-            //RemoveFromClassList("enable");
-            //RemoveFromClassList("disable");
+            if (_node.Task == null)
+                return;
 
-            //if (Application.isPlaying)
-            //{
-            //    switch (_node.CurrentState)
-            //    {
-            //        case Node.State.Enable:
-            //            AddToClassList("enable");
-            //            break;
-            //        case Node.State.Disable:
-            //            AddToClassList("disable");
-            //            break;
-            //    }
-            //}
+            RemoveFromClassList("enable");
+            RemoveFromClassList("disable");
+
+            if (Application.isPlaying)
+            {
+                switch (_node.Task.CurrentState)
+                {
+                    case Task.State.Enable:
+                        AddToClassList("enable");
+                        break;
+                    case Task.State.Disable:
+                        AddToClassList("disable");
+                        break;
+                }
+            }
         }
     }
 }

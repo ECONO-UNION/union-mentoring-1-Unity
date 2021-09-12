@@ -11,18 +11,19 @@ namespace JuicyFlowChart
         public new class UxmlFactory : UxmlFactory<InspectorView, VisualElement.UxmlTraits> { }
 
         private Node _node;
+        private FlowChart _flowChart;
         private object _selectedInstance;
         private Type _type;
         private FieldInfo[] _fields;
-        private ObjectDrawer _objectDrawer;
+        private FieldDrawer _drawer = new FieldDrawer();
 
-        internal void ShowInspector(NodeView nodeView)
+        internal void ShowInspector(NodeView nodeView, FlowChart flowChart)
         {
             Clear();
             _node = nodeView.Node;
+            _flowChart = flowChart;
             _type = FlowChart.GetNodeType(_node.Name);
             _selectedInstance = JsonUtility.FromJson(_node.Data, _type);
-            _objectDrawer = new ObjectDrawer();
             _fields = _type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
             IMGUIContainer container = new IMGUIContainer(DrawInspectorView);
@@ -32,12 +33,13 @@ namespace JuicyFlowChart
         private void DrawInspectorView()
         {
             EditorGUILayout.LabelField(_type.Name,EditorStyles.boldLabel);
-            _objectDrawer.Draw(_selectedInstance, _fields, SaveField);
+            _drawer.Draw(_selectedInstance, _fields, SaveField);
         }
 
         private void SaveField()
         {
             _node.Data = JsonUtility.ToJson(_selectedInstance);
+            EditorUtility.SetDirty(_flowChart);
         }
     }
 }

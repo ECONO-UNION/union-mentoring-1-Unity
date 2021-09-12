@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <JuicyFlowChart.SplitView fixed-pane-initial-dimension="220">
         <ui:VisualElement name="left-panel">
-            <ui:Button text="SAVE" display-tooltip-when-elided="true" name="save" style="min-height: 30px; -unity-font-style: bold; background-color: rgb(245, 52, 67); color: rgb(255, 255, 255); font-size: 15px;" />
             <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(47, 47, 47); font-size: 13px;" />
+            <ui:Button text="SAVE" name="save" style="min-height: 30px; -unity-font-style: bold; color: rgb(255, 255, 255); font-size: 15px;" />
             <JuicyFlowChart.InspectorView style="height: 72px; flex-grow: 1;" />
         </ui:VisualElement>
         <ui:VisualElement name="right-panel">

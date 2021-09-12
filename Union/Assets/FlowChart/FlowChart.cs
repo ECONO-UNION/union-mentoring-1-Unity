@@ -61,6 +61,12 @@ namespace JuicyFlowChart
                     }
                 });
             }
+            else
+            {
+                Node rootNode = _nodes.Find(x => x.ID == _rootID);
+                rootNode.ChildrenID.Clear();
+            }
+
             _rootID = target.ID;
             EditorUtility.SetDirty(this);
         }
@@ -94,6 +100,7 @@ namespace JuicyFlowChart
             Node rootNode = _nodes.Find(x => x.ID == _rootID);
             Task rootTask = (Task)JsonUtility.FromJson(rootNode.Data, GetNodeType(rootNode.Name));
             rootTask.SetGameObject(gameObject);
+            rootTask.NodeID = rootNode.ID;
             Traverse(rootNode, rootTask);
             return rootTask;
         }
@@ -107,6 +114,8 @@ namespace JuicyFlowChart
                 {
                     Node targetNode = _nodes.Find(x => x.ID == nodeID);
                     Task targetTask = (Task)JsonUtility.FromJson(targetNode.Data, GetNodeType(targetNode.Name));
+                    targetTask.NodeID = targetNode.ID;
+
                     task.Children.Add(targetTask);
                     Traverse(targetNode, targetTask);
                 });

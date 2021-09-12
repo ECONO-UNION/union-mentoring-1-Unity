@@ -13,5 +13,6 @@ namespace JuicyFlowChart
         public string Data;
         public Vector2 Position;
         public List<int> ChildrenID = new List<int>();
+        public Task Task;
     }
 }
