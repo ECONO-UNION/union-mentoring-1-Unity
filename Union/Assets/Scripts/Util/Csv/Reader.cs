@@ -6,43 +6,74 @@ using UnityEngine;
 
 namespace Union.Util.Csv
 {
-    public class Reader
+    public static class Constants
+    {
+        public const int MinimumLineLengthOfCsv = 2;
+    }
+
+    public class Reader <T> where T : class
     {
         private string _csvPath;
-        private List<Dictionary<string, string>> _datas;
+        private Dictionary<int, T> _datas;
+
+        public Reader()
+        {
+            this._csvPath = "Csv/" + typeof(T).Name;
+            Read();
+        }
 
         public Reader(string csvPath)
         {
-            this._csvPath = csvPath;
+            this._csvPath = RemoveUnnecessaryCsvPathStrings(csvPath);
+            Read();
         }
 
-        public void Read()
+        private string RemoveUnnecessaryCsvPathStrings(string path)
         {
-            const string BaseCsvPath = "Csv/";
-            string fullCsvPath = BaseCsvPath + this._csvPath;
-            TextAsset data = Resources.Load(fullCsvPath) as TextAsset;
+            string csvPath = path;
+
+            csvPath = csvPath.Replace("Assets/Resources/", "");
+            csvPath = csvPath.Replace(".csv", "");
+
+            return csvPath;
+        }
+
+        private void Read()
+        {
+            string csvPath = this._csvPath;
+            TextAsset data = Resources.Load(csvPath) as TextAsset;
 
             const string LineSplitChars = @"\r\n|\n\r|\n|\r";
-            var lines = Regex.Split(data.text, LineSplitChars);
-            if (lines.Length <= 1)
+            string[] csvRows = Regex.Split(data.text, LineSplitChars);
+            if (csvRows.Length <= Constants.MinimumLineLengthOfCsv)
             {
-                Debug.LogError("error : " + fullCsvPath + " line 길이 에러");
+                Debug.LogError("error : " + csvPath + " line 길이 에러");
                 return;
             }
 
+            ClearDatasAndCreate();
+            ConvertLowsToData(csvRows);
+        }
+
+        private void ClearDatasAndCreate()
+        {
             if (this._datas == null)
             {
-                this._datas = new List<Dictionary<string, string>>();
+                this._datas = new Dictionary<int, T>();
             }
             else
             {
                 this._datas.Clear();
             }
+        }
 
+        private void ConvertLowsToData(string[] lines)
+        {
             const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
             char[] trimChars = { '\"' };
-            var header = Regex.Split(lines[0], SplitChars);
-            for (var i = 1; i < lines.Length; i++)
+
+            string[] header = Regex.Split(lines[0], SplitChars);
+            for (var i = Constants.MinimumLineLengthOfCsv; i < lines.Length; i++)
             {
                 var values = Regex.Split(lines[i], SplitChars);
 
@@ -51,69 +82,28 @@ namespace Union.Util.Csv
                     continue;
                 }
 
-                var entry = new Dictionary<string, string>();
-                for (var j = 0; j < header.Length && j < values.Length; j++)
+                int infoID = Int32.Parse(values[0]);
+
+                object entry = Activator.CreateInstance(typeof(T));
+                var propertyValues = entry.GetType().GetProperties();
+                for (var j = 0; j < header.Length && j < values.Length && j < propertyValues.Length; j++)
                 {
                     string value = values[j];
                     value = value.TrimStart(trimChars).TrimEnd(trimChars).Replace("\\", "");
                     value = value.Replace("<br>", "\n");
                     value = value.Replace("<c>", ",");
 
-                    entry[header[j]] = value;
+                    object convertValue = Convert.ChangeType(value, propertyValues[j].PropertyType);
+                    propertyValues[j].SetValue(entry, convertValue);
                 }
 
-                this._datas.Add(entry);
+                this._datas[infoID] = (T)Convert.ChangeType(entry, typeof(T));
             }
         }
 
-        public int GetInfoID(int index)
+        public T GetData(int infoID)
         {
-            return int.Parse(this._datas[index]["infoID"]);
-        }
-
-        public T GetData<T>(string key, int infoID)
-        {
-            Dictionary<string, string> data = FindData(infoID);
-
-            if (data == null)
-                return default(T);
-
-            return (T)Convert.ChangeType(data[key].ToString(), typeof(T));
-        }
-
-        public List<T> GetDataList<T>(string key, int infoID)
-        {
-            Dictionary<string, string> data = FindData(infoID);
-
-            if (data == null)
-                return null;
-
-            string[] trimmedData = data[key].Trim('[', ']').Split(',');
-            List<T> result = new List<T>();
-
-            for (int i = 0; i < trimmedData.Length; i++)
-            {
-                result.Add((T)Convert.ChangeType(trimmedData[i], typeof(T)));
-            }
-
-            return result;
-        }
-
-        private Dictionary<string, string> FindData(int infoID)
-        {
-            string id = infoID.ToString();
-
-            for (int i = 0; i < this._datas.Count; i++)
-            {
-                if (this._datas[i]["infoID"] != id)
-                {
-                    continue;
-                }
-
-                return this._datas[i];
-            }
-
-            return null;
+            return this._datas[infoID];
         }
     }
 }
