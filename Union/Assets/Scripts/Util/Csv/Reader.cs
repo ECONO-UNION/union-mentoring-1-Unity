@@ -11,7 +11,7 @@ namespace Union.Util.Csv
         public const int MinimumLineLengthOfCsv = 2;
     }
 
-    public class Reader <T> where T : class
+    public class Reader <T> where T : IData
     {
         private string _csvPath;
         private Dictionary<int, T> _datas;

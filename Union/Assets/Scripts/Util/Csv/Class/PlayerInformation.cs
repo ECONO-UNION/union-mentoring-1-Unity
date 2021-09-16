@@ -1,6 +1,6 @@
 namespace Union.Util.Csv
 {
-    public class PlayerInformation
+    public class PlayerInformation : IData
     {
         public int InfoID { get; set; }
         public string Name { get; set; }
