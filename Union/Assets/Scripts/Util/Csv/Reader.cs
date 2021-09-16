@@ -41,7 +41,7 @@ namespace Union.Util.Csv
         private void Read()
         {
             string csvPath = this._csvPath;
-            TextAsset data = Resources.Load(csvPath) as TextAsset;
+            TextAsset data = Resources.Load<TextAsset>(csvPath);
 
             const string LineSplitChars = @"\r\n|\n\r|\n|\r";
             string[] csvRows = Regex.Split(data.text, LineSplitChars);
