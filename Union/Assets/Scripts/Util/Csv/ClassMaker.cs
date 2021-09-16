@@ -11,50 +11,75 @@ namespace Union.Util.Csv
 {
     public class ClassMaker
     {
+        private string _csvClassDirectoryPath = Application.dataPath + "/Scripts/Util/Csv/Class";
+
         [MenuItem("Csv/Refresh All Csv Class from Csv Files")]
         private static void RefreshAllCsvClass()
         {
             ClassMaker classMaker = new ClassMaker();
-
-            List<string> csvPaths = classMaker.FindCsvPaths();
-            foreach (string csvPath in csvPaths)
+            classMaker.DeletePreviouslyExistingClass();
+            
+            List<string> csvNames = classMaker.FindCsvNameList();
+            foreach (string csvName in csvNames)
             {
-                classMaker.CreateCsvClass(csvPath);
+                classMaker.CreateCsvClass(csvName);
             }
 
             AssetDatabase.Refresh();
         }
 
-        public void CreateCsvClass(string csvPath)
+        private void DeletePreviouslyExistingClass()
         {
-            string assetCsvPath = csvPath;
-            assetCsvPath = assetCsvPath.Replace("Assets/Resources/", "");
-            assetCsvPath = assetCsvPath.Replace(".csv", "");
-
-            TextAsset data = Resources.Load(assetCsvPath) as TextAsset;
-
-            const string LineSplitChars = @"\r\n|\n\r|\n|\r";
-            var lines = Regex.Split(data.text, LineSplitChars);
-            if (lines.Length <= Constants.MinimumLineLengthOfCsv)
+            try
             {
-                Debug.LogError("error : " + csvPath + " line 길이 에러");
+                DirectoryInfo csvClassDirectoryInfo = new DirectoryInfo(this._csvClassDirectoryPath);
+                csvClassDirectoryInfo.Delete(true);
+
+                Debug.Log("Log : csv 클래스 폴더를 비웠습니다.");
+            }
+            catch (Exception)
+            {
+                Debug.Log("error : csv 클래스 폴더에 파일이 없습니다.");
+            }
+
+        }
+
+        private void CreateCsvClass(string csvName)
+        {
+            csvName = csvName.Replace(".csv", "");
+            string assetCsvPath = "Csv/" + csvName;
+
+            TextAsset csvData = Resources.Load(assetCsvPath) as TextAsset;
+            const string LineSplitChars = @"\r\n|\n\r|\n|\r";
+            string[] csvDataLines = Regex.Split(csvData.text, LineSplitChars);
+            if (csvDataLines.Length <= Constants.MinimumLineLengthOfCsv)
+            {
+                Debug.LogError("error : " + assetCsvPath + " line 길이 에러");
                 return;
             }
 
+            CheckAndCreateCsvClassDirectory(this._csvClassDirectoryPath);
+
+            string writePath = this._csvClassDirectoryPath + $"/{csvName}.cs";
+            StringBuilder classStringBuilder = CreateClassStringBuilder(csvName, csvDataLines);
+            File.WriteAllText(writePath, classStringBuilder.ToString());
+        }
+
+        private StringBuilder CreateClassStringBuilder(string className, string[] csvDataLines)
+        {
             StringBuilder classStringBuilder = new StringBuilder();
-            string csvName = GetCsvName(csvPath);
 
             // Begin
             classStringBuilder.AppendLine("namespace Union.Util.Csv");
             classStringBuilder.AppendLine("{");
-            classStringBuilder.AppendLine($"    public class {csvName}");
+            classStringBuilder.AppendLine($"    public class {className} : IData");
             classStringBuilder.AppendLine("    {");
 
             // Variables
             const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
             char[] trimChars = { '\"' };
-            string[] variableNames = Regex.Split(lines[0], SplitChars);
-            string[] dataTypes = Regex.Split(lines[1], SplitChars);
+            string[] variableNames = Regex.Split(csvDataLines[0], SplitChars);
+            string[] dataTypes = Regex.Split(csvDataLines[1], SplitChars);
             for (uint i = 0; i < variableNames.Length && i < dataTypes.Length; i++)
             {
                 string dataType = dataTypes[i];
@@ -70,11 +95,7 @@ namespace Union.Util.Csv
             classStringBuilder.AppendLine();
             classStringBuilder.AppendLine("}");
 
-            string csvClassDirectoryPath = Application.dataPath + "/Scripts/Util/Csv/Class";
-            CheckAndCreateCsvClassDirectory(csvClassDirectoryPath);
-
-            string writePath = csvClassDirectoryPath + $"/{csvName}.cs";
-            File.WriteAllText(writePath, classStringBuilder.ToString());
+            return classStringBuilder;
         }
 
         private void CheckAndCreateCsvClassDirectory(string csvClassDirectoryPath)
@@ -87,39 +108,22 @@ namespace Union.Util.Csv
             }
         }
 
-        private string GetCsvName(string csvPath)
+        public List<string> FindCsvNameList()
         {
-            int lastIndexOfSlash = csvPath.LastIndexOf("/") + 1;
-            int lastIndexOfCsv = csvPath.LastIndexOf(".csv");
-            string csvName = csvPath.Substring(lastIndexOfSlash, lastIndexOfCsv - lastIndexOfSlash);
+            const string CsvDirectoryPath = "Assets/Resources/Csv";
+            DirectoryInfo csvDirectory = new DirectoryInfo(CsvDirectoryPath);
+            FileInfo[] csvFileInfos = csvDirectory.GetFiles();
 
-            return csvName;
-        }
-
-        public List<string> FindCsvPaths()
-        {
-            List<string> csvPaths = new List<string>();
-            string[] filePaths = { "" };
-
-            try
+            List<string> csvNames = new List<string>();
+            foreach (var csv in csvFileInfos)
             {
-                const string CsvDirectoryPath = "Assets/Resources/Csv";
-                filePaths = Directory.GetFiles(CsvDirectoryPath, "*.*", SearchOption.AllDirectories);
-            }
-            catch (IOException ex) 
-            {
-                Debug.Log(ex.Message);
-            }
-
-            foreach (string filePath in filePaths)
-            {
-                if (IsCsvFile(filePath) == true)
+                if (IsCsvFile(csv.Name) == true)
                 {
-                    csvPaths.Add(filePath);
+                    csvNames.Add(csv.Name);
                 }
             }
 
-            return csvPaths;
+            return csvNames;
         }
 
         private bool IsCsvFile(string file)
