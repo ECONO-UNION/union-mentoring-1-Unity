@@ -80,10 +80,11 @@ namespace InputSystem
                 return;
             }
 
-            if (!Directory.Exists(_directory))
-                Directory.CreateDirectory(_directory);
+            string directoryPath = string.Format($"{Path.Combine(_resourcePath, _directory)}");
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
 
-            string path = string.Format($"{Path.Combine(_resourcePath, _directory, _settingName)}.{_extension}");
+            string path = string.Format($"{Path.Combine(directoryPath, _settingName)}.{_extension}");
             _inputSetting = AssetDatabase.LoadAssetAtPath(path, typeof(InputSetting)) as InputSetting;
             if (_inputSetting == null)
             {
