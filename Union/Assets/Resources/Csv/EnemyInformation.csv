@@ -1,0 +1,4 @@
+﻿InfoID,Name,HealthPoint,PhysicalPower,PhysicalDefense,WalkingSpeed,RunningSpeed,JumpingPower
+int,string,int,int,int,int,int,int
+1001,Test_enemy_01,20,10,10,10,20,10
+1002,Test_enemy_02,21,11,11,11,21,11
