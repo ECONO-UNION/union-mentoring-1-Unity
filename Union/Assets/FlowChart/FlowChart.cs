@@ -103,11 +103,11 @@ namespace JuicyFlowChart
             Task rootTask = (Task)JsonUtility.FromJson(rootNode.Data, GetNodeType(rootNode.Name));
             rootTask.SetGameObject(gameObject);
             rootTask.NodeID = rootNode.ID;
-            Traverse(rootNode, rootTask);
+            Traverse(rootNode, rootTask, gameObject);
             return rootTask;
         }
 
-        public void Traverse(Node node, Task task)
+        public void Traverse(Node node, Task task, GameObject gameObject)
         {
             if (node != null)
             {
@@ -117,9 +117,10 @@ namespace JuicyFlowChart
                     Node targetNode = _nodes.Find(x => x.ID == nodeID);
                     Task targetTask = (Task)JsonUtility.FromJson(targetNode.Data, GetNodeType(targetNode.Name));
                     targetTask.NodeID = targetNode.ID;
+                    targetTask.SetGameObject(gameObject);
 
                     task.Children.Add(targetTask);
-                    Traverse(targetNode, targetTask);
+                    Traverse(targetNode, targetTask, gameObject);
                 });
             }
         }
