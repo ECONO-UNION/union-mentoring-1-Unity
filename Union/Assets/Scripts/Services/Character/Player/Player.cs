@@ -1,19 +1,28 @@
 ﻿using UnityEngine;
+using Union.Util.Csv;
 
 namespace Union.Services.Charcater.Player
 {
     public class Player : Character
     {
+        [SerializeField]
+        private int _infoID = 1001;
+
         private FiniteStateMachineController _finiteStateMachineController;
 
         private void Awake()
         {
-            this.BaseStat = new BaseStat(100, 10, 10, 10, 20, 10);
-            this._finiteStateMachineController = new FiniteStateMachineController(this);
+            PlayerInformation playerInformation = Storage<PlayerInformation>.Instance.GetData(this._infoID);
+
+            this.BaseStat = new BaseStat(playerInformation.HealthPoint,
+                                        playerInformation.PhysicalPower, playerInformation.PhysicalDefense,
+                                        playerInformation.WalkingSpeed, playerInformation.RunningSpeed,
+                                        playerInformation.JumpingPower);
         }
 
         private void Start()
         {
+            this._finiteStateMachineController = new FiniteStateMachineController(this);
             this._finiteStateMachineController.Initialize();
         }
 
