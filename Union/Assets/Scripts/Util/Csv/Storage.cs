@@ -40,10 +40,10 @@ namespace Union.Util.Csv
             Type genericType = typeof(Reader<>);
             Type[] typeArgs = { Type.GetType("Union.Util.Csv." + typeof(T).Name) };
             Type readerType = genericType.MakeGenericType(typeArgs);
-            var reader = Activator.CreateInstance(readerType);
+            Reader<T> reader = (Reader<T>)Activator.CreateInstance(readerType);
 
-            readerType.GetMethod("Read").Invoke(reader, null);
-            readerType.GetMethod("StoreDatasInStorage").Invoke(reader, null);
+            reader.Read();
+            reader.StoreDatasInStorage();
         }
     }
 }
