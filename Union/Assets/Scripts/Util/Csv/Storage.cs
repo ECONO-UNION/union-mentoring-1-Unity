@@ -18,21 +18,21 @@ namespace Union.Util.Csv
             }
         }
 
-        public Dictionary<int, T> dataDictionary;
+        public Dictionary<int, T> datas;
 
         public void ChangeDatas(Dictionary<int, T> datas)
         {
-            this.dataDictionary = new Dictionary<int, T>(datas);
+            this.datas = datas;
         }
 
         public T GetData(int infoID)
         {
-            if (this.dataDictionary == null)
+            if (this.datas == null)
             {
                 ReadAndStoreDatas();
             }
 
-            return this.dataDictionary[infoID];
+            return this.datas[infoID];
         }
 
         private void ReadAndStoreDatas()
