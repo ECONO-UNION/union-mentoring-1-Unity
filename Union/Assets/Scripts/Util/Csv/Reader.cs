@@ -18,14 +18,12 @@ namespace Union.Util.Csv
 
         public Reader()
         {
-            this._csvPath = "Csv/" + typeof(T).Name;
-            Read();
+            this._csvPath = "Csv/" + typeof(T).Name; 
         }
 
         public Reader(string csvPath)
         {
             this._csvPath = RemoveUnnecessaryCsvPathStrings(csvPath);
-            Read();
         }
 
         private string RemoveUnnecessaryCsvPathStrings(string path)
@@ -38,7 +36,7 @@ namespace Union.Util.Csv
             return csvPath;
         }
 
-        private void Read()
+        public void Read()
         {
             string csvPath = this._csvPath;
             TextAsset data = Resources.Load<TextAsset>(csvPath);
@@ -51,26 +49,23 @@ namespace Union.Util.Csv
                 return;
             }
 
-            ClearDatasAndCreate();
-            ConvertLowsToData(csvRows);
+            ConvertLowsToDatas(csvRows);
         }
 
-        private void ClearDatasAndCreate()
+        public void StoreDatasInStorage()
         {
+            Storage<T>.Instance.ChangeDatas(this._datas);
+        }
+
+        private void ConvertLowsToDatas(string[] lines)
+        {
+            const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+            char[] trimChars = { '\"' };
+
             if (this._datas == null)
             {
                 this._datas = new Dictionary<int, T>();
             }
-            else
-            {
-                this._datas.Clear();
-            }
-        }
-
-        private void ConvertLowsToData(string[] lines)
-        {
-            const string SplitChars = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
-            char[] trimChars = { '\"' };
 
             string[] header = Regex.Split(lines[0], SplitChars);
             for (var i = Constants.MinimumLineLengthOfCsv; i < lines.Length; i++)
@@ -97,7 +92,7 @@ namespace Union.Util.Csv
                     propertyValues[j].SetValue(entry, convertValue);
                 }
 
-                this._datas[infoID] = (T)Convert.ChangeType(entry, typeof(T));
+                this._datas.Add(infoID, (T)Convert.ChangeType(entry, typeof(T)));
             }
         }
 
