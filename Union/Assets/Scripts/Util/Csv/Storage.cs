@@ -18,7 +18,7 @@ namespace Union.Util.Csv
             }
         }
 
-        public Dictionary<int, T> datas;
+        private Dictionary<int, T> datas;
 
         public void ChangeDatas(Dictionary<int, T> datas)
         {
