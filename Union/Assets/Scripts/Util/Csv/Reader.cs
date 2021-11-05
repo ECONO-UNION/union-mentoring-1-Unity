@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
@@ -18,7 +19,7 @@ namespace Union.Util.Csv
 
         public Reader()
         {
-            this._csvPath = "Csv/" + typeof(T).Name; 
+            this._csvPath = Path.Combine("Csv", typeof(T).Name);
         }
 
         public Reader(string csvPath)

@@ -18,21 +18,21 @@ namespace Union.Util.Csv
             }
         }
 
-        public Dictionary<int, T> dataDictionary;
+        private Dictionary<int, T> datas;
 
         public void ChangeDatas(Dictionary<int, T> datas)
         {
-            this.dataDictionary = new Dictionary<int, T>(datas);
+            this.datas = datas;
         }
 
         public T GetData(int infoID)
         {
-            if (this.dataDictionary == null)
+            if (this.datas == null)
             {
                 ReadAndStoreDatas();
             }
 
-            return this.dataDictionary[infoID];
+            return this.datas[infoID];
         }
 
         private void ReadAndStoreDatas()
@@ -40,10 +40,10 @@ namespace Union.Util.Csv
             Type genericType = typeof(Reader<>);
             Type[] typeArgs = { Type.GetType("Union.Util.Csv." + typeof(T).Name) };
             Type readerType = genericType.MakeGenericType(typeArgs);
-            var reader = Activator.CreateInstance(readerType);
+            Reader<T> reader = (Reader<T>)Activator.CreateInstance(readerType);
 
-            readerType.GetMethod("Read").Invoke(reader, null);
-            readerType.GetMethod("StoreDatasInStorage").Invoke(reader, null);
+            reader.Read();
+            reader.StoreDatasInStorage();
         }
     }
 }
