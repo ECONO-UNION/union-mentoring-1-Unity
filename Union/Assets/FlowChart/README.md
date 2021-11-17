@@ -1,24 +1,5 @@
 # FlowChart
 
-## 디렉토리
-
-- Assets폴더
-  - FlowChart폴더
-    - Editor폴더
-      - [FlowChartEditor.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Editor/FlowChartEditor.cs)
-      - [FlowChartView.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Editor/FlowChartView.cs)
-      - [NodeView.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Editor/NodeView.cs)
-      - [InspectorView.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Editor/InspectorView.cs)
-    - Task폴더
-      - [Task.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Task/Task.cs)
-      - [Action.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Task/Action.cs)
-      - [Condition.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Task/Condition.cs)
-    - [FlowChart.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/FlowChart.cs)
-    - [Node.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/Node.cs)
-    - [FlowChartRunner.cs](https://github.com/JuicyPark/ExternalModule/blob/main/Assets/FlowChart/FlowChartRunner.cs)
-
-***
-
 ## 작업로그
 
 [FlowChart System 개발 #21](https://github.com/ECONO-UNION/union-mentoring-1-Unity/pull/21)
