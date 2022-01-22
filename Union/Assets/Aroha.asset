@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b1529ce14c14b46b1a6d40cd138ee1, type: 3}
+  m_Name: Aroha
+  m_EditorClassIdentifier: 
+  _rootID: -1204304249
+  _nodes:
+  - Name: SimpleAction
+    BaseType: Action
+    ID: 1302271184
+    Data: '{"ABC":"222"}'
+    Position: {x: -54, y: 82}
+    ChildrenID: 
+  - Name: SimpleAction
+    BaseType: Action
+    ID: -1204304249
+    Data: '{"ABC":"11"}'
+    Position: {x: 96, y: -73}
+    ChildrenID: d0149f4dfd237a48
+  - Name: SimpleAction
+    BaseType: Action
+    ID: 1215964157
+    Data: '{"ABC":"333"}'
+    Position: {x: 303, y: 82}
+    ChildrenID: c876058d5925876f
+  - Name: NegativeCondition
+    BaseType: Condition
+    ID: -1929021752
+    Data: '{}'
+    Position: {x: 110, y: 302}
+    ChildrenID: 
+  - Name: PositiveCondition
+    BaseType: Condition
+    ID: 1871127897
+    Data: '{}'
+    Position: {x: 337.35004, y: 225.00005}
+    ChildrenID: 19882260
+  - Name: SimpleAction
+    BaseType: Action
+    ID: 1612875801
+    Data: '{"ABC":"44"}'
+    Position: {x: 500.40012, y: 393.8461}
+    ChildrenID: 
